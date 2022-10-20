@@ -1,0 +1,48 @@
+<body>
+	<head>
+		<link href="style/css/style.css" rel="stylesheet" type="text/css">
+	</head>
+	<div class="card">
+	   <header>
+	      <h1>Map Editor</h1>
+	      <div>
+			 <button class="button-as-link" onclick="clearCanvas()">Clear Canvas</button>
+	         <button class="primary-button" onclick="exportImage()">Export Image</button>
+			 <button class="primary-button" onclick="saveMap()">Save Map</button>
+			 <button class="primary-button" onclick="selectFile()">Load Map</button>
+			 <input type="file" name="file" id="file-input">
+	      </div>
+	   </header>
+	   <div class="card_body">
+	      <aside>
+	         <label>Select a tile to add to the map:</label>
+	         <div class="tileset-container">
+	            <img id="tileset-source" crossorigin />
+	            <div class="tileset-container_selection"></div>
+	         </div>
+	      </aside>
+	      <div class="card_right-column">
+	         <!-- The main canvas -->
+	         <canvas width="480" height="480">
+	         </canvas>
+	         <p class="instructions">
+	            <strong>Click</strong> to paint.
+	            <strong>Shift+Click</strong> to remove.
+	         </p>
+	         <!-- UI for layers -->
+	         <div>
+	            <label>Choose a layer to edit:</label>
+	            <ul class="layers">
+	               <li><button onclick="setLayer(0)" class="layer" tile-layer="0">Layer 0: water</button></li>
+	               <li><button onclick="setLayer(1)" class="layer" tile-layer="1">Layer 1: grass</button></li>
+	               <li><button onclick="setLayer(2)" class="layer" tile-layer="2">Layer 2: hills</button></li>
+	               <li><button onclick="setLayer(3)" class="layer" tile-layer="3">Layer 3: other objects</button></li>
+	               <li><button onclick="setLayer(4)" class="layer" tile-layer="4">Layer 4</button></li>
+	               <li><button onclick="setLayer(5)" class="layer" tile-layer="5">Layer 5</button></li>
+	            </ul>
+	         </div>
+	      </div>
+	   </div>
+	</div>
+	<script src="scripts.js" type="text/javascript"></script>
+</body>
