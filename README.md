@@ -1,6 +1,6 @@
 ## Getting started
 
-# The following dependencies have been included in the front end template:
+### The following dependencies have been included in the front end template:
 "moralis": "^2.6.7",
 "moralis-v1": "^1.11.0",
 "next": "12.3.1",
