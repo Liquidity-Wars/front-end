@@ -721,6 +721,14 @@
     "tweetnacl" "^1.0.3"
     "tweetnacl-util" "^0.15.1"
 
+"@metamask/logo@^3.1.1":
+  "integrity" "sha512-8/ObOWyBtwbe3/r9QbXMs+aKK2EgcYp2NiF4fm1xIO/c3aBMN5wBc2zUnl1lpHU71l70/OH5cxHbyDYoEgdMoA=="
+  "resolved" "https://registry.npmjs.org/@metamask/logo/-/logo-3.1.1.tgz"
+  "version" "3.1.1"
+  dependencies:
+    "gl-mat4" "1.1.4"
+    "gl-vec3" "1.0.3"
+
 "@metamask/obs-store@^7.0.0":
   "integrity" "sha512-Tr61Uu9CGXkCg5CZwOYRMQERd+y6fbtrtLd/PzDTPHO5UJpmSbU+7MPcQK7d1DwZCOCeCIvhmZSUCvYliC8uGw=="
   "resolved" "https://registry.npmjs.org/@metamask/obs-store/-/obs-store-7.0.0.tgz"
@@ -3918,6 +3926,16 @@
   "version" "0.1.7"
   dependencies:
     "assert-plus" "^1.0.0"
+
+"gl-mat4@1.1.4":
+  "integrity" "sha512-3NrFjvQMNSITLncF5Xz7EqfzB3IZczfNuJ6+ZFf2ko8hKhKzp8UXrdaRWm3AvpoowKMtnFDE7YpV5uD9AIxltw=="
+  "resolved" "https://registry.npmjs.org/gl-mat4/-/gl-mat4-1.1.4.tgz"
+  "version" "1.1.4"
+
+"gl-vec3@1.0.3":
+  "integrity" "sha512-B4cOpz3vpwRwkmjVsv+JKgBlPOFSLQApDAaUFrowXPgx6Y/SOhTmeciOKHvcFqls6DsGuZ+YHXo9Py5oVia7bA=="
+  "resolved" "https://registry.npmjs.org/gl-vec3/-/gl-vec3-1.0.3.tgz"
+  "version" "1.0.3"
 
 "glob-parent@^5.1.2":
   "integrity" "sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow=="

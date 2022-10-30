@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@font-face {
+    font-family: 'Stardew';
+    src: url('/fonts/Stardew_Valley.ttf');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Stardew-Caps';
+    src: url('/fonts/Stardew_Valley_ALL_CAPS.ttf');
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+/* h1, h2, {
+   font-family: 'Stardew';
+} */
