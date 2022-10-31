@@ -1,7 +1,6 @@
 import "../styles/globals.css";
 import Head from "next/head";
 import { MoralisProvider } from "react-moralis";
-import TopNav from "../components/TopNav";
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -12,7 +11,6 @@ function MyApp({ Component, pageProps }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MoralisProvider initializeOnMount={false}>
-        <TopNav />
         <Component {...pageProps} />
       </MoralisProvider>
     </div>

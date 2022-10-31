@@ -1,11 +1,10 @@
 import React from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ConnectButton } from "web3uikit";
 
-const TopNav = () => {
+const VillageNav = () => {
   const router = useRouter();
 
   return (
@@ -60,17 +59,6 @@ const TopNav = () => {
           </button>
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
             <ul className="flex flex-col p-4 mt-4 items-center bg-transparent rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0">
-              <li className={router.pathname == "/" ? "active" : ""}>
-                <Link href="/">
-                  <a
-                    className={`block py-2 pr-4 pl-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 ${
-                      router.pathname === "/" ? "text-gray-200" : "text-white"
-                    }`}
-                  >
-                    Deposit
-                  </a>
-                </Link>
-              </li>
               <li className={router.pathname == "/map-page" ? "active" : ""}>
                 <Link href="/map-page">
                   <a
@@ -110,4 +98,4 @@ const TopNav = () => {
   );
 };
 
-export default TopNav;
+export default VillageNav;
