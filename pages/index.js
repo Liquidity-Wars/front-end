@@ -5,6 +5,7 @@ import { useMoralis, useWeb3Contract } from "react-moralis";
 import LiquidityVault from '../constants/LiquidityVault.json'
 import LiquidityPool from '../components/LiquidityPool';
 import networkMapping from '../constants/networkMapping.json'
+import LiquidityWars from "../constants/LiquidityWars.json";
 import { useEffect, useState } from "react";
 import ConnectToWallet from "../components/Misc/ConnectToWallet";
 
@@ -67,22 +68,26 @@ export default function Home() {
       <div className={styles.container}>
         <div className="flex flex-col justify-center items-center pt-4">
           <motion.div
-             initial={{
+            initial={{
               y: 0,
             }}
             animate={{
               y: [30, 0, 30],
-              transition:{
+              transition: {
                 duration: 1.6,
                 ease: "linear",
                 repeat: Infinity,
-              }
+              },
             }}
-           className="flex"
-          >  
-          <img  className="h-64"src="/assets/images/sample-logo.png" alt="logo"/>
+            className="flex"
+          >
+            <img
+              className="h-64"
+              src="/assets/images/sample-logo.png"
+              alt="logo"
+            />
           </motion.div>
-            
+
           <div className="flex flex-col mt-12">
 
             {isWeb3Enabled ? ( 
@@ -109,5 +114,5 @@ export default function Home() {
         </div>
       </div>
     </>
-  )
+  );
 }

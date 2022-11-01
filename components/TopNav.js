@@ -1,12 +1,12 @@
-import React from 'react'
-import Image from 'next/image'
+import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import Link from 'next/link';
+import Link from "next/link";
 import { useRouter } from "next/router";
-import { ConnectButton } from 'web3uikit';
+import { ConnectButton } from "web3uikit";
 
 const TopNav = () => {
-    const router = useRouter();
+  const router = useRouter();
 
   return (
     <>
@@ -67,10 +67,9 @@ const TopNav = () => {
                 <ConnectButton />
             </div>
         </div>
-        </nav>
-
+      </nav>
     </>
-  )
-}
+  );
+};
 
-export default TopNav
+export default TopNav;
