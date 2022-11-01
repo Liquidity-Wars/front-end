@@ -8,6 +8,7 @@ import networkMapping from '../constants/networkMapping.json'
 import LiquidityWars from "../constants/LiquidityWars.json";
 import { useEffect, useState } from "react";
 import ConnectToWallet from "../components/Misc/ConnectToWallet";
+import TopNav from "../components/TopNav";
 
 export default function Home() {
 
@@ -65,6 +66,7 @@ export default function Home() {
 
   return (
     <>
+    <TopNav />
       <div className={styles.container}>
         <div className="flex flex-col justify-center items-center pt-4">
           <motion.div
