@@ -1,10 +1,15 @@
 
-.body{
-  background-image: url('../public/assets/images/bg_2.jpg');
-}
-
 .container {
   padding: 0 2rem;
+}
+
+.containerBg{
+  background-image: url('../public/assets/images/stardew-valley-img.jpg');
+  background-size: cover ;
+  background-repeat: no-repeat;
+  /* width: 100vw ;
+  /* height: 100vh ; */
+  height: 100vh;
 }
 
 .main {

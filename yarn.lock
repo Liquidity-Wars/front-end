@@ -802,6 +802,14 @@
     tweetnacl "^1.0.3"
     tweetnacl-util "^0.15.1"
 
+"@metamask/logo@^3.1.1":
+  "integrity" "sha512-8/ObOWyBtwbe3/r9QbXMs+aKK2EgcYp2NiF4fm1xIO/c3aBMN5wBc2zUnl1lpHU71l70/OH5cxHbyDYoEgdMoA=="
+  "resolved" "https://registry.npmjs.org/@metamask/logo/-/logo-3.1.1.tgz"
+  "version" "3.1.1"
+  dependencies:
+    "gl-mat4" "1.1.4"
+    "gl-vec3" "1.0.3"
+
 "@metamask/obs-store@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@metamask/obs-store/-/obs-store-7.0.0.tgz#6cae5f28306bb3e83a381bc9ae22682316095bd3"
@@ -3991,10 +3999,20 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-glob-parent@^5.1.2, glob-parent@~5.1.2:
-  version "5.1.2"
-  resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-5.1.2.tgz#869832c58034fe68a4093c17dc15e8340d8401c4"
-  integrity sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==
+"gl-mat4@1.1.4":
+  "integrity" "sha512-3NrFjvQMNSITLncF5Xz7EqfzB3IZczfNuJ6+ZFf2ko8hKhKzp8UXrdaRWm3AvpoowKMtnFDE7YpV5uD9AIxltw=="
+  "resolved" "https://registry.npmjs.org/gl-mat4/-/gl-mat4-1.1.4.tgz"
+  "version" "1.1.4"
+
+"gl-vec3@1.0.3":
+  "integrity" "sha512-B4cOpz3vpwRwkmjVsv+JKgBlPOFSLQApDAaUFrowXPgx6Y/SOhTmeciOKHvcFqls6DsGuZ+YHXo9Py5oVia7bA=="
+  "resolved" "https://registry.npmjs.org/gl-vec3/-/gl-vec3-1.0.3.tgz"
+  "version" "1.0.3"
+
+"glob-parent@^5.1.2":
+  "integrity" "sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow=="
+  "resolved" "https://registry.npmjs.org/glob-parent/-/glob-parent-5.1.2.tgz"
+  "version" "5.1.2"
   dependencies:
     is-glob "^4.0.1"
 
