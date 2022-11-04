@@ -3,18 +3,39 @@ import { useMoralis, useWeb3Contract } from "react-moralis";
 import LiquidityVault from "../../constants/LiquidityVault.json";
 import networkMapping from "../../constants/networkMapping.json";
 import LiquidityWars from "../../constants/LiquidityWars.json";
+import { useNotification } from "web3uikit";
 
 export default function TrainTroops() {
   const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
   const [troopAttributes, setTroopAttributes] = useState();
   const [costToTrainTroops, setCostToTrainTroops] = useState();
-  const [numberToTrain, setNumberToTrain] = useState(0);
+  const dispatch = useNotification();
 
   const chainId = parseInt(chainIdHex);
   const LiquidityWarsAddress =
     chainId in networkMapping
       ? networkMapping[chainId]["LiquidityWars"][0]
       : null;
+
+  const { runContractFunction } = useWeb3Contract();
+
+  // handle train troops success
+  async function handleTrainTroopsSuccess() {
+    dispatch({
+      type: "success",
+      message: "Troops Trained",
+      title: "Troops Trained",
+      position: "topR",
+    });
+  }
+  async function handleTrainTroopsError(error) {
+    dispatch({
+      type: "error",
+      message: "Not enough resources",
+      title: "Failed to train troops",
+      position: "topR",
+    });
+  }
 
   // get Troop Attributes
   const { runContractFunction: getTroopAttributes } = useWeb3Contract({
@@ -32,13 +53,21 @@ export default function TrainTroops() {
     params: { _playerAddress: account },
   });
 
-  // get Cost Of Training Troops
-  const { runContractFunction: trainTroops } = useWeb3Contract({
-    abi: LiquidityWars,
-    contractAddress: LiquidityWarsAddress,
-    functionName: "trainTroops",
-    params: { _numberOfTroops: numberToTrain },
-  });
+  // submit train <user input> number of troops
+  async function handleTrainTroops(numberToTrain) {
+    const trainTroopsParams = {
+      abi: LiquidityWars,
+      contractAddress: LiquidityWarsAddress,
+      functionName: "trainTroops",
+      params: { _numberOfTroops: numberToTrain },
+    };
+
+    await runContractFunction({
+      params: trainTroopsParams,
+      onSuccess: () => handleTrainTroopsSuccess(),
+      onError: () => handleTrainTroopsError(),
+    });
+  }
 
   async function updateUI() {
     const getTroopAttribute = await getTroopAttributes();
@@ -53,18 +82,37 @@ export default function TrainTroops() {
     }
   }, []);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await handleTrainTroops(e.target.value);
+  };
+
   return (
-    <div>
-      <h1 className="text-xl font-bold text-gray-700 text-center mb-3">
+    <form onSubmit={handleSubmit}>
+      <h1 className="text-xl font-bold text-gray-700 text-center mt-3">
         Troop Stats
       </h1>
-      <div>
-        Number: {troopAttributes.number} Health: {troopAttributes.health}{" "}
-        Capacity: {troopAttributes.capacity} Speed: {troopAttributes.speed}{" "}
-        Defense: {troopAttributes.defense} Attack: {troopAttributes.attack}
+      <div className="text-xs">
+        Number: {troopAttributes?.number} | Health: {troopAttributes?.health} |
+        Capacity: {troopAttributes?.capacity} | Speed: {troopAttributes?.speed}{" "}
+        | Defense: {troopAttributes?.defense} | Attack:{" "}
+        {troopAttributes?.attack}
       </div>
-      <div>Cost to Train Troops: {costToTrainTroops}</div>
-      <button>Train Troops</button>
-    </div>
+      <div className="text-sm mt-2 mb-1">
+        Cost to Train Troops: {costToTrainTroops}
+      </div>
+      <input
+        name="Train Troops"
+        type="number"
+        className="w-2/3 p-1"
+        placeholder="Number to train"
+      />
+      <button
+        type="submit"
+        className="btn btn-primary text-white font-semibold w-1/3 p-1 bg-[rgb(5,57,76)]"
+      >
+        Train Troops
+      </button>
+    </form>
   );
 }

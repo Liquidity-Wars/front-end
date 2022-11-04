@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useMoralis, useWeb3Contract } from "react-moralis";
 import LiquidityVault from "../../constants/LiquidityVault.json";
 import networkMapping from "../../constants/networkMapping.json";
@@ -23,6 +23,17 @@ export default function MapGrid() {
     functionName: "getNumberOfPlayers",
     params: {},
   });
+
+  async function updateUI() {
+    const getNumberOfPlayersInGame = await getNumberOfPlayers();
+    setNumberOfPlayers(getNumberOfPlayersInGame);
+  }
+
+  useEffect(() => {
+    if (isWeb3Enabled) {
+      updateUI();
+    }
+  }, [isWeb3Enabled]);
 
   const villages = [];
   for (let i = 0; i < numberOfPlayers; i++) {
