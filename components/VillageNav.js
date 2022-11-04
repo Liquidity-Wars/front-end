@@ -70,21 +70,42 @@ const VillageNav = () => {
               <li className={router.pathname == "/map-page" ? "active" : ""}>
                 <Link href="/map-page">
                   <a
-                    className={`block py-2 pr-4 pl-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 ${
+                    className={`block py-2 pr-4 pl-3 rounded hover:text-blue-700  ${
                       router.pathname === "/map-page"
                         ? "text-gray-200"
                         : "text-white"
                     }`}
                   >
-                    Go to Map
+                    <div className="flex items-center justify-center">
+                      <img
+                        src="/assets/images/map_icon.png"
+                        className="h-[40px] mr-2 p-0"
+                        alt="map icon"
+                      />
+                      <div>Go to Map</div>
+                    </div>
                   </a>
                 </Link>
               </li>
               <li className="text-white block py-2 pr-4 pl-3 rounded">
-                Your Resources: {playerResources}
+                <div className="flex items-center justify-center">
+                  <img
+                    src="/assets/images/resources_icon.png"
+                    className="h-[30px] mr-2 p-0"
+                    alt="resources icon"
+                  />
+                  <div>Your Resources: {playerResources}</div>
+                </div>
               </li>
               <li className="text-white block py-2 pr-4 pl-3 rounded">
-                Rewards to Claim: {playerResources}
+                <div className="flex items-center justify-center">
+                  <img
+                    src="/assets/images/rewards_icon.png"
+                    className="h-[40px] mr-1 p-0"
+                    alt="rewards icon"
+                  />
+                  <div>Rewards to Claim: {playerResources}</div>
+                </div>
               </li>
             </ul>
           </div>

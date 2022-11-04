@@ -78,15 +78,36 @@ const MapNav = () => {
                         : "text-white"
                     }`}
                   >
-                    Go to Village
+                    <div className="flex items-center justify-center">
+                      <img
+                        src="/assets/images/village_icon.png"
+                        className="h-[40px] mr-2 p-0"
+                        alt="map icon"
+                      />
+                      <div>Go to VIllage</div>
+                    </div>
                   </a>
                 </Link>
               </li>
               <li className="text-white block py-2 pr-4 pl-3 rounded">
-                Your Resources: {playerResources}
+                <div className="flex items-center justify-center">
+                  <img
+                    src="/assets/images/resources_icon.png"
+                    className="h-[30px] mr-2 p-0"
+                    alt="resources icon"
+                  />
+                  <div>Your Resources: {playerResources}</div>
+                </div>
               </li>
               <li className="text-white block py-2 pr-4 pl-3 rounded">
-                Rewards to Claim: {playerResources}
+                <div className="flex items-center justify-center">
+                  <img
+                    src="/assets/images/rewards_icon.png"
+                    className="h-[40px] mr-1 p-0"
+                    alt="rewards icon"
+                  />
+                  <div>Rewards to Claim: {playerResources}</div>
+                </div>
               </li>
             </ul>
           </div>
