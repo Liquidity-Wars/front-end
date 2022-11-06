@@ -1,8 +1,10 @@
 import VillageNav from "../components/VillageNav";
 import Modal from "../components/Buildings/Modal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import VillageHoverInfo from "../components/HoverInfo/VillageHoverInfo";
+import { ethers } from "ethers";
+import ERC20Abi from '../constants/ERC20.json'
 
 export default function VillagePage() {
   const [modalOpen, setModalOpen] = useState();
@@ -21,6 +23,43 @@ export default function VillagePage() {
   const handleMouseOut = () => {
     setIsHovering(false);
   };
+
+  const getEvents = async () => {
+    // https://docs.ethers.io/v5/concepts/events/
+    // https://docs.ethers.io/v5/getting-started/#getting-started--history
+
+    console.log("getEvents");
+
+    const provider = new ethers.providers.Web3Provider(ethereum);
+
+    // LINK Token Mumbai
+    const erc20Contract = new ethers.Contract("0x326C977E6efc84E512bB9C30f76E30c160eD06FB", ERC20Abi, provider);
+    // Filter for all token transfers to me
+    const filterTo = erc20Contract.filters.Transfer(null, "0xe220825b597e4D5867218E0Efa9684Dd26957b00");
+    console.log("filterTo:", filterTo);
+    // Filter for all token transfers from me
+    const filterFrom = erc20Contract.filters.Transfer("0xe220825b597e4D5867218E0Efa9684Dd26957b00");
+    console.log("filterFrom:", filterFrom);
+    const events = await erc20Contract.queryFilter(filterTo);
+    console.log("events:", events);
+
+    // USDC Token Mainnet
+    const usdcContract = new ethers.Contract("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", ERC20Abi, provider);
+    const events2 = await usdcContract.queryFilter(filterTo);
+    console.log("All USDC transfer to me:", events2);
+    const events3 = await usdcContract.queryFilter(filterFrom);
+    console.log("All USDC transfer from me:", events3);
+
+    // DepositDone event from the LiquidityVault contract
+    //const liquidityVaultContract = new ethers.Contract("0x41e190323923e37A190A6907aa4868cb0F613cF2", LiquidityVaultAbi, provider);
+    //const eventFilter = liquidityVaultContract.filters.DepositDone();
+    //const events = await liquidityVaultContract.queryFilter(eventFilter);
+
+  }
+
+  useEffect(() => {
+    getEvents();
+  }, [])
 
   return (
     <div className="flex flex-col items-center h-screen w-screen bg-cover bg-[url('/assets/images/stardew-valley-img.jpg')]">
