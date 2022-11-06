@@ -1,1 +1,7 @@
-{"80001":{"LiquidityVault":["0x41e190323923e37A190A6907aa4868cb0F613cF2"],"LiquidityWars":["0xF26AC22Da674c8Bc8B5E6276afF69823bcc35785"]}}
+{
+	"80001": {
+		"LiquidityVault": ["0x41e190323923e37A190A6907aa4868cb0F613cF2"],
+		"LiquidityWars": ["0xF26AC22Da674c8Bc8B5E6276afF69823bcc35785"],
+		"LiquidityWarsConfig": ["0x9367248bDE95762676Fb99Ae98dC858dE61592Ca"]
+	}
+}

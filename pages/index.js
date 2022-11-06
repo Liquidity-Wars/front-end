@@ -1,11 +1,15 @@
 import styles from "../styles/Home.module.css";
 import { motion } from "framer-motion";
+import { ethers } from "ethers";
 import CountdownTimer from "../components/Timer/CountdownTimer";
 import { useMoralis, useWeb3Contract } from "react-moralis";
-import LiquidityVault from '../constants/LiquidityVault.json'
 import LiquidityPool from '../components/LiquidityPool';
 import networkMapping from '../constants/networkMapping.json'
-import LiquidityWars from "../constants/LiquidityWars.json";
+import LiquidityVaultAbi from '../constants/LiquidityVault.json'
+import ERC20Abi from '../constants/ERC20.json'
+import UniswapV2PairAbi from '../constants/UniswapV2Pair.json'
+import LiquidityWarsConfigAbi from "../constants/LiquidityWarsConfig.json";
+import LiquidityWarsAbi from "../constants/LiquidityWars.json";
 import { useEffect, useState } from "react";
 import ConnectToWallet from "../components/Misc/ConnectToWallet";
 import TopNav from "../components/TopNav";
@@ -16,21 +20,24 @@ export default function Home() {
   const [dateTime , setDateTime] = useState();
   const [ gameState, setGameState ] = useState();
   const chainId = parseInt(chainIdHex)
-  const LiquidityVaultAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityVault'][0] : null
+  const liquidityVaultAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityVault'][0] : null
+  const liquidityWarsConfigAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityWarsConfig'][0] : null
+  const [allowedLPTokens , setAllowedLPTokens] = useState([]);
+  const [allowedLPAddresses , setAllowedLPAddresses] = useState([]);
 
 
   // get time getTimeToStartOrEndGame
   const {runContractFunction: getTimeToStartOrEndGame} = useWeb3Contract({
-    abi: LiquidityVault,
-    contractAddress: LiquidityVaultAddress,
+    abi: LiquidityVaultAbi,
+    contractAddress: liquidityVaultAddress,
     functionName:"getTimeToStartOrEndGame",
     params:{}
   })
 
   // getGameState 
   const {runContractFunction: getGameState} = useWeb3Contract({
-    abi: LiquidityVault,
-    contractAddress: LiquidityVaultAddress,
+    abi: LiquidityVaultAbi,
+    contractAddress: liquidityVaultAddress,
     functionName:"getGameState",
     params:{}
   })
@@ -57,6 +64,58 @@ export default function Home() {
   // const handleNewNotification = (tx) =>{
 
   // }
+
+  const getAllowedTokens = async () => {
+    if(liquidityWarsConfigAddress && LiquidityWarsConfigAbi) {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const liquidityWarsConfigContract = new ethers.Contract(liquidityWarsConfigAddress, LiquidityWarsConfigAbi, provider);
+      const addresses = await liquidityWarsConfigContract.getAllowedTokens();
+      setAllowedLPAddresses(addresses);
+    }
+  } 
+
+  const getTokenPairAddresses = async (lpTokenAddress) => {
+    const provider = new ethers.providers.Web3Provider(ethereum);
+    const uniswapPairContract = new ethers.Contract(lpTokenAddress, UniswapV2PairAbi, provider);
+    const token0 = uniswapPairContract.token0();
+    const token1 = uniswapPairContract.token1();
+    const result = await Promise.all([token0, token1])
+    return result;
+  };
+
+  const getTokenSymbol = async (tokenAddress) => {
+    const provider = new ethers.providers.Web3Provider(ethereum);
+    const erc20TokenContract = new ethers.Contract(tokenAddress, ERC20Abi, provider);
+    const symbol = erc20TokenContract.symbol();
+    return symbol;
+  }
+
+  const getLPTokenSymbol = async (lpTokenAddress) => {
+    const [token0, token1] = await getTokenPairAddresses(lpTokenAddress);
+    const symbol0 = getTokenSymbol(token0);
+    const symbol1 = getTokenSymbol(token1);
+    const result = await Promise.all([symbol0, symbol1]);
+    const lpTokenSymbol = result.join('-');
+    const newAllowedLPTokens = allowedLPTokens.concat([lpTokenSymbol]);
+    setAllowedLPTokens([...new Set(newAllowedLPTokens)]);
+  }
+
+  useEffect(() => {
+    getAllowedTokens();
+  }, [liquidityWarsConfigAddress])
+  
+  useEffect(() => {
+    //console.log("allowedLPAddresses: ", allowedLPAddresses);
+    for (let i = 0; i < allowedLPAddresses.length; i++) {
+      getLPTokenSymbol(allowedLPAddresses[i]);
+    }
+  }, [allowedLPAddresses])
+
+  useEffect(() =>{
+    if(allowedLPTokens.length > 0) {
+      console.log("allowedLPTokens: ", allowedLPTokens);
+    }
+  }, [allowedLPTokens])
 
   useEffect(() =>{
     if(isWeb3Enabled){
@@ -102,7 +161,7 @@ export default function Home() {
                         <p>{gameState}</p>
                       </div>
                       <CountdownTimer targetDate={dateTime} />
-                      <LiquidityPool contractAddress={LiquidityVaultAddress} />
+                      <LiquidityPool contractAddress={liquidityVaultAddress} allowedLPTokens={allowedLPTokens} />
                     </div>
                   </div>
               </div>
