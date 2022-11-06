@@ -15,10 +15,13 @@ export default function Home() {
   const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
   const [dateTime , setDateTime] = useState();
   const [ gameState, setGameState ] = useState();
-  const chainId = parseInt(chainIdHex)
+  const chainId = chainIdHex ? parseInt(chainIdHex) : 80001
   const LiquidityVaultAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityVault'][0] : null
   const LiquidityVaultConfigAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityWarsConfig'][0] : null
+  const LiquidityWars = chainId in networkMapping ? networkMapping[chainId]['LiquidityWars'][0] : null
+  const SushiSwapAddress = chainId in networkMapping ? networkMapping[chainId]['SushiSwap'][0] : null
   
+
   // get time getTimeToStartOrEndGame
   const {runContractFunction: getTimeToStartOrEndGame} = useWeb3Contract({
     abi: LiquidityVault,
@@ -105,6 +108,7 @@ export default function Home() {
                       <LiquidityPool 
                       LiquidityVaultAddress={LiquidityVaultAddress}
                       LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
+                      SushiSwapAddress={SushiSwapAddress}
                       />
                     </div>
                   </div>

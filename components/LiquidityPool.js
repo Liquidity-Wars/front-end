@@ -80,7 +80,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress}) => 
 
   async function depositLPTokens(event){
     event.preventDefault();
-    const tokensAddr = '0xe097d6b3100777dc31b34dc2c58fb524c2e76921'
+    const tokensAddr = '0x18a2470a7a8cda7691bb3a304b880da720053a3e' //Lp tokens
     setTokenId(tokensAddr);
     // const price = ethers.utils.parseUnits(tokenAmount, "ether").toString()
     const price = Number(tokenAmount)
@@ -90,7 +90,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress}) => 
       contractAddress: LiquidityVaultAddress,
       functionName: "depositLpToken",
       params: {
-        _tokenAddress: tokenId,
+        _tokenAddress: tokensAddr,
         _amount: price
       }
     }
@@ -142,7 +142,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress}) => 
               onChange={event => setTokenAmount(event.target.value)}
               value={tokenAmount}
               type='text' id="deposit" className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'/>
-            <div className='text-[#CF3810] text-sm font py-1'>Amount u need to deposit {requiredAmount} USD to play </div>
+            <div className='text-[#CF3810] text-sm font py-1'>Amount u need to deposit <br/> {requiredAmount} LP Token to play </div>
           </div>
           {/* <div className="bg-[url('/assets/images/valley-button.png')] justify-center items-center w-40 h-auto bg-cover bg-no-repeat">
             
