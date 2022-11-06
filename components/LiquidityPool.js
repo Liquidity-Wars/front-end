@@ -5,7 +5,7 @@ import { useMoralis, useWeb3Contract  } from "react-moralis"
 import { ethers } from "ethers"
 import { Form } from 'web3uikit';
 
-const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress}) => {
+const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, SushiSwapAddress, allowedLPTokens}) => {
 
   const [ tokenAmount, setTokenAmount] = useState(0);
   const [ requiredAmount, setRequiredAmount] = useState(0);
@@ -127,13 +127,14 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress}) => 
   
   useEffect(() =>{
     if(isWeb3Enabled){
+      console.log(allowedLPTokens)
       updateUI();
     }
   }, [isWeb3Enabled])
 
   return (
    <>
-      <div className="bg-[url('/assets/images/frame.png')] p-4 shadow-sm rounded-lg bg-cover bg-no-repeat justify-center items-center w-[400px]">
+      <div className="bg-[url('/assets/images/frame.png')] p-4 shadow-sm rounded-lg bg-cover bg-no-repeat justify-center items-center w-[450px]">
 
         <form className='px-4 py-4' onSubmit={depositLPTokens}>
           <div>

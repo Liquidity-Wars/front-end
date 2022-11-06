@@ -13,6 +13,7 @@ import LiquidityWarsAbi from "../constants/LiquidityWars.json";
 import { useEffect, useState } from "react";
 import ConnectToWallet from "../components/Misc/ConnectToWallet";
 import TopNav from "../components/TopNav";
+import Selector from "../components/Misc/Selector";
 
 export default function Home() {
 
@@ -31,7 +32,7 @@ export default function Home() {
   // get time getTimeToStartOrEndGame
   const {runContractFunction: getTimeToStartOrEndGame} = useWeb3Contract({
     abi: LiquidityVaultAbi,
-    contractAddress: liquidityVaultAddress,
+    contractAddress: LiquidityVaultAddress,
     functionName:"getTimeToStartOrEndGame",
     params:{}
   })
@@ -39,7 +40,7 @@ export default function Home() {
   // getGameState 
   const {runContractFunction: getGameState} = useWeb3Contract({
     abi: LiquidityVaultAbi,
-    contractAddress: liquidityVaultAddress,
+    contractAddress: LiquidityVaultAddress,
     functionName:"getGameState",
     params:{}
   })
@@ -68,9 +69,9 @@ export default function Home() {
   // }
 
   const getAllowedTokens = async () => {
-    if(liquidityWarsConfigAddress && LiquidityWarsConfigAbi) {
+    if(LiquidityVaultConfigAddress && LiquidityWarsConfigAbi) {
       const provider = new ethers.providers.Web3Provider(ethereum);
-      const liquidityWarsConfigContract = new ethers.Contract(liquidityWarsConfigAddress, LiquidityWarsConfigAbi, provider);
+      const liquidityWarsConfigContract = new ethers.Contract(LiquidityVaultConfigAddress, LiquidityWarsConfigAbi, provider);
       const addresses = await liquidityWarsConfigContract.getAllowedTokens();
       setAllowedLPAddresses(addresses);
     }
@@ -104,7 +105,7 @@ export default function Home() {
 
   useEffect(() => {
     getAllowedTokens();
-  }, [liquidityWarsConfigAddress])
+  }, [LiquidityVaultAddress])
   
   useEffect(() => {
     //console.log("allowedLPAddresses: ", allowedLPAddresses);
@@ -156,18 +157,20 @@ export default function Home() {
             {isWeb3Enabled ? ( 
               <>
               <div className="bg-transparent p-4 ">
-                <div className="bg-[url('/assets/images/valley-canvas.png')] justify-center w-[600px] h-auto bg-cover bg-no-repeat">
+                <div className="bg-[url('/assets/images/valley-canvas.png')] justify-center w-[700px] h-auto bg-cover bg-no-repeat">
                     <div className="flex flex-col  justify-center text-lg items-center text-center px-6 py-6">
                       <h2 className="font-['Nabana-bold'] text-4xl text-[#CF3810]">Next Game In</h2>
                       <div className="bg-[url('/assets/images/scroll.png')] justify-center w-24 bg-cover bg-no-repeat">
-                        <p>{gameState}</p>
+                        <p className="font-['Nabana-bold']">{gameState == 0 ? 'Ready' : 'Running'}</p>
                       </div>
                       <CountdownTimer targetDate={dateTime} />
+                      <Selector />
                       <LiquidityPool 
                       LiquidityVaultAddress={LiquidityVaultAddress}
                       LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
                       SushiSwapAddress={SushiSwapAddress}
                       allowedLPTokens={allowedLPTokens} />
+
                     </div>
                   </div>
               </div>
