@@ -17,8 +17,8 @@ export default function Home() {
   const [ gameState, setGameState ] = useState();
   const chainId = parseInt(chainIdHex)
   const LiquidityVaultAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityVault'][0] : null
-
-
+  const LiquidityVaultConfigAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityWarsConfig'][0] : null
+  
   // get time getTimeToStartOrEndGame
   const {runContractFunction: getTimeToStartOrEndGame} = useWeb3Contract({
     abi: LiquidityVault,
@@ -102,7 +102,10 @@ export default function Home() {
                         <p>{gameState}</p>
                       </div>
                       <CountdownTimer targetDate={dateTime} />
-                      <LiquidityPool contractAddress={LiquidityVaultAddress} />
+                      <LiquidityPool 
+                      LiquidityVaultAddress={LiquidityVaultAddress}
+                      LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
+                      />
                     </div>
                   </div>
               </div>

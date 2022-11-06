@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import LiquidityVault from '../constants/LiquidityVault.json'
+import LiquidityWarsConfig from '../constants/LiquidityWarsConfig.json'
 import { useMoralis, useWeb3Contract  } from "react-moralis"
 import { ethers } from "ethers"
 import { Form } from 'web3uikit';
 
-const LiquidityPool = ({contractAddress}) => {
+const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress}) => {
 
   const [ tokenAmount, setTokenAmount] = useState(0);
   const [ requiredAmount, setRequiredAmount] = useState(0);
-  const [ tokenId, setTokenId ] = useState(0);
+  const [ tokenId, setTokenId ] = useState();
   const { isWeb3Enabled  } = useMoralis();
   const { runContractFunction } = useWeb3Contract();
 
   // deposit LP tokens
   const { runContractFunction: depositLpToken } = useWeb3Contract({
     abi: LiquidityVault,
-    contractAddress: contractAddress,
+    contractAddress: LiquidityVaultAddress,
     functionName: "depositLpToken",
     params:{
       amount: tokenAmount,
@@ -25,16 +26,25 @@ const LiquidityPool = ({contractAddress}) => {
 
   // getUsdRequiredAmount
   const { runContractFunction: getUsdRequiredAmount } = useWeb3Contract({
-    abi: LiquidityVault,
-    contractAddress: contractAddress,
+    abi: LiquidityWarsConfig,
+    contractAddress: LiquidityVaultConfigAddress,
     functionName: "getUsdRequiredAmount",
+    params:{}
+  })
+
+  // getUsdRequiredAmount
+  const { runContractFunction: getGameDuration } = useWeb3Contract({
+    abi: LiquidityVault,
+    contractAddress: LiquidityVaultAddress,
+    functionName: "getGameDuration",
     params:{}
   })
 
   async function updateUI(){
     const depositedLpTokens = await depositLpToken();
     const getUsdAmount = (await getUsdRequiredAmount()).toString();
-
+    const gameDuration = (await getGameDuration()).toString();
+    console.log(gameDuration)
     setRequiredAmount(getUsdAmount);
   }
 
@@ -70,27 +80,36 @@ const LiquidityPool = ({contractAddress}) => {
 
   async function depositLPTokens(event){
     event.preventDefault();
-    setTokenId("0x0000000000000000000000000000000000001010");
+    const tokensAddr = '0xe097d6b3100777dc31b34dc2c58fb524c2e76921'
+    setTokenId(tokensAddr);
     // const price = ethers.utils.parseUnits(tokenAmount, "ether").toString()
-    const price = tokenAmount
-
+    const price = Number(tokenAmount)
 
     const approveOptions = {
       abi:LiquidityVault,
-      contractAddress: contractAddress,
+      contractAddress: LiquidityVaultAddress,
       functionName: "depositLpToken",
       params: {
         _tokenAddress: tokenId,
         _amount: price
       }
     }
+    // claimRewardTokensFromProtocol
+    //  const approveOptions = {
+    //   abi:LiquidityVault,
+    //   contractAddress: LiquidityVaultAddress,
+    //   functionName: "setGameDuration",
+    //   params: {
+    //     _gameDuration : 1000
+    //   }
+    // }
     console.log(approveOptions )
 
     await runContractFunction({
       params: approveOptions,
       onSuccess: handleApproveSuccess,
       onError:(error) =>{
-        console.log(error);
+        handleError(error);
       }
     })
 
@@ -100,6 +119,11 @@ const LiquidityPool = ({contractAddress}) => {
    await tx.wait(1)
     console.log("soemthing")
   }
+
+  async function handleError(error){
+    // await tx.wait(1)
+     console.log("soemthing", error)
+   }
   
   useEffect(() =>{
     if(isWeb3Enabled){
