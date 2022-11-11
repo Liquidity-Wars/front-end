@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import LiquidityVault from "../../constants/LiquidityVault.json";
 import networkMapping from "../../constants/networkMapping.json";
 import LiquidityWars from "../../constants/LiquidityWars.json";
+import LiquidityWarsConfig from "../../constants/LiquidityWarsConfig.json";
 import { useMoralis, useWeb3Contract } from "react-moralis";
 import TrainTroops from "./TrainTroops";
 import { useNotification } from "web3uikit";
@@ -38,22 +39,27 @@ export default function UpgradeBuilding({ handleClose, buildingType }) {
       ? networkMapping[chainId]["LiquidityWars"][0]
       : null;
 
+  const LiquidityWarsConfigAddress =
+    chainId in networkMapping
+      ? networkMapping[chainId]["LiquidityWarsConfig"][0]
+      : null;
+
   // handle upgrade building success
-  async function handleUpgradeSuccess() {
+  async function handleUpgradeSuccess(buildingType) {
     dispatch({
       type: "success",
-      message: "NFT Listing",
-      title: "NFT Listed",
+      message: "Builing upgraded successfully!",
+      title: `${buildingType} Upgrade`,
       position: "topR",
     });
   }
 
   // handle upgrade building error
-  async function handleUpgradeError() {
+  async function handleUpgradeError(buildingType) {
     dispatch({
       type: "error",
       message: "Not enough resources to upgrade building",
-      title: "Failed to upgrade building",
+      title: `Failed to upgrade ${buildingType}`,
       position: "topR",
     });
   }
@@ -85,7 +91,7 @@ export default function UpgradeBuilding({ handleClose, buildingType }) {
   // get buildingParam for bonuses
   const { runContractFunction: getBuildingParam } = useWeb3Contract({
     abi: LiquidityWars,
-    contractAddress: LiquidityWarsAddress,
+    contractAddress: LiquidityWarsConfigAddress,
     functionName: "getBuildingParam",
     params: { _id: infrastructureNumber },
   });
@@ -101,8 +107,8 @@ export default function UpgradeBuilding({ handleClose, buildingType }) {
 
     await runContractFunction({
       params: buildingParams,
-      onSuccess: () => handleUpgradeSuccess(),
-      onError: () => handleUpgradeError(),
+      onSuccess: () => handleUpgradeSuccess(buildingParams.params._building),
+      onError: () => handleUpgradeError(buildingParams.params._building),
     });
   }
 
