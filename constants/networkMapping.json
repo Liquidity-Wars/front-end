@@ -3,6 +3,8 @@
 		"LiquidityVault": ["0x2320B7a94F339D1cEf9EDd4A653d58f3bB666995"],
 		"LiquidityWars": ["0xF010790219A93Af678E29f63b73D8Fa7cCd4f464"],
 		"LiquidityWarsConfig": ["0xbC22d783cE2027613C513f5f07ABa9aeBA6568DD"],
-		"Strategies": ["0xd0c08ce389aea24ddFB170F86ed181D1239efA6d"]
+		"Strategies": ["0xd0c08ce389aea24ddFB170F86ed181D1239efA6d"],
+        "SushiSwap":["0x9f2DAf5153D794ac979aC5552432e8e14760Cd3F"],
+        "SendMeDemoLps":["0xa17DC3018d1ae833b119754B4135cbb35F4F718B"]
 	}
 }
