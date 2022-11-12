@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import SendMeDemoLps from "../constants/SendMeDemoLps.json";
+import SendMeDemoLpsAbi from "../constants/SendMeDemoLps.json";
 import LiquidityVaultAbi from '../constants/LiquidityVault.json'
 import LiquidityWarsConfigAbi from '../constants/LiquidityWarsConfig.json'
 import { useMoralis, useWeb3Contract  } from "react-moralis"
@@ -36,7 +36,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
 
   // getUsdRequiredAmount
   const { runContractFunction: getGameDuration } = useWeb3Contract({
-    abi: LiquidityVault,
+    abi: LiquidityVaultAbi,
     contractAddress: LiquidityVaultAddress,
     functionName: "getGameDuration",
     params:{}
@@ -45,7 +45,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
   // send me Demo lps
 
   const { runContractFunction: sendMeDemoLps } = useWeb3Contract({
-    abi: SendMeDemoLps,
+    abi: SendMeDemoLpsAbi,
     contractAddress: SendMeDemoLpsAddress,
     functionName: "sendMeDemoLps",
     params:{}
