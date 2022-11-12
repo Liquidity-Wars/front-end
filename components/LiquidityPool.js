@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import LiquidityVault from '../constants/LiquidityVault.json'
+import LiquidityVaultAbi from '../constants/LiquidityVault.json'
+import LiquidityWarsConfigAbi from '../constants/LiquidityWarsConfig.json'
 import { useMoralis, useWeb3Contract  } from "react-moralis"
 import { ethers } from "ethers"
 import { Form } from 'web3uikit';
 
-const LiquidityPool = ({contractAddress}) => {
+const LiquidityPool = ({liquidityWarsConfigAddress, liquidityVaultAddress}) => {
 
   const [ tokenAmount, setTokenAmount] = useState(0);
   const [ requiredAmount, setRequiredAmount] = useState(0);
@@ -14,8 +15,8 @@ const LiquidityPool = ({contractAddress}) => {
 
   // deposit LP tokens
   const { runContractFunction: depositLpToken } = useWeb3Contract({
-    abi: LiquidityVault,
-    contractAddress: contractAddress,
+    abi: LiquidityVaultAbi,
+    contractAddress: liquidityVaultAddress,
     functionName: "depositLpToken",
     params:{
       amount: tokenAmount,
@@ -25,8 +26,8 @@ const LiquidityPool = ({contractAddress}) => {
 
   // getUsdRequiredAmount
   const { runContractFunction: getUsdRequiredAmount } = useWeb3Contract({
-    abi: LiquidityVault,
-    contractAddress: contractAddress,
+    abi: LiquidityWarsConfigAbi,
+    contractAddress: liquidityWarsConfigAddress,
     functionName: "getUsdRequiredAmount",
     params:{}
   })

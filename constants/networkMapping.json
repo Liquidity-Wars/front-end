@@ -1,7 +1,8 @@
 {
 	"80001": {
-		"LiquidityVault": ["0x41e190323923e37A190A6907aa4868cb0F613cF2"],
-		"LiquidityWars": ["0xF26AC22Da674c8Bc8B5E6276afF69823bcc35785"],
-		"LiquidityWarsConfig": ["0x9367248bDE95762676Fb99Ae98dC858dE61592Ca"]
+		"LiquidityVault": ["0x2320B7a94F339D1cEf9EDd4A653d58f3bB666995"],
+		"LiquidityWars": ["0xF010790219A93Af678E29f63b73D8Fa7cCd4f464"],
+		"LiquidityWarsConfig": ["0xbC22d783cE2027613C513f5f07ABa9aeBA6568DD"],
+		"Strategies": ["0xd0c08ce389aea24ddFB170F86ed181D1239efA6d"]
 	}
 }

@@ -161,7 +161,7 @@ export default function Home() {
                         <p>{gameState}</p>
                       </div>
                       <CountdownTimer targetDate={dateTime} />
-                      <LiquidityPool contractAddress={liquidityVaultAddress} allowedLPTokens={allowedLPTokens} />
+                      <LiquidityPool liquidityWarsConfigAddress={liquidityWarsConfigAddress} liquidityVaultAddress={liquidityVaultAddress} allowedLPTokens={allowedLPTokens} />
                     </div>
                   </div>
               </div>

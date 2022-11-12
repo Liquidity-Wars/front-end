@@ -3,38 +3,11 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ConnectButton } from "web3uikit";
-import { useMoralis, useWeb3Contract } from "react-moralis";
-import LiquidityVault from "../constants/LiquidityVault.json";
-import networkMapping from "../constants/networkMapping.json";
-import LiquidityWars from "../constants/LiquidityWars.json";
+import RewardsToClaim from "./Nav/RewardsToClaim";
+import YourResources from "./Nav/YourResources";
 
 const VillageNav = () => {
   const router = useRouter();
-  const [playerResources, setPlayerResources] = useState(0);
-  const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
-  const chainId = parseInt(chainIdHex);
-  const LiquidityWarsAddress =
-    chainId in networkMapping
-      ? networkMapping[chainId]["LiquidityWars"][0]
-      : null;
-
-  const { runContractFunction: getPlayerResources } = useWeb3Contract({
-    abi: LiquidityWars,
-    contractAddress: LiquidityWarsAddress,
-    functionName: "getPlayerResources",
-    params: { _playerAddress: account },
-  });
-
-  async function updateUI() {
-    const getPlayerResource = await getPlayerResources();
-    setPlayerResources(getPlayerResource);
-  }
-
-  useEffect(() => {
-    if (isWeb3Enabled) {
-      updateUI();
-    }
-  }, [isWeb3Enabled]);
 
   return (
     <>
@@ -87,26 +60,8 @@ const VillageNav = () => {
                   </a>
                 </Link>
               </li>
-              <li className="text-white block py-2 pr-4 pl-3 rounded">
-                <div className="flex items-center justify-center">
-                  <img
-                    src="/assets/images/resources_icon.png"
-                    className="h-[30px] mr-2 p-0"
-                    alt="resources icon"
-                  />
-                  <div>Your Resources: {playerResources}</div>
-                </div>
-              </li>
-              <li className="text-white block py-2 pr-4 pl-3 rounded">
-                <div className="flex items-center justify-center">
-                  <img
-                    src="/assets/images/rewards_icon.png"
-                    className="h-[40px] mr-1 p-0"
-                    alt="rewards icon"
-                  />
-                  <div>Rewards to Claim: {playerResources}</div>
-                </div>
-              </li>
+              <YourResources />
+              <RewardsToClaim />
             </ul>
           </div>
           <div className="flex">
