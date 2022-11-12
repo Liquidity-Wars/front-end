@@ -10,6 +10,7 @@ import ERC20Abi from '../constants/ERC20.json'
 import UniswapV2PairAbi from '../constants/UniswapV2Pair.json'
 import LiquidityWarsConfigAbi from "../constants/LiquidityWarsConfig.json";
 import LiquidityWarsAbi from "../constants/LiquidityWars.json";
+import SendMeDemoLps from "../constants/SendMeDemoLps.json";
 import { useEffect, useState } from "react";
 import ConnectToWallet from "../components/Misc/ConnectToWallet";
 import TopNav from "../components/TopNav";
@@ -18,17 +19,17 @@ import Selector from "../components/Misc/Selector";
 export default function Home() {
 
   const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
-  const [dateTime , setDateTime] = useState();
+  const [dateTime , setDateTime] = useState(0);
   const [ gameState, setGameState ] = useState();
   const chainId = parseInt(chainIdHex)
   const LiquidityVaultAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityVault'][0] : null
   const LiquidityVaultConfigAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityWarsConfig'][0] : null
   const LiquidityWars = chainId in networkMapping ? networkMapping[chainId]['LiquidityWars'][0] : null
   const SushiSwapAddress = chainId in networkMapping ? networkMapping[chainId]['SushiSwap'][0] : null
+  const SendMeDemoLpsAddress = chainId in networkMapping ? networkMapping[chainId]['SendMeDemoLps'][0] : null
   const [allowedLPTokens , setAllowedLPTokens] = useState([]);
   const [allowedLPAddresses , setAllowedLPAddresses] = useState([]);
-
-
+  
   // get time getTimeToStartOrEndGame
   const {runContractFunction: getTimeToStartOrEndGame} = useWeb3Contract({
     abi: LiquidityVaultAbi,
@@ -47,9 +48,10 @@ export default function Home() {
 
   // Keep track and update all UI state
   async function updateUI(){
-    const getTime = (await getTimeToStartOrEndGame()).toString();
+
+    // const getTime = (await getTimeToStartOrEndGame()).toString();
     const gameStatus = (await getGameState()).toString();
-    setDateTime(getTime)
+    setDateTime(450)
     setGameState(gameStatus)
 
   }
@@ -169,7 +171,9 @@ export default function Home() {
                       LiquidityVaultAddress={LiquidityVaultAddress}
                       LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
                       SushiSwapAddress={SushiSwapAddress}
-                      allowedLPTokens={allowedLPTokens} />
+                      allowedLPTokens={allowedLPTokens}
+                      SendMeDemoLpsAddress={SendMeDemoLpsAddress}
+                      />
 
                     </div>
                   </div>

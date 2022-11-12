@@ -18,6 +18,7 @@ const VillageNav = () => {
       ? networkMapping[chainId]["LiquidityWars"][0]
       : null;
 
+  
   const { runContractFunction: getPlayerResources } = useWeb3Contract({
     abi: LiquidityWars,
     contractAddress: LiquidityWarsAddress,
@@ -26,7 +27,7 @@ const VillageNav = () => {
   });
 
   async function updateUI() {
-    const getPlayerResource = await getPlayerResources();
+    const getPlayerResource = (await getPlayerResources()).toString();
     setPlayerResources(getPlayerResource);
   }
 

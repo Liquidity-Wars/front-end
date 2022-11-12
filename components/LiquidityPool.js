@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import LiquidityVault from '../constants/LiquidityVault.json'
 import LiquidityWarsConfig from '../constants/LiquidityWarsConfig.json'
+import SendMeDemoLps from "../constants/SendMeDemoLps.json";
 import { useMoralis, useWeb3Contract  } from "react-moralis"
 import { ethers } from "ethers"
 import { Form } from 'web3uikit';
 
-const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, SushiSwapAddress, allowedLPTokens}) => {
+const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, SushiSwapAddress, allowedLPTokens, SendMeDemoLpsAddress}) => {
 
   const [ tokenAmount, setTokenAmount] = useState(0);
   const [ requiredAmount, setRequiredAmount] = useState(0);
   const [ tokenId, setTokenId ] = useState();
+  const [ demoLps , setDemoLps] = useState();
   const { isWeb3Enabled  } = useMoralis();
   const { runContractFunction } = useWeb3Contract();
 
@@ -37,6 +39,15 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
     abi: LiquidityVault,
     contractAddress: LiquidityVaultAddress,
     functionName: "getGameDuration",
+    params:{}
+  })
+
+  // send me Demo lps
+
+  const { runContractFunction: sendMeDemoLps } = useWeb3Contract({
+    abi: SendMeDemoLps,
+    contractAddress: SendMeDemoLpsAddress,
+    functionName: "sendMeDemoLps",
     params:{}
   })
 
@@ -123,7 +134,14 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
   async function handleError(error){
     // await tx.wait(1)
      console.log("soemthing", error)
-   }
+  }
+
+  const SendMeDemoLps = async () =>{
+    console.log("button trigger")
+      const demoLps = await sendMeDemoLps()
+
+      console.log(demoLps)
+  }
   
   useEffect(() =>{
     if(isWeb3Enabled){
@@ -136,7 +154,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
    <>
       <div className="bg-[url('/assets/images/frame.png')] p-4 shadow-sm rounded-lg bg-cover bg-no-repeat justify-center items-center w-[450px]">
 
-        <form className='px-4 py-4' onSubmit={depositLPTokens}>
+        <div className='px-4 py-4' >
           <div>
             <label className="block mb-2  font-['Nabana-bold'] text-3xl text-[#CF3810] font-medium">Deposit</label>
             <input 
@@ -149,9 +167,10 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
             
           </div> */}
 
-          <button className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Deposit</button>
+          <button onSubmit={depositLPTokens} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Deposit</button>
 
-        </form>
+          <button onSubmit={SendMeDemoLps} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">DemoLps</button>
+        </div>
       </div>
    </>
   )
