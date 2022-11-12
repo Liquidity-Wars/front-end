@@ -29,12 +29,12 @@ export default function EnemyInfo({ playerId }) {
     params: { _id: playerId },
   });
 
-  // get playerAddress
+  // get villageSize
   const { runContractFunction: getVillageSize } = useWeb3Contract({
     abi: LiquidityWars,
     contractAddress: LiquidityWarsAddress,
     functionName: "getVillageSize",
-    params: { _playerAddress: playerAddress },
+    params: { _playerAddress: playerAddress.toString() },
   });
 
   const { runContractFunction } = useWeb3Contract();
@@ -68,15 +68,16 @@ export default function EnemyInfo({ playerId }) {
   async function updateUI() {
     const getPlayerAddresses = await getPlayerAddress();
     setPlayerAddress(getPlayerAddresses);
+    console.log(getPlayerAddresses);
     const getVillageSizes = await getVillageSize();
-    setVillageSize(getVillageSizes);
+    setVillageSize(getVillageSizes?.toString());
   }
 
   useEffect(() => {
     if (isWeb3Enabled) {
       updateUI();
     }
-  }, [isWeb3Enabled]);
+  }, [playerId, playerAddress]);
 
   return (
     <div className="flex flex-col w-full h-full justify-center p-2">

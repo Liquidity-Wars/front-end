@@ -10,6 +10,7 @@ export default function TrainTroops() {
   const [troopAttributes, setTroopAttributes] = useState();
   const [costToTrainTroops, setCostToTrainTroops] = useState();
   const dispatch = useNotification();
+  const [numberToTrain, setNumberToTrain] = useState();
 
   const chainId = parseInt(chainIdHex);
   const LiquidityWarsAddress =
@@ -55,6 +56,7 @@ export default function TrainTroops() {
 
   // submit train <user input> number of troops
   async function handleTrainTroops(numberToTrain) {
+    console.log(numberToTrain);
     const trainTroopsParams = {
       abi: LiquidityWars,
       contractAddress: LiquidityWarsAddress,
@@ -73,7 +75,7 @@ export default function TrainTroops() {
     const getTroopAttribute = await getTroopAttributes();
     setTroopAttributes(getTroopAttribute);
     const getCostToTrainTroops = await getTotalCostOfTroop();
-    setCostToTrainTroops(getCostToTrainTroops);
+    setCostToTrainTroops(getCostToTrainTroops.toNumber());
   }
 
   useEffect(() => {
@@ -84,7 +86,7 @@ export default function TrainTroops() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await handleTrainTroops(e.target.value);
+    await handleTrainTroops(numberToTrain);
   };
 
   return (
@@ -106,6 +108,8 @@ export default function TrainTroops() {
         type="number"
         className="w-2/3 p-1"
         placeholder="Number to train"
+        value={numberToTrain}
+        onChange={(event) => setNumberToTrain(event.target.value)}
       />
       <button
         type="submit"

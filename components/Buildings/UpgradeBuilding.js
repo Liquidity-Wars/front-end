@@ -6,32 +6,21 @@ import LiquidityWarsConfig from "../../constants/LiquidityWarsConfig.json";
 import { useMoralis, useWeb3Contract } from "react-moralis";
 import TrainTroops from "./TrainTroops";
 import { useNotification } from "web3uikit";
+import { ethers } from "ethers";
 
-export default function UpgradeBuilding({ handleClose, buildingType }) {
+export default function UpgradeBuilding({
+  handleClose,
+  buildingType,
+  infrastructureNumber,
+}) {
   const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
   const [currentBuildingLevel, setCurrentBuildingLevel] = useState(0);
   const [costOfUpgrade, setCostOfUpgrade] = useState(0);
   const [buildingAbility, setBuildingAbility] = useState(0);
   const [bonus, setBonus] = useState(0);
   const dispatch = useNotification();
-  var infrastructureNumber;
 
   const { runContractFunction } = useWeb3Contract();
-
-  switch (buildingType) {
-    case "FARM":
-      infrastructureNumber = 0;
-      break;
-    case "BARRACKS":
-      infrastructureNumber = 1;
-      break;
-    case "HIDEAWAY":
-      infrastructureNumber = 2;
-      break;
-    case "WALLS":
-      infrastructureNumber = 3;
-      break;
-  }
 
   const chainId = parseInt(chainIdHex);
   const LiquidityWarsAddress =
@@ -90,19 +79,19 @@ export default function UpgradeBuilding({ handleClose, buildingType }) {
 
   // get buildingParam for bonuses
   const { runContractFunction: getBuildingParam } = useWeb3Contract({
-    abi: LiquidityWars,
+    abi: LiquidityWarsConfig,
     contractAddress: LiquidityWarsConfigAddress,
     functionName: "getBuildingParam",
     params: { _id: infrastructureNumber },
   });
 
   // upgrade building function
-  async function handleUpgradeBuilding(buildingType) {
+  async function handleUpgradeBuilding() {
     const buildingParams = {
       abi: LiquidityWars,
       contractAddress: LiquidityWarsAddress,
       functionName: "upgradeBuilding",
-      params: { _building: buildingType },
+      params: { _building: infrastructureNumber },
     };
 
     await runContractFunction({
@@ -112,20 +101,33 @@ export default function UpgradeBuilding({ handleClose, buildingType }) {
     });
   }
 
-  async function updateUI() {
-    const getBuildingLevel = await getCurrentBuildingLevel();
-    setCurrentBuildingLevel(getBuildingLevel);
-    const getUpgradeCost = await getCostOfUpgrade();
-    setCostOfUpgrade(getUpgradeCost);
-    const getCurrentAbility = await getBuildingAbility();
-    setBuildingAbility(getCurrentAbility);
+  async function getBuildingParams() {
     const getBuildingParams = await getBuildingParam();
-    setBonus(getBuildingParams?.bonus);
+    console.log(getBuildingParams.toString());
+    setBonus(getBuildingParams?.bonus ? getBuildingParams.bonus.toNumber() : 0);
+    console.log(typeof bonus);
+  }
+
+  async function updateUI() {
+    const getBuildingLevel = (await getCurrentBuildingLevel())?.toString();
+    setCurrentBuildingLevel(getBuildingLevel);
+    const getUpgradeCost = (await getCostOfUpgrade())?.toString();
+    setCostOfUpgrade(getUpgradeCost);
+    const getCurrentAbility = (await getBuildingAbility())?.toString();
+    setBuildingAbility(getCurrentAbility);
+    console.log(getBuildingLevel);
+    console.log(getCurrentAbility);
   }
 
   useEffect(() => {
     if (isWeb3Enabled) {
       updateUI();
+    }
+  }, [buildingType, currentBuildingLevel]);
+
+  useEffect(() => {
+    if (isWeb3Enabled) {
+      getBuildingParams();
     }
   }, [buildingType]);
 
@@ -152,13 +154,14 @@ export default function UpgradeBuilding({ handleClose, buildingType }) {
           <div>Cost of Upgrade: {costOfUpgrade}</div>
           <div>Current Ability: {buildingAbility}</div>
           <div>
-            Next Ability: {buildingAbility + (buildingAbility * bonus) / 100}
+            Next Ability:{" "}
+            {Number(buildingAbility) + Number(buildingAbility * bonus) / 100}
           </div>
           {buildingType == "BARRACK" && <TrainTroops />}
         </div>
         <button
           onClick={async () => {
-            await handleUpgradeBuilding(buildingType);
+            await handleUpgradeBuilding();
           }}
           className="btn btn-primary text-white p-3 font-semibold rounded-md bg-cover w-[130px] bg-[url('/assets/images/valley-button.png')]"
         >
