@@ -5,12 +5,18 @@ import { AnimatePresence } from "framer-motion";
 import VillageHoverInfo from "../components/HoverInfo/VillageHoverInfo";
 import { ethers } from "ethers";
 import ERC20Abi from '../constants/ERC20.json'
+import { useMoralis } from "react-moralis";
+import { useRouter } from 'next/router'
 
 export default function VillagePage() {
+  const { account } = useMoralis();
+  const router = useRouter()
   const [modalOpen, setModalOpen] = useState();
   const [buildingType, setBuildingType] = useState("none");
   const [isHovering, setIsHovering] = useState(false);
+  
   const close = () => setModalOpen(false);
+
   const open = (building) => {
     setModalOpen(true);
     setBuildingType(building);
@@ -60,6 +66,12 @@ export default function VillagePage() {
   useEffect(() => {
     getEvents();
   }, [])
+
+  useEffect(() => {
+    if(!account) {
+      router.push("/");
+    }
+  }, [account])
 
   return (
     <div className="flex flex-col items-center h-screen w-screen bg-cover bg-[url('/assets/images/stardew-valley-img.jpg')]">

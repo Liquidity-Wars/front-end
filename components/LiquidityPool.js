@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import LiquidityVault from '../constants/LiquidityVault.json'
-import LiquidityWarsConfig from '../constants/LiquidityWarsConfig.json'
 import SendMeDemoLps from "../constants/SendMeDemoLps.json";
+import LiquidityVaultAbi from '../constants/LiquidityVault.json'
+import LiquidityWarsConfigAbi from '../constants/LiquidityWarsConfig.json'
 import { useMoralis, useWeb3Contract  } from "react-moralis"
 import { ethers } from "ethers"
 import { Form } from 'web3uikit';
@@ -17,7 +17,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
 
   // deposit LP tokens
   const { runContractFunction: depositLpToken } = useWeb3Contract({
-    abi: LiquidityVault,
+    abi: LiquidityVaultAbi,
     contractAddress: LiquidityVaultAddress,
     functionName: "depositLpToken",
     params:{
@@ -28,7 +28,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
 
   // getUsdRequiredAmount
   const { runContractFunction: getUsdRequiredAmount } = useWeb3Contract({
-    abi: LiquidityWarsConfig,
+    abi: LiquidityWarsConfigAbi,
     contractAddress: LiquidityVaultConfigAddress,
     functionName: "getUsdRequiredAmount",
     params:{}

@@ -1,21 +1,33 @@
 import { AnimatePresence } from "framer-motion";
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import MapHoverInfo from "../components/HoverInfo/MapHoverInfo";
 import EnemyInfo from "../components/Map/EnemyInfo";
 import MapGrid from "../components/Map/MapGrid";
 import Modal from "../components/Map/Modal";
 import MapNav from "../components/MapNav";
 import styles from "../styles/Home.module.css";
+import { useMoralis } from "react-moralis";
+import { useRouter } from 'next/router'
+
 export const PlayerContext = createContext();
 
 export default function MapPage() {
+  const { account } = useMoralis();
+  const router = useRouter()
   const [playerId, setPlayerId] = useState();
   const [modalOpen, setModalOpen] = useState();
 
   const close = () => setModalOpen(false);
+  
   const open = () => {
     setModalOpen(true);
   };
+
+  useEffect(() => {
+    if(!account) {
+      router.push("/");
+    }
+  }, [account])
 
   return (
     <PlayerContext.Provider value={setPlayerId}>
