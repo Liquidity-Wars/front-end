@@ -4,15 +4,21 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ConnectButton } from "web3uikit";
+import { useMoralis } from "react-moralis";
 
 const TopNav = () => {
   const router = useRouter();
+  const { isWeb3Enabled } = useMoralis();
+
+//   useEffect(() =>{
+
+//   }, [isWeb3Enabled])
 
   return (
     <>
         <nav className="bg-transparent border-gray-200 px-2 sm:px-4 py-2.5 rounded">
         <div className="container flex flex-wrap justify-between items-center mx-auto">
-            <a href="/" className="flex items-center">
+            <a href="/" className={`flex items-center ${isWeb3Enabled == true ? "pr-36" : "pr-2"}`}>
                 <motion.div
                      initial={{
                         y: 0,
@@ -41,7 +47,7 @@ const TopNav = () => {
                             <a className={`block py-2 pr-4 pl-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 ${router.pathname === "/"
                                     ? "text-gray-200"
                                     : "text-white"
-                                }`}>Deposit</a>
+                                }`}>Home</a>
                         </Link>
                     </li>
                     <li className={router.pathname == "/map-page" ? "active" : ""}>
