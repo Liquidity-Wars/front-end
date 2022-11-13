@@ -15,6 +15,8 @@ import { useEffect, useState } from "react";
 import ConnectToWallet from "../components/Misc/ConnectToWallet";
 import TopNav from "../components/TopNav";
 import Selector from "../components/Misc/Selector";
+import Link from "next/link";
+
 
 export default function Home() {
 
@@ -31,6 +33,9 @@ export default function Home() {
   const [allowedLPAddresses , setAllowedLPAddresses] = useState([]);
   const [userAddress , setUserAddress ] = useState();
   const [ playerExist, setPlayerExist ] = useState(false);
+  // const [lpTokens, setLpTokens] = useState([]);
+
+
   
   // get time getTimeToStartOrEndGame
   const {runContractFunction: getTimeToStartOrEndGame} = useWeb3Contract({
@@ -208,7 +213,7 @@ export default function Home() {
             className="flex"
           >
             <img
-              className="h-64"
+              className="h-48"
               src="/assets/images/sample-logo.png"
               alt="logo"
             />
@@ -219,43 +224,58 @@ export default function Home() {
             {isWeb3Enabled ? ( 
               <>
               <div className="bg-transparent p-4 ">
-                <div className="bg-[url('/assets/images/valley-canvas.png')] justify-center w-[700px] h-auto bg-cover bg-no-repeat">
+                <div className="bg-[url('/assets/images/valley-canvas.png')] justify-center w-[800px] h-auto bg-cover bg-no-repeat">
                     <div className="flex flex-col  justify-center text-lg items-center text-center px-6 py-6">
-                      <h2 className="font-['Nabana-bold'] text-4xl text-[#CF3810]">Next Game In</h2>
+                      <h2 className="font-['Nabana-bold'] text-4xl text-[#CF3810]">{gameState == 0 ? 'Next Game In' : 'Game is Running!'}</h2>
                       <div className="bg-[url('/assets/images/scroll.png')] justify-center w-24 bg-cover bg-no-repeat">
                         <p className="font-['Nabana-bold']">{gameState == 0 ? 'Ready' : 'Running'}</p>
                       </div>
+
                       <CountdownTimer targetDate={dateTime} />
-                      <Selector />
+                      {/* <Selector 
+                        allowedLPTokens={allowedLPTokens}
+                        allowedLPAddresses={allowedLPAddresses}
+                      />
                       <LiquidityPool 
                       LiquidityVaultAddress={LiquidityVaultAddress}
                       LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
                       SushiSwapAddress={SushiSwapAddress}
                       allowedLPTokens={allowedLPTokens}
                       SendMeDemoLpsAddress={SendMeDemoLpsAddress}
-
-
-
-                      />
-                        {/* {playerExist ? 
+                      allowedLPAddresses={allowedLPAddresses}
+                      /> */}
+                        {playerExist ? 
                         (
                           <>
-                              <div>Lets play the game!</div>
+                              <div className="bg-transparent p-8 ">
+                                <div className="bg-[url('/assets/images/Web3Frame.png')] flex justify-center w-64 h-64 bg-cover bg-no-repeat">
+                                    <div className="flex flex-col font-['Stardew'] justify-center text-lg items-center text-center px-6">
+                                        <h2>Welcome to <br></br> Liqduidity Wars!!!</h2>
+                                        <Link href="/map-page">
+                                          <a className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-4 ">Play Now!</a>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
                           </>
                         ) : 
                         
                           <>
-                          
-                            <Selector />
+                            <Selector 
+                            allowedLPTokens={allowedLPTokens}
+                            allowedLPAddresses={allowedLPAddresses}
+                            />
                             <LiquidityPool 
                             LiquidityVaultAddress={LiquidityVaultAddress}
                             LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
                             SushiSwapAddress={SushiSwapAddress}
                             allowedLPTokens={allowedLPTokens}
                             SendMeDemoLpsAddress={SendMeDemoLpsAddress}
+                            allowedLPAddresses={allowedLPAddresses}
+                            userAddress={userAddress}
                             />
                           </>
-                        }  */}
+                        } 
 
 
                 

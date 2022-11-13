@@ -1,7 +1,11 @@
 import { motion } from "framer-motion";
 import UpgradeBuilding from "./UpgradeBuilding";
 
-export default function Modal({ handleClose, buildingType }) {
+export default function Modal({
+  handleClose,
+  buildingType,
+  infrastructureNumber,
+}) {
   const dropIn = {
     hidden: {
       y: "-100vh",
@@ -24,14 +28,17 @@ export default function Modal({ handleClose, buildingType }) {
   };
   return (
     <motion.div
-      onClick={(e) => e.stopPropagation}
       className="absolute w-[400px] h-[400px] flex flex-col items-center justify-center"
       variants={dropIn}
       initial="hidden"
       animate="visible"
       exit="exit"
     >
-      <UpgradeBuilding handleClose={handleClose} buildingType={buildingType} />
+      <UpgradeBuilding
+        handleClose={handleClose}
+        buildingType={buildingType}
+        infrastructureNumber={infrastructureNumber}
+      />
     </motion.div>
   );
 }

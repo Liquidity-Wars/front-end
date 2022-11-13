@@ -7,27 +7,28 @@ import Modal from "../components/Map/Modal";
 import MapNav from "../components/MapNav";
 import styles from "../styles/Home.module.css";
 import { useMoralis } from "react-moralis";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 
 export const PlayerContext = createContext();
 
 export default function MapPage() {
   const { account } = useMoralis();
-  const router = useRouter()
+  const router = useRouter();
   const [playerId, setPlayerId] = useState();
   const [modalOpen, setModalOpen] = useState();
+  console.log(playerId);
 
   const close = () => setModalOpen(false);
-  
+
   const open = () => {
     setModalOpen(true);
   };
 
   useEffect(() => {
-    if(!account) {
+    if (!account) {
       router.push("/");
     }
-  }, [account])
+  }, [account]);
 
   return (
     <PlayerContext.Provider value={setPlayerId}>
@@ -47,7 +48,7 @@ export default function MapPage() {
             <MapGrid />
           </div>
           <button
-            onClick={() => open("WALLS")}
+            onClick={() => open()}
             className="py-3 px-3 bg-yellow-400 border-black border-2 rounded-full translate-y-[-230px] translate-x-6"
           >
             Log

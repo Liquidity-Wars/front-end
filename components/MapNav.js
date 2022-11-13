@@ -6,7 +6,6 @@ import { ConnectButton } from "web3uikit";
 import RewardsToClaim from "./Nav/RewardsToClaim";
 import YourResources from "./Nav/YourResources";
 
-
 const MapNav = () => {
   const router = useRouter();
 
@@ -58,7 +57,7 @@ const MapNav = () => {
                         className="h-[40px] mr-2 p-0"
                         alt="map icon"
                       />
-                      <div>Go to VIllage</div>
+                      <div>Go to Village</div>
                     </div>
                   </a>
                 </Link>
