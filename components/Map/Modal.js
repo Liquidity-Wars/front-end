@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import AttackLog from "./AttackLog";
 
-export default function Modal({ handleClose }) {
+export default function Modal({ handleClose, gameId }) {
   const dropIn = {
     hidden: {
       y: "-100vh",
@@ -31,7 +31,7 @@ export default function Modal({ handleClose }) {
       animate="visible"
       exit="exit"
     >
-      <AttackLog handleClose={handleClose} />
+      <AttackLog handleClose={handleClose} gameId={gameId} />
     </motion.div>
   );
 }

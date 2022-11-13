@@ -9,7 +9,6 @@ import LiquidityVaultAbi from '../constants/LiquidityVault.json'
 import ERC20Abi from '../constants/ERC20.json'
 import UniswapV2PairAbi from '../constants/UniswapV2Pair.json'
 import LiquidityWarsConfigAbi from "../constants/LiquidityWarsConfig.json";
-import LiquidityWarsAbi from "../constants/LiquidityWars.json";
 import SendMeDemoLps from "../constants/SendMeDemoLps.json";
 import { useEffect, useState } from "react";
 import ConnectToWallet from "../components/Misc/ConnectToWallet";
