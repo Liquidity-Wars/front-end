@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import SendMeDemoLpsAbi from "../constants/SendMeDemoLps.json";
 import LiquidityVaultAbi from '../constants/LiquidityVault.json'
 import LiquidityWarsConfigAbi from '../constants/LiquidityWarsConfig.json'
+import ERC20Abi from '../constants/ERC20.json';
 import SushiAbi from '../constants/SushiAbi.json'
 import { useMoralis, useWeb3Contract, useERC20Balances   } from "react-moralis"
 import { useNotification } from "web3uikit";
@@ -16,6 +17,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
   const [ demoLps , setDemoLps] = useState();
   const { isWeb3Enabled, isInitialized  } = useMoralis();
   const [ lpTokenBalance, setLpTokenBalance] = useState();
+  const [ approvedAmount, setApprovedAmount ] = useState(0)
   const { runContractFunction } = useWeb3Contract();
   const dispatch = useNotification();
 
@@ -31,6 +33,16 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
     params:{
       _amount: tokenAmount,
       _tokenAddress: allowedLPAddresses // usdc token addre
+    }
+  })
+
+  const { runContractFunction: approveLpToken } = useWeb3Contract({
+    abi: ERC20Abi,
+    contractAddress: allowedLPAddresses[0],
+    functionName: "approve",
+    params:{
+      spender: LiquidityVaultAddress,
+      amount: tokenAmount
     }
   })
 
@@ -60,7 +72,6 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
     setRequiredAmount(getUsdAmount);
   }
  
-
   async function depositLPTokens(event){
     event.preventDefault();
     const tokensAddr = allowedLPAddresses?.toString() //Lp tokens
@@ -73,8 +84,8 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
       contractAddress: LiquidityVaultAddress,
       functionName: "depositLpToken",
       params: {
-        _tokenAddress: tokensAddr,
-        _amount: price
+        _tokenAddress: "0x18a2470a7a8CdA7691Bb3a304b880Da720053A3e",
+        _amount: tokenAmount
       }
     }
     await runContractFunction({
@@ -84,6 +95,23 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
         handleDepositErrorDispatcher(error);
       }
     })
+
+  }
+
+  async function approveLpTokenFunc(event){
+    event.preventDefault();
+
+    // Get Approve LP Tokens
+
+    console.log(LiquidityVaultAddress, tokenAmount, allowedLPAddresses)
+    if(tokenAmount && tokenAmount > requiredAmount){
+      const approveLPTokens = await approveLpToken()
+      await tx.wait(1)
+      setApprovedAmount(approveLPTokens)
+      console.log(approveLPTokens)
+    } else {
+      handleErrorApproveDispatcher()
+    }
 
   }
   
@@ -146,6 +174,15 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
     });
   }
 
+  async function handleErrorApproveDispatcher(error) {
+    dispatch({
+      type: "error",
+      message: "Approving Too little LpTokens!",
+      title: `You have to deposit at least more than required amount ${requiredAmount}`,
+      position: "topR",
+    });
+  }
+
   async function handleDepositErrorDispatcher(error) {
     dispatch({
       type: "error",
@@ -183,8 +220,16 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
           {/* <div className="bg-[url('/assets/images/valley-button.png')] justify-center items-center w-40 h-auto bg-cover bg-no-repeat">
             
           </div> */}
+          {!approvedAmount ?
+          (
+            <button onClick={approveLpTokenFunc} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Approve</button>
+          ) : (
+            <button onClick={depositLPTokens} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Deposit</button>
+          )
+          }
 
-          <button onClick={depositLPTokens} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Deposit</button>
+            
+
 
           <button onClick={SendMeDemoLpFunc} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">DemoLps</button>
         </div>
