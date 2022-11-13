@@ -74,7 +74,7 @@ export default function Home() {
 
     const getTime = (await getTimeToStartOrEndGame())?.toString() || 0;
     const gameStatus = (await getGameState()).toString();
-    const getGameDurations = (await getGameDuration()).toString();
+    const getGameDurations = (await getGameDuration())?.toString();
     const playerInfo = (await getPlayerInfo())?.toString();
     const playerExistInGame = playerInfo?.split(',')[0] 
 
@@ -84,15 +84,18 @@ export default function Home() {
       setPlayerExist(true)
     } 
 
-
-    if(gameStatus == 0){  
-      setDateTime(getTime)
-    } else {
-      setDateTime(getGameDurations)
+    if(gameStatus == 0){
+      let expiresInMS = getTime*1000
+      let currentTimeStamp = new Date()
+      let expiresDateTime = new Date(currentTimeStamp.getTime() + expiresInMS);
+      setDateTime(expiresDateTime)
     }
-
-   
-
+    if(gameStatus == 1){
+      let expiresInMS = getGameDurations*1000
+      let currentTimeStamp = new Date()
+      let expiresDateTime = new Date(currentTimeStamp.getTime() + expiresInMS);
+      setDateTime(expiresDateTime)
+    }
 
   }
 
@@ -106,9 +109,6 @@ export default function Home() {
     }
   }
 
-  // const handleNewNotification = (tx) =>{
-
-  // }
 
   const getAllowedTokens = async () => {
     if(LiquidityVaultConfigAddress && LiquidityWarsConfigAbi) {

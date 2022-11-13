@@ -39,8 +39,8 @@ const Selector = ({allowedLPTokens ,allowedLPAddresses }) => {
             : selected
           : (
             <div className="flex flex-row items-center w-full">
-              <p className="flex ">Select Token To Play!</p>
-              <img src='../assets/images/Milk.png' className="w-8 h-8 item-right" alt="Milk"/>
+              <p className="flex w-3/4 mr-8">Select Token To Play!</p>
+              <img src='../assets/images/Milk.png' className="w-8 h-8 items-right" alt="Milk"/>
             </div>
           )}
        
