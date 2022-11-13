@@ -34,7 +34,7 @@ export default function EnemyInfo({ playerId }) {
     abi: LiquidityWars,
     contractAddress: LiquidityWarsAddress,
     functionName: "getVillageSize",
-    params: { _playerAddress: playerAddress.toString() },
+    params: { _playerAddress: playerAddress },
   });
 
   const { runContractFunction } = useWeb3Contract();
@@ -66,11 +66,10 @@ export default function EnemyInfo({ playerId }) {
   }
 
   async function updateUI() {
-    const getPlayerAddresses = await getPlayerAddress();
+    const getPlayerAddresses = (await getPlayerAddress()).toString();
     setPlayerAddress(getPlayerAddresses);
-    console.log(getPlayerAddresses);
-    const getVillageSizes = await getVillageSize();
-    setVillageSize(getVillageSizes?.toString());
+    const getVillageSizes = (await getVillageSize())?.toString();
+    setVillageSize(getVillageSizes);
   }
 
   useEffect(() => {
@@ -80,26 +79,33 @@ export default function EnemyInfo({ playerId }) {
   }, [playerId, playerAddress]);
 
   return (
-    <div className="flex flex-col w-full h-full justify-center p-2">
+    <div className="flex flex-col w-[250px] h-full justify-between">
       <div className="text-xl font-bold text-gray-700 mb-8">
         <div>Player Id: {playerId}</div>
-        <div>Player Address {playerAddress}:</div>
+        <div className="truncate">
+          Player Address:{" "}
+          {playerAddress.toLowerCase() == account.toLowerCase()
+            ? "You"
+            : playerAddress}
+        </div>
         <div>Village Size: {villageSize}</div>
       </div>
 
-      <button
-        onClick={() => handleAttackPlayer(playerAddress)}
-        className="m-auto mb-4 text-white font-semibold p-3 rounded-md bg-cover w-[150px] bg-[url('/assets/images/valley-button.png')]"
-      >
-        <div className="flex items-center justify-center p-1">
-          <img
-            src="/assets/images/attack_icon.png"
-            alt="attack enemy"
-            className="h-[20px]"
-          />{" "}
-          <div> Attack Player</div>
-        </div>
-      </button>
+      {playerAddress.toLowerCase() !== account.toLowerCase() && (
+        <button
+          onClick={() => handleAttackPlayer(playerAddress)}
+          className="m-auto mb-4 text-white font-semibold p-3 rounded-md bg-cover w-[150px] bg-[url('/assets/images/valley-button.png')]"
+        >
+          <div className="flex items-center justify-center p-1">
+            <img
+              src="/assets/images/attack_icon.png"
+              alt="attack enemy"
+              className="h-[20px]"
+            />{" "}
+            <div> Attack Player</div>
+          </div>
+        </button>
+      )}
     </div>
   );
 }

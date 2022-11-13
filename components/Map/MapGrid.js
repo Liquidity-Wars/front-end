@@ -10,7 +10,7 @@ export default function MapGrid() {
   const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
   const setPlayerId = useContext(PlayerContext);
   const chainId = parseInt(chainIdHex);
-  const [numberOfPlayers, setNumberOfPlayers] = useState(3);
+  const [numberOfPlayers, setNumberOfPlayers] = useState();
   const LiquidityVaultAddress =
     chainId in networkMapping
       ? networkMapping[chainId]["LiquidityVault"][0]
