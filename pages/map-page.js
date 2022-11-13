@@ -6,17 +6,30 @@ import MapGrid from "../components/Map/MapGrid";
 import Modal from "../components/Map/Modal";
 import MapNav from "../components/MapNav";
 import styles from "../styles/Home.module.css";
-import { useMoralis } from "react-moralis";
+import { useMoralis, useWeb3Contract } from "react-moralis";
 import { useRouter } from "next/router";
+import LiquidityWarsAbi from "../constants/LiquidityWars.json";
+import networkMapping from "../constants/networkMapping.json";
 
 export const PlayerContext = createContext();
 
 export default function MapPage() {
-  const { account } = useMoralis();
   const router = useRouter();
   const [playerId, setPlayerId] = useState();
   const [modalOpen, setModalOpen] = useState();
-  console.log(playerId);
+  const [gameId, setGameId] = useState();
+  const { account, isWeb3Enabled, chainId: chainIdHex } = useMoralis();
+  const chainId = parseInt(chainIdHex);
+  const LiquidityWarsAddress =
+  chainId in networkMapping
+    ? networkMapping[chainId]["LiquidityWars"][0]
+    : null;
+
+  const { runContractFunction: getCurrentGameId } = useWeb3Contract({
+    abi: LiquidityWarsAbi,
+    contractAddress: LiquidityWarsAddress,
+    functionName: "getCurrentGameId"
+  });
 
   const close = () => setModalOpen(false);
 
@@ -24,11 +37,22 @@ export default function MapPage() {
     setModalOpen(true);
   };
 
+  async function updateGameId() {
+    const gameId = await getCurrentGameId();
+    setGameId(gameId);
+}
+
   useEffect(() => {
     if (!account) {
       router.push("/");
     }
   }, [account]);
+
+  useEffect(() => {
+    if (isWeb3Enabled) {
+      updateGameId();
+    }
+  }, [isWeb3Enabled]);
 
   return (
     <PlayerContext.Provider value={setPlayerId}>
@@ -59,7 +83,7 @@ export default function MapPage() {
             onExitComplete={() => null}
             className="absolute m-auto"
           >
-            {modalOpen && <Modal modalOpen={modalOpen} handleClose={close} />}
+            {modalOpen && <Modal gameId={gameId} handleClose={close} />}
           </AnimatePresence>
         </div>
       </div>

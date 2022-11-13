@@ -84,6 +84,10 @@ export default function VillagePage() {
     const events3 = await usdcContract.queryFilter(filterFrom);
     console.log("All USDC transfer from me:", events3);
 
+    let allEvents = [...events2, ...events3];
+    allEvents.sort((a,b) => a.blockNumber - b.blockNumber); // b - a for reverse sort
+    console.log("All transfers:", allEvents);
+
     // DepositDone event from the LiquidityVault contract
     //const liquidityVaultContract = new ethers.Contract("0x41e190323923e37A190A6907aa4868cb0F613cF2", LiquidityVaultAbi, provider);
     //const eventFilter = liquidityVaultContract.filters.DepositDone();

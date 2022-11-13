@@ -1,1 +1,612 @@
-[{"inputs":[{"internalType":"uint256","name":"_distributionInterval","type":"uint256"},{"internalType":"address","name":"_configAddress","type":"address"},{"internalType":"address","name":"_VRFAddress","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"LiquidityVault__MsgSenderNotInGame","type":"error"},{"inputs":[{"internalType":"enum GameState","name":"","type":"uint8"}],"name":"LiquidityVault__WrongGameState","type":"error"},{"inputs":[{"internalType":"uint256","name":"resourcesRequired","type":"uint256"}],"name":"LiquidityWars__NotEnoughResources","type":"error"},{"inputs":[],"name":"LiquidityWars__NotLiquidityVaultCall","type":"error"},{"inputs":[{"internalType":"enum Infrastructure","name":"building","type":"uint8"}],"name":"LiquidityWars__WrongInfrastructure","type":"error"},{"inputs":[],"name":"LiquidityWars__WrongInputValue","type":"error"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"attackerTroopsSurvived","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"defenderTroopsSurvived","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"robbedResources","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"gameId","type":"uint256"}],"name":"AttackHappenned","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"playerAddr","type":"address"},{"indexed":false,"internalType":"uint256","name":"playerResources","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"playerRaking","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"gameId","type":"uint256"}],"name":"RakingUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"gameId","type":"uint256"}],"name":"ResourcesUpdated","type":"event"},{"inputs":[{"internalType":"address","name":"_playerToAttack","type":"address"}],"name":"attackPlayer","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes","name":"checkData","type":"bytes"}],"name":"checkUpkeep","outputs":[{"internalType":"bool","name":"upkeepNeeded","type":"bool"},{"internalType":"bytes","name":"performData","type":"bytes"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"endGame","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"gameId","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_level","type":"uint256"},{"internalType":"enum Infrastructure","name":"_building","type":"uint8"}],"name":"getBuildingAbility","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint16","name":"_level","type":"uint16"}],"name":"getCostOfUpgrade","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"enum Infrastructure","name":"_building","type":"uint8"}],"name":"getCurrentBuildingLevel","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getGameState","outputs":[{"internalType":"enum GameState","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getNumberOfTroops","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_playerAddress","type":"address"}],"name":"getPlayerResources","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_playerAddress","type":"address"}],"name":"getRatioOfResources","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getRewardsToClaim","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_playerAddress","type":"address"}],"name":"getTotalCostOfTroop","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTotalSupplyOfResources","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"enum Nation","name":"_nation","type":"uint8"}],"name":"getTroopAttributes","outputs":[{"components":[{"internalType":"uint64","name":"number","type":"uint64"},{"internalType":"uint32","name":"cost","type":"uint32"},{"internalType":"uint32","name":"health","type":"uint32"},{"internalType":"uint16","name":"capacity","type":"uint16"},{"internalType":"uint16","name":"speed","type":"uint16"},{"internalType":"uint16","name":"defense","type":"uint16"},{"internalType":"uint16","name":"attack","type":"uint16"}],"internalType":"struct Troop","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getVaultResources","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_playerAddress","type":"address"}],"name":"getVillageSize","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes","name":"performData","type":"bytes"}],"name":"performUpkeep","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_costOfAttack","type":"uint256"}],"name":"setCostsOfAttack","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes","name":"_playersEncoded","type":"bytes"}],"name":"startGame","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_numberOfTroops","type":"uint256"}],"name":"trainTroops","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"enum Infrastructure","name":"_building","type":"uint8"}],"name":"upgradeBuilding","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+[
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_distributionInterval",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_configAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_VRFAddress",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "LiquidityVault__TimeNotPassed",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum GameState",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "name": "LiquidityVault__WrongGameState",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "LiquidityWars__MsgSenderNotInGame",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "resourcesRequired",
+        "type": "uint256"
+      }
+    ],
+    "name": "LiquidityWars__NotEnoughResources",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "LiquidityWars__NotLiquidityVaultCall",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum Infrastructure",
+        "name": "building",
+        "type": "uint8"
+      }
+    ],
+    "name": "LiquidityWars__WrongInfrastructure",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "LiquidityWars__WrongInputValue",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "LiquidityWars__checkUpkeepError",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "attacker",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "defender",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "gameId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "attackerTroopsSurvived",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "defenderTroopsSurvived",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "robbedResources",
+        "type": "uint256"
+      }
+    ],
+    "name": "AttackHappenned",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "playerAddr",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "gameId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "playerResources",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "playerRaking",
+        "type": "uint256"
+      }
+    ],
+    "name": "RakingUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "gameId",
+        "type": "uint256"
+      }
+    ],
+    "name": "ResourcesUpdated",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_playerToAttack",
+        "type": "address"
+      }
+    ],
+    "name": "attackPlayer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "checkData",
+        "type": "bytes"
+      }
+    ],
+    "name": "checkUpkeep",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "upkeepNeeded",
+        "type": "bool"
+      },
+      {
+        "internalType": "bytes",
+        "name": "performData",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "endGame",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "gameId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_level",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum Infrastructure",
+        "name": "_building",
+        "type": "uint8"
+      }
+    ],
+    "name": "getBuildingAbility",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "_level",
+        "type": "uint16"
+      }
+    ],
+    "name": "getCostOfUpgrade",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum Infrastructure",
+        "name": "_building",
+        "type": "uint8"
+      }
+    ],
+    "name": "getCurrentBuildingLevel",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getCurrentGameId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getGameState",
+    "outputs": [
+      {
+        "internalType": "enum GameState",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getNumberOfTroops",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_playerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "getPlayerResources",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_playerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "getRatioOfResources",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_playerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "getTotalCostOfTroop",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getTotalSupplyOfResources",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum Nation",
+        "name": "_nation",
+        "type": "uint8"
+      }
+    ],
+    "name": "getTroopAttributes",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint64",
+            "name": "number",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint32",
+            "name": "cost",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "health",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint16",
+            "name": "capacity",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "speed",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "defense",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "attack",
+            "type": "uint16"
+          }
+        ],
+        "internalType": "struct Troop",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getVaultResources",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_playerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "getVillageSize",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "performData",
+        "type": "bytes"
+      }
+    ],
+    "name": "performUpkeep",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_costOfAttack",
+        "type": "uint256"
+      }
+    ],
+    "name": "setCostsOfAttack",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "_playersEncoded",
+        "type": "bytes"
+      }
+    ],
+    "name": "startGame",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_numberOfTroops",
+        "type": "uint256"
+      }
+    ],
+    "name": "trainTroops",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum Infrastructure",
+        "name": "_building",
+        "type": "uint8"
+      }
+    ],
+    "name": "upgradeBuilding",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
