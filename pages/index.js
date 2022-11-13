@@ -89,7 +89,8 @@ export default function Home() {
       //setDateTime(getTime)
       setDateTime(1669870800) //unix time stamp for Dec 1st 2022 00:00:00 GMT+0000
     } else {
-      setDateTime(getGameDurations)
+      //setDateTime(getGameDurations)
+      setDateTime(1669870800) //unix time stamp for Dec 1st 2022 00:00:00 GMT+0000
     }
 
    
