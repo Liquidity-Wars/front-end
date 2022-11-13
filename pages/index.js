@@ -29,6 +29,8 @@ export default function Home() {
   const SendMeDemoLpsAddress = chainId in networkMapping ? networkMapping[chainId]['SendMeDemoLps'][0] : null
   const [allowedLPTokens , setAllowedLPTokens] = useState([]);
   const [allowedLPAddresses , setAllowedLPAddresses] = useState([]);
+  const [userAddress , setUserAddress ] = useState();
+  const [ playerExist, setPlayerExist ] = useState(false);
   
   // get time getTimeToStartOrEndGame
   const {runContractFunction: getTimeToStartOrEndGame} = useWeb3Contract({
@@ -46,13 +48,47 @@ export default function Home() {
     params:{}
   })
 
+   // getGameDuration
+   const {runContractFunction: getGameDuration} = useWeb3Contract({
+    abi: LiquidityVaultAbi,
+    contractAddress: LiquidityVaultAddress,
+    functionName:"getGameDuration",
+    params:{}
+  })
+
+  // getCurrentPlayInfo
+  const {runContractFunction: getPlayerInfo} = useWeb3Contract({
+    abi: LiquidityVaultAbi,
+    contractAddress: LiquidityVaultAddress,
+    functionName:"getPlayerInfo",
+    params:{ _playerAddress: userAddress}
+  })
+
+
   // Keep track and update all UI state
   async function updateUI(){
 
-    // const getTime = (await getTimeToStartOrEndGame()).toString();
+    const getTime = (await getTimeToStartOrEndGame())?.toString() || 0;
     const gameStatus = (await getGameState()).toString();
-    setDateTime(450)
+    const getGameDurations = (await getGameDuration()).toString();
+    const playerInfo = (await getPlayerInfo())?.toString();
+    const playerExistInGame = playerInfo?.split(',')[0] 
+
     setGameState(gameStatus)
+
+    if(allowedLPAddresses.includes(playerExistInGame)){
+      setPlayerExist(true)
+    } 
+
+
+    if(gameStatus == 0){  
+      setDateTime(getTime)
+    } else {
+      setDateTime(getGameDurations)
+    }
+
+   
+
 
   }
 
@@ -105,14 +141,33 @@ export default function Home() {
     setAllowedLPTokens([...new Set(newAllowedLPTokens)]);
   }
 
+
+  async function connect() {
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    let accounts = await provider.send("eth_requestAccounts", []);
+    let account = accounts[0];
+    provider.on('accountsChanged', function (accounts) {
+        account = accounts[0];
+        console.log(address); // Print new address
+    });
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    setUserAddress(address)
+  }
+
   useEffect(() => {
-    getAllowedTokens();
-  }, [LiquidityVaultAddress])
-  
+    connect();
+  }, [userAddress])
+
+
   useEffect(() => {
-    //console.log("allowedLPAddresses: ", allowedLPAddresses);
+    // console.log("allowedLPAddresses: ", allowedLPAddresses);
     for (let i = 0; i < allowedLPAddresses.length; i++) {
       getLPTokenSymbol(allowedLPAddresses[i]);
+    }
+
+    if(allowedLPAddresses.length>0){
+      updateUI();
     }
   }, [allowedLPAddresses])
 
@@ -122,11 +177,16 @@ export default function Home() {
     }
   }, [allowedLPTokens])
 
+  useEffect(() => {
+    getAllowedTokens();
+  }, [LiquidityVaultAddress])
+  
+
   useEffect(() =>{
     if(isWeb3Enabled){
       updateUI();
     }
-  }, [isWeb3Enabled])
+  }, [isWeb3Enabled, userAddress, playerExist])
 
   return (
     <>
@@ -173,7 +233,32 @@ export default function Home() {
                       SushiSwapAddress={SushiSwapAddress}
                       allowedLPTokens={allowedLPTokens}
                       SendMeDemoLpsAddress={SendMeDemoLpsAddress}
+
+
+
                       />
+                        {/* {playerExist ? 
+                        (
+                          <>
+                              <div>Lets play the game!</div>
+                          </>
+                        ) : 
+                        
+                          <>
+                          
+                            <Selector />
+                            <LiquidityPool 
+                            LiquidityVaultAddress={LiquidityVaultAddress}
+                            LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
+                            SushiSwapAddress={SushiSwapAddress}
+                            allowedLPTokens={allowedLPTokens}
+                            SendMeDemoLpsAddress={SendMeDemoLpsAddress}
+                            />
+                          </>
+                        }  */}
+
+
+                
 
                     </div>
                   </div>

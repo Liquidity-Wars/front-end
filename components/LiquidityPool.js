@@ -97,7 +97,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
     const price = Number(tokenAmount)
 
     const approveOptions = {
-      abi:LiquidityVault,
+      abi:LiquidityVaultAbi,
       contractAddress: LiquidityVaultAddress,
       functionName: "depositLpToken",
       params: {
@@ -136,7 +136,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
      console.log("soemthing", error)
   }
 
-  const SendMeDemoLps = async () =>{
+  const SendMeDemoLpFunc = async () =>{
     console.log("button trigger")
       const demoLps = await sendMeDemoLps()
 
@@ -167,9 +167,9 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
             
           </div> */}
 
-          <button onSubmit={depositLPTokens} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Deposit</button>
+          <button onClick={depositLPTokens} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Deposit</button>
 
-          <button onSubmit={SendMeDemoLps} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">DemoLps</button>
+          <button onClick={SendMeDemoLpFunc} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">DemoLps</button>
         </div>
       </div>
    </>
