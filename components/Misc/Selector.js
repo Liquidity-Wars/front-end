@@ -37,7 +37,12 @@ const Selector = ({allowedLPTokens ,allowedLPAddresses }) => {
           ? selected?.length > 25
             ? selected?.substring(0, 25) + "..."
             : selected
-          : "Select Token To Play!"}
+          : (
+            <div className="flex flex-row items-center w-full">
+              <p className="flex ">Select Token To Play!</p>
+              <img src='../assets/images/Milk.png' className="w-8 h-8 item-right" alt="Milk"/>
+            </div>
+          )}
        
       </div>
       <ul
