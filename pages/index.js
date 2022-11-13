@@ -91,7 +91,7 @@ export default function Home() {
       setDateTime(expiresDateTime)
     }
     if(gameStatus == 1){
-      let expiresInMS = getGameDurations*1000
+      let expiresInMS = getTime*1000
       let currentTimeStamp = new Date()
       let expiresDateTime = new Date(currentTimeStamp.getTime() + expiresInMS);
       setDateTime(expiresDateTime)
