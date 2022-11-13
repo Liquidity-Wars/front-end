@@ -50,7 +50,7 @@ export default function Home() {
 
     // const getTime = (await getTimeToStartOrEndGame()).toString();
     const gameStatus = (await getGameState()).toString();
-    setDateTime(450)
+    setDateTime(1669870800) //unix time stamp for Dec 1st 2022 00:00:00 GMT+0000
     setGameState(gameStatus)
 
   }
