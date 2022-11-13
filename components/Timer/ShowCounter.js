@@ -5,7 +5,7 @@ const ShowCounter = ({ days, hours, minutes, seconds }) => {
   return (
     <>
         <div className="flex flex-row items-center">
-          <DateTimeDisplay value={days} type={'Days'} isDanger={false} />
+            <DateTimeDisplay value={days} type={'Days'} isDanger={false} />
             <img src='../assets/images/horseEMOJI.png' className="w-4 h-4" alt="horse"/>
             <DateTimeDisplay value={hours} type={'Hours'} isDanger={false} />
             <img src='../assets/images/horseEMOJI.png' className="w-4 h-4" alt="horse"/>

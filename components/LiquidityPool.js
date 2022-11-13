@@ -59,36 +59,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
     console.log(gameDuration)
     setRequiredAmount(getUsdAmount);
   }
-
-
-
-  // let approveOptions = {
-  //   abi:LiquidityVault,
-  //   contractAddress: contractAddress,
-  //   functionName: "depositLpToken"
-  // }
-
-  // const depositToken = async event =>{
-  //   event.preventDefault();
-
-  //   approveOptions.params = {
-  //     amount: tokenAmount,
-  //     tokenAddress: "0xe11a86849d99f524cac3e7a0ec1241828e332c62"
-  //   }
-
-  //   console.log("approving")
-
-  //   const tx = await depositLpToken({
-  //     params: approveOptions,
-  //     onError : (error) => console.log(error),
-  //     onSuccess : () =>{
-  //       handleApproveSuccess(approveOptions.params.amount)
-  //     }
-  //   })
-    
-  // }
-
-  
+ 
 
   async function depositLPTokens(event){
     event.preventDefault();
@@ -106,17 +77,6 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
         _amount: price
       }
     }
-    // claimRewardTokensFromProtocol
-    //  const approveOptions = {
-    //   abi:LiquidityVault,
-    //   contractAddress: LiquidityVaultAddress,
-    //   functionName: "setGameDuration",
-    //   params: {
-    //     _gameDuration : 1000
-    //   }
-    // }
-    console.log(approveOptions )
-
     await runContractFunction({
       params: approveOptions,
       onSuccess: handleApproveSuccess,
@@ -126,10 +86,10 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
     })
 
   }
+  
 
   async function handleApproveSuccess(tx){
    await tx.wait(1)
-    console.log("soemthing")
   }
 
   const SendMeDemoLpFunc = async () =>{
@@ -160,31 +120,16 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
   const fetchTokenBalances = async () => {
     const provider = new ethers.providers.Web3Provider(ethereum);
     const erc20TokenContract = new ethers.Contract("0x18a2470a7a8CdA7691Bb3a304b880Da720053A3e", SushiAbi, provider);
-    console.log(userAddress)
     const balance = (await erc20TokenContract.balanceOf(userAddress))?.toString();
     const format = ethers.utils.formatEther(balance,18)
-    console.log(format)
+
     setLpTokenBalance(balance)
   }
 
-  // async function fetchTokenBalances() {
-  //   const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-  //   let accounts = await provider.send("eth_requestAccounts", []);
-  //   let account = accounts[0];
-  //   provider.on('accountsChanged', function (accounts) {
-  //       account = accounts[0];
-  //       console.log(address); // Print new address
-  //   });
-  //   const signer = provider.getSigner();
-  //   const balance = await signer.getBalance();
-  //   const format = ethers.utils.formatEther(balance,18)
-  //  console.log(format)
-  // }
 
   
   // dispatch function
   async function handleSuccess() {
-    console.log(tx)
     dispatch({
       type: "success",
       message: "Lp Tokens Are Acquired",
@@ -212,7 +157,6 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
   
   useEffect(() =>{
     if(isWeb3Enabled){
-      console.log(allowedLPTokens)
       updateUI();
       if(userAddress){
         fetchTokenBalances();
