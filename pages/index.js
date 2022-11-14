@@ -85,7 +85,7 @@ export default function Home() {
     } 
 
     if(gameStatus == 0){
-      let expiresInMS = getTime*1000
+      let expiresInMS = getGameDurations*1000
       let currentTimeStamp = new Date()
       let expiresDateTime = new Date(currentTimeStamp.getTime() + expiresInMS);
       setDateTime(expiresDateTime)
@@ -97,6 +97,7 @@ export default function Home() {
       setDateTime(expiresDateTime)
     }
 
+    
   }
 
   const handleSuccess = async (tx) => {
@@ -212,8 +213,8 @@ export default function Home() {
             className="flex"
           >
             <img
-              className="h-48"
-              src="/assets/images/sample-logo.png"
+              className="h-52"
+              src="/assets/images/liquidity_wars.png"
               alt="logo"
             />
           </motion.div>
@@ -249,7 +250,7 @@ export default function Home() {
                               <div className="bg-transparent p-8 ">
                                 <div className="bg-[url('/assets/images/Web3Frame.png')] flex justify-center w-64 h-64 bg-cover bg-no-repeat">
                                     <div className="flex flex-col font-['Stardew'] justify-center text-lg items-center text-center px-6">
-                                        <h2>Welcome to <br></br> Liqduidity Wars!!!</h2>
+                                        <h2>Welcome to <br></br> Liquidity Wars!!!</h2>
                                         <Link href="/map-page">
                                           <a className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-4 ">Play Now!</a>
                                         </Link>
@@ -260,18 +261,18 @@ export default function Home() {
                         ) : 
                         
                           <>
-                            <Selector 
-                            allowedLPTokens={allowedLPTokens}
-                            allowedLPAddresses={allowedLPAddresses}
-                            />
+                            {/* <Selector 
+                              allowedLPTokens={allowedLPTokens}
+                              allowedLPAddresses={allowedLPAddresses}
+                            /> */}
                             <LiquidityPool 
-                            LiquidityVaultAddress={LiquidityVaultAddress}
-                            LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
-                            SushiSwapAddress={SushiSwapAddress}
-                            allowedLPTokens={allowedLPTokens}
-                            SendMeDemoLpsAddress={SendMeDemoLpsAddress}
-                            allowedLPAddresses={allowedLPAddresses}
-                            userAddress={userAddress}
+                              LiquidityVaultAddress={LiquidityVaultAddress}
+                              LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
+                              SushiSwapAddress={SushiSwapAddress}
+                              SendMeDemoLpsAddress={SendMeDemoLpsAddress}
+                              allowedLPTokens={allowedLPTokens}
+                              allowedLPAddresses={allowedLPAddresses}
+                              userAddress={userAddress}
                             />
                           </>
                         } 

@@ -9,26 +9,38 @@ import styles from "../styles/Home.module.css";
 import { useMoralis, useWeb3Contract } from "react-moralis";
 import { useRouter } from "next/router";
 import LiquidityWarsAbi from "../constants/LiquidityWars.json";
+import LiquidityVaultAbi from "../constants/LiquidityVault.json";
 import networkMapping from "../constants/networkMapping.json";
+import { ethers } from "ethers"
 
 export const PlayerContext = createContext();
 
 export default function MapPage() {
   const router = useRouter();
+  const [isPlayer, setIsPlayer] = useState("");
   const [playerId, setPlayerId] = useState();
   const [modalOpen, setModalOpen] = useState();
   const [gameId, setGameId] = useState();
   const { account, isWeb3Enabled, chainId: chainIdHex } = useMoralis();
   const chainId = parseInt(chainIdHex);
-  const LiquidityWarsAddress =
+  const contractAddresses =
     chainId in networkMapping
-      ? networkMapping[chainId]["LiquidityWars"][0]
+      ? networkMapping[chainId]
       : null;
 
   const { runContractFunction: getCurrentGameId } = useWeb3Contract({
     abi: LiquidityWarsAbi,
-    contractAddress: LiquidityWarsAddress,
+    contractAddress: contractAddresses ? contractAddresses["LiquidityWars"][0]: null,
     functionName: "getCurrentGameId",
+  });
+
+  const { runContractFunction: getPlayerInfo } = useWeb3Contract({
+    abi: LiquidityVaultAbi,
+    contractAddress: contractAddresses ? contractAddresses["LiquidityVault"][0]: null,
+    functionName: "getPlayerInfo",
+    params:{
+      _playerAddress: account
+    }
   });
 
   const close = () => setModalOpen(false);
@@ -42,15 +54,31 @@ export default function MapPage() {
     setGameId(gameId);
   }
 
+  async function checkPlayer() {
+    if (account){
+      // console.log("Checking if is player...");
+      // console.log("account: ", account);
+      const [tokenAddress, amount] = await getPlayerInfo();
+      const amountParsed = parseFloat(ethers.utils.formatEther(amount));
+      // console.log("amount:", amountParsed);
+      const isPlayer = amountParsed > 0 ? "yes" : "no";
+      // console.log("isPlayer:", isPlayer);
+      setIsPlayer(isPlayer);
+    }
+  }
+
   useEffect(() => {
-    if (!account) {
+    // console.log("useEffect isPlayer: ", isPlayer);
+    // console.log("useEffect account: ", account);
+    if (account && isPlayer == "no") {
       router.push("/");
     }
-  }, [account]);
+  }, [isPlayer]);
 
   useEffect(() => {
     if (isWeb3Enabled) {
       updateGameId();
+      checkPlayer();
     }
   }, [isWeb3Enabled]);
 
