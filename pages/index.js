@@ -84,18 +84,10 @@ export default function Home() {
       setPlayerExist(true)
     } 
 
-    if(gameStatus == 0){
-      let expiresInMS = getTime*1000
-      let currentTimeStamp = new Date()
-      let expiresDateTime = new Date(currentTimeStamp.getTime() + expiresInMS);
-      setDateTime(expiresDateTime)
-    }
-    if(gameStatus == 1){
-      let expiresInMS = getTime*1000
-      let currentTimeStamp = new Date()
-      let expiresDateTime = new Date(currentTimeStamp.getTime() + expiresInMS);
-      setDateTime(expiresDateTime)
-    }
+    let expiresInMS = getTime*1000
+    let currentTimeStamp = new Date()
+    let expiresDateTime = new Date(currentTimeStamp.getTime() + expiresInMS);
+    setDateTime(expiresDateTime)
 
   }
 
