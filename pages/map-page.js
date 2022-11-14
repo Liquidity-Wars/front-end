@@ -59,7 +59,7 @@ export default function MapPage() {
 
   async function updateGameId() {
     const gameId = await getCurrentGameId();
-    setGameId(gameId);
+    setGameId(gameId ? gameId.toString() : 0);
   }
 
   async function checkPlayer() {

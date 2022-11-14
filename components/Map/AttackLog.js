@@ -7,7 +7,7 @@ import networkMapping from "../../constants/networkMapping.json";
 
 export default function AttackLog({ handleClose, gameId }) {
   const [attackHistory, setAttackHistory] = useState([]);
-  const { account, isWeb3Enabled, chainId: chainIdHex } = useMoralis();
+  const { account, chainId: chainIdHex } = useMoralis();
   const chainId = parseInt(chainIdHex);
   const LiquidityWarsAddress =
   chainId in networkMapping
@@ -17,18 +17,14 @@ export default function AttackLog({ handleClose, gameId }) {
   const getEvents = async () => {
     // https://docs.ethers.io/v5/concepts/events/
     // https://docs.ethers.io/v5/getting-started/#getting-started--history
-    console.log("getAttackEvents");
-    console.log("account: ", account);
-    console.log("gameId: ", gameId);
-    console.log("LiquidityWarsAddress: ", LiquidityWarsAddress);
     if(account && gameId) {
-      const provider = new ethers.providers.Web3Provider(ethereum);
+      var provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_MUMBAI_RPC_URL)
       const liquidityWarsContract = new ethers.Contract(LiquidityWarsAddress, LiquidityWarsAbi, provider);
       const attackerFilter = liquidityWarsContract.filters.AttackHappenned(account,null,gameId);
       const defenderFilter = liquidityWarsContract.filters.AttackHappenned(null,account,gameId);
-      const attackerEvents = await liquidityWarsContract.queryFilter(attackerFilter);
-      const defenderEvents = await liquidityWarsContract.queryFilter(defenderFilter);
-      await Promise.all([attackerEvents, defenderEvents])
+      const attackerEvents = await liquidityWarsContract.queryFilter(attackerFilter, -10000);
+      const defenderEvents = await liquidityWarsContract.queryFilter(defenderFilter, -10000);
+      //await Promise.all([attackerEvents, defenderEvents])
       console.log("attackerEvents:", attackerEvents);
       console.log("defenderEvents:", defenderEvents);
       let allEvents = [...attackerEvents, ...defenderEvents];
@@ -37,8 +33,12 @@ export default function AttackLog({ handleClose, gameId }) {
       let history = [];
       let type;
       allEvents.forEach((event) => {
-        type = event.args.attacker === account ? "Attack" : "Attacked";
-        history.push([type, event.args.attackerTroopsSurvived, event.args.defenderTroopsSurvived, event.args.robbedResources]);
+        type = (event.args.attacker.toLowerCase() == account.toLowerCase()) ? "Attack" : "Attacked";
+        history.push([type,
+                      event.args.attackerTroopsSurvived.toString(), 
+                      event.args.defenderTroopsSurvived.toString(),
+                      event.args.robbedResources.toString(),
+                      event.blockNumber.toString()]);
       });
       console.log("history:", history);
       setAttackHistory(history)
@@ -47,7 +47,7 @@ export default function AttackLog({ handleClose, gameId }) {
 
   useEffect(() => {
     getEvents();
-  }, [isWeb3Enabled, gameId]);
+  }, [gameId]);
 
   return (
     <div className="flex flex-col items-center justify-center h-full w-full rounded-md bg-cover bg-[url('/assets/images/Web3Frame.png')]">
@@ -59,7 +59,7 @@ export default function AttackLog({ handleClose, gameId }) {
       </button>
       <div className="h-[350px] w-[350px]  overflow-y-scroll overflow-x-hidden flex flex-col">
         {attackHistory.map((attack, index) => (
-          <div>
+          <div key={attack[4]}>
             <AttackEvent
               index={index}
               type={attack[0]}
