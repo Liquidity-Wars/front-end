@@ -26,10 +26,10 @@ const Selector = ({allowedLPTokens ,allowedLPAddresses }) => {
 
   return (
     <>
-     <div className="w-72 font-medium ">
+     <div className="font-medium items-center w-2/5">
       <div
         onClick={() => setOpen(!open)}
-        className={`bg-[#F3B46C] border-[#AB4A05] border-4 w-full p-2 flex items-center justify-between rounded font-['Nabana-bold'] ${
+        className={`bg-[#F3B46C] border-[#AB4A05] mx-2 border-4 w-full p-2 flex items-center text-sm justify-between rounded font-['Nabana-bold'] ${
           !selected && " text-[#CF3810]"
         }`}
       >
@@ -38,10 +38,7 @@ const Selector = ({allowedLPTokens ,allowedLPAddresses }) => {
             ? selected?.substring(0, 25) + "..."
             : selected
           : (
-            <div className="flex flex-row items-center w-full">
-              <p className="flex w-3/4 mr-8">Select Token To Play!</p>
-              <img src='../assets/images/Milk.png' className="w-8 h-8 items-right" alt="Milk"/>
-            </div>
+            <p className="text-xs">Select Token To Play!</p>
           )}
        
       </div>
@@ -62,10 +59,10 @@ const Selector = ({allowedLPTokens ,allowedLPAddresses }) => {
         {lpTokens?.map((lpToken) => (
           <li
             key={lpToken?.name}
-            className={`p-2 text-sm hover:bg-sky-600 hover:text-white
+            className={`p-2 text-xs hover:bg-sky-600 hover:text-white
             ${
               lpToken?.name?.toLowerCase() === selected?.toLowerCase() &&
-              "bg-[#FFCA7A] border-[#AB4A05] border-2  text-[#CF3810]"
+              "bg-[#FFCA7A] border-[#AB4A05] border-2  text-[#CF3810] text-sm"
             }
             ${
               lpToken?.name?.toLowerCase().startsWith(inputValue)
