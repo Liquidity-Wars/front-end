@@ -24,7 +24,6 @@ export default function AttackLog({ handleClose, gameId }) {
       const defenderFilter = liquidityWarsContract.filters.AttackHappenned(null,account,gameId);
       const attackerEvents = await liquidityWarsContract.queryFilter(attackerFilter, -10000);
       const defenderEvents = await liquidityWarsContract.queryFilter(defenderFilter, -10000);
-      //await Promise.all([attackerEvents, defenderEvents])
       console.log("attackerEvents:", attackerEvents);
       console.log("defenderEvents:", defenderEvents);
       let allEvents = [...attackerEvents, ...defenderEvents];
