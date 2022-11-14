@@ -21,7 +21,7 @@ const YourResources = () => {
   });
 
   async function updatePlayerResources() {
-    const getPlayerResource = (await getPlayerResources()).toString();
+    const getPlayerResource = (await getPlayerResources())?.toString();
     setPlayerResources(getPlayerResource);
   }
 

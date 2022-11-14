@@ -5,6 +5,7 @@ import LiquidityWarsConfigAbi from '../constants/LiquidityWarsConfig.json'
 import ERC20Abi from '../constants/ERC20.json';
 import UniswapV2PairAbi from '../constants/UniswapV2Pair.json'
 import { useMoralis, useWeb3Contract, useERC20Balances   } from "react-moralis"
+import Selector from "../components/Misc/Selector";
 import { useNotification } from "web3uikit";
 import { ethers } from "ethers"
 import { Form } from 'web3uikit';
@@ -92,6 +93,29 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
 
   }
 
+  async function depositLPTokens(event){
+    event.preventDefault();
+    console.log(allowedLPAddresses?.toString())
+    console.log(tokenAmount)
+    const approveOptions = {
+      abi:LiquidityVaultAbi,
+      contractAddress: LiquidityVaultAddress,
+      functionName: "depositLpToken",
+      params: {
+        _tokenAddress: allowedLPAddresses?.toString(),
+        _amount: tokenAmount
+      }
+    }
+    await runContractFunction({
+      params: approveOptions,
+      onSuccess: handleSuccess,
+      onError:(error) =>{
+        handleDepositErrorDispatcher(error);
+      }
+    })
+
+  }
+
   const SendMeDemoLpFunc = async () =>{
     let SendMeDemoLpParams = {
       abi: SendMeDemoLpsAbi,
@@ -175,7 +199,15 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
         <div className='px-4 py-4' >
           <div>
             <label className="block mb-2  font-['Nabana-bold'] text-3xl text-[#CF3810] font-medium">Deposit</label>
+            <div className="flex flex-row w-full justify-between">
             <input type='text' id="deposit" className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'/>
+                 <Selector 
+                  allowedLPTokens={allowedLPTokens}
+                  allowedLPAddresses={allowedLPAddresses}
+                />
+            </div>
+
+           
             <div className='text-[#CF3810] text-sm font py-1'>You need {formatEther(requiredAmount)} LP Tokens to join the game</div>
             <div className='text-sm font py-1'>You currently have {formatEther(lpTokenBalance)} LP Tokens</div>
           </div>
