@@ -3,7 +3,7 @@ import SendMeDemoLpsAbi from "../constants/SendMeDemoLps.json";
 import LiquidityVaultAbi from '../constants/LiquidityVault.json'
 import LiquidityWarsConfigAbi from '../constants/LiquidityWarsConfig.json'
 import ERC20Abi from '../constants/ERC20.json';
-import SushiAbi from '../constants/SushiAbi.json'
+import UniswapV2PairAbi from '../constants/UniswapV2Pair.json'
 import { useMoralis, useWeb3Contract, useERC20Balances   } from "react-moralis"
 import { useNotification } from "web3uikit";
 import { ethers } from "ethers"
@@ -13,7 +13,6 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
 
   const [ tokenAmount, setTokenAmount] = useState(0);
   const [ requiredAmount, setRequiredAmount] = useState(0);
-  const [ tokenId, setTokenId ] = useState();
   const [ demoLps , setDemoLps] = useState();
   const { isWeb3Enabled, isInitialized  } = useMoralis();
   const [ lpTokenBalance, setLpTokenBalance] = useState();
@@ -21,18 +20,13 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
   const { runContractFunction } = useWeb3Contract();
   const dispatch = useNotification();
 
-
-
-
-
-  // deposit LP tokens
   const { runContractFunction: depositLpToken } = useWeb3Contract({
     abi: LiquidityVaultAbi,
     contractAddress: LiquidityVaultAddress,
     functionName: "depositLpToken",
     params:{
-      _amount: tokenAmount,
-      _tokenAddress: allowedLPAddresses // usdc token addre
+      _amount: requiredAmount,
+      _tokenAddress: allowedLPAddresses[0]
     }
   })
 
@@ -42,11 +36,10 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
     functionName: "approve",
     params:{
       spender: LiquidityVaultAddress,
-      amount: tokenAmount
+      amount: requiredAmount
     }
   })
 
-  // getUsdRequiredAmount
   const { runContractFunction: getUsdRequiredAmount } = useWeb3Contract({
     abi: LiquidityWarsConfigAbi,
     contractAddress: LiquidityVaultConfigAddress,
@@ -54,7 +47,15 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
     params:{}
   })
 
-  // getUsdRequiredAmount
+  const { runContractFunction: getAmountOfLpTokensRequired } = useWeb3Contract({
+    abi: LiquidityWarsConfigAbi,
+    contractAddress: LiquidityVaultConfigAddress,
+    functionName: "getAmountOfLpTokensRequired",
+    params:{
+      _tokenAddress: allowedLPAddresses[0],
+    }
+  })
+
   const { runContractFunction: getGameDuration } = useWeb3Contract({
     abi: LiquidityVaultAbi,
     contractAddress: LiquidityVaultAddress,
@@ -62,61 +63,33 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
     params:{}
   })
 
-  
-  async function updateUI(){
-    const depositedLpTokens = await depositLpToken();
-    const getUsdAmount = (await getUsdRequiredAmount())?.toString();
-    const gameDuration = (await getGameDuration())?.toString();
-    const format = ethers.utils.formatEther(getUsdAmount,18)
-    console.log(gameDuration)
-    setRequiredAmount(getUsdAmount);
-  }
- 
-  async function depositLPTokens(event){
-    event.preventDefault();
-    const tokensAddr = allowedLPAddresses?.toString() //Lp tokens
-    setTokenId(tokensAddr);
-    // const price = ethers.utils.parseUnits(tokenAmount, "ether").toString()
-    const price = Number(tokenAmount)
-
-    const approveOptions = {
-      abi:LiquidityVaultAbi,
-      contractAddress: LiquidityVaultAddress,
-      functionName: "depositLpToken",
-      params: {
-        _tokenAddress: "0x18a2470a7a8CdA7691Bb3a304b880Da720053A3e",
-        _amount: tokenAmount
-      }
-    }
-    await runContractFunction({
-      params: approveOptions,
-      onSuccess: handleApproveSuccess,
-      onError:(error) =>{
-        handleDepositErrorDispatcher(error);
-      }
-    })
-
+  async function getRequiredAmountOfLpTokens(){
+    //const depositedLpTokens = await depositLpToken();
+    // const usdAmount = (await getUsdRequiredAmount())?.toString();
+    const amountOfLpTokensRequired = await getAmountOfLpTokensRequired()
+    // console.log("usdAmount:", usdAmount)
+    console.log("amountOfLpTokensRequired:", amountOfLpTokensRequired)
+    setRequiredAmount(amountOfLpTokensRequired);
   }
 
   async function approveLpTokenFunc(event){
     event.preventDefault();
 
-    // Get Approve LP Tokens
-
-    console.log(LiquidityVaultAddress, tokenAmount, allowedLPAddresses)
-    if(tokenAmount && tokenAmount > requiredAmount){
-      const approveLPTokens = await approveLpToken()
-      setApprovedAmount(approveLPTokens)
-      console.log(approveLPTokens)
+    console.log("approveLpTokenFunc:", allowedLPAddresses, requiredAmount, lpTokenBalance)
+    if(allowedLPAddresses.length > 0 
+        && requiredAmount
+        && lpTokenBalance
+        && lpTokenBalance.gte(requiredAmount)){
+        const approval = await approveLpToken()
+        if(approval) {
+          setApprovedAmount(requiredAmount)
+        } else {
+          handleErrorDispatcher()
+        }
     } else {
       handleErrorApproveDispatcher()
     }
 
-  }
-  
-
-  async function handleApproveSuccess(tx){
-   await tx.wait(1)
   }
 
   const SendMeDemoLpFunc = async () =>{
@@ -133,34 +106,30 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
     })
   }
 
-  // async function getBalance(){
-  //   // tokensAddr: 0x18a2470a7a8CdA7691Bb3a304b880Da720053A3e
-  //   const tokensAddr = allowedLPAddresses.toString() //Lp tokens
-  //   setTokenId(tokensAddr)
-  //   console.log(tokenId)
-  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //   const balance = await provider.getBalance(tokenId);
-  //   // const balanceInLpToken = ethers.utils.formatEther(balance);
-  //   console.log(balance.toString());
-  // }
-
   const fetchTokenBalances = async () => {
-    const provider = new ethers.providers.Web3Provider(ethereum);
-    const erc20TokenContract = new ethers.Contract("0x18a2470a7a8CdA7691Bb3a304b880Da720053A3e", SushiAbi, provider);
-    const balance = (await erc20TokenContract.balanceOf(userAddress))?.toString();
-    const format = ethers.utils.formatEther(balance,18)
-
-    setLpTokenBalance(balance)
+    console.log("userAddress:", userAddress);
+    console.log("allowedLPAddresses:", allowedLPAddresses);
+    if(userAddress && allowedLPAddresses.length > 0){
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const erc20TokenContract = new ethers.Contract(allowedLPAddresses[0], UniswapV2PairAbi, provider);
+      const balance = await erc20TokenContract.balanceOf(userAddress)
+      setLpTokenBalance(balance);
+    }
   }
 
+  const formatEther = (value) => {
+    if (value) {
+      return parseFloat(ethers.utils.formatEther(value)).toFixed(5);
+    } else {
+      return 0;
+    }   
+  }
 
-  
-  // dispatch function
   async function handleSuccess() {
     dispatch({
       type: "success",
-      message: "Lp Tokens Are Acquired",
-      title: "Troops Trained",
+      message: "Lp Tokens Transferred successfully",
+      title: "Lp Tokens",
       position: "topR",
     });
   }
@@ -176,8 +145,8 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
   async function handleErrorApproveDispatcher(error) {
     dispatch({
       type: "error",
-      message: "Approving Too little LpTokens!",
-      title: `You have to deposit at least more than required amount ${requiredAmount}`,
+      message: "Not enough LP Tokens in wallet",
+      title: `You have to deposit the required amount: ${requiredAmount}`,
       position: "topR",
     });
   }
@@ -193,13 +162,10 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
   
   useEffect(() =>{
     if(isWeb3Enabled){
-      updateUI();
-      if(userAddress){
-        fetchTokenBalances();
-      }
-
+      getRequiredAmountOfLpTokens();
+      fetchTokenBalances();
     }
-  }, [isWeb3Enabled, userAddress,approvedAmount])
+  }, [isWeb3Enabled, userAddress, allowedLPAddresses])
 
 
   return (
@@ -209,28 +175,21 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
         <div className='px-4 py-4' >
           <div>
             <label className="block mb-2  font-['Nabana-bold'] text-3xl text-[#CF3810] font-medium">Deposit</label>
-            <input 
-              onChange={event => setTokenAmount(event.target.value)}
-              value={tokenAmount}
-              type='text' id="deposit" className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'/>
-            <div className='text-[#CF3810] text-sm font py-1'>This amount of {requiredAmount} LP Token to play </div>
-            <div className='text-sm font py-1'>You currently have This much LP token {lpTokenBalance}  </div>
+            <input type='text' id="deposit" className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'/>
+            <div className='text-[#CF3810] text-sm font py-1'>You need {formatEther(requiredAmount)} LP Tokens to join the game</div>
+            <div className='text-sm font py-1'>You currently have {formatEther(lpTokenBalance)} LP Tokens</div>
           </div>
           {/* <div className="bg-[url('/assets/images/valley-button.png')] justify-center items-center w-40 h-auto bg-cover bg-no-repeat">
             
           </div> */}
-          {!approvedAmount ?
+          {approvedAmount == 0 ?
           (
             <button onClick={approveLpTokenFunc} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Approve</button>
           ) : (
-            <button onClick={depositLPTokens} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Deposit</button>
+            <button onClick={depositLpToken} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Deposit</button>
           )
           }
-
-            
-
-
-          <button onClick={SendMeDemoLpFunc} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">DemoLps</button>
+          <button onClick={SendMeDemoLpFunc} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">LP Tokens Faucet</button>
         </div>
       </div>
    </>

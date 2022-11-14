@@ -261,17 +261,17 @@ export default function Home() {
                         
                           <>
                             <Selector 
-                            allowedLPTokens={allowedLPTokens}
-                            allowedLPAddresses={allowedLPAddresses}
+                              allowedLPTokens={allowedLPTokens}
+                              allowedLPAddresses={allowedLPAddresses}
                             />
                             <LiquidityPool 
-                            LiquidityVaultAddress={LiquidityVaultAddress}
-                            LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
-                            SushiSwapAddress={SushiSwapAddress}
-                            allowedLPTokens={allowedLPTokens}
-                            SendMeDemoLpsAddress={SendMeDemoLpsAddress}
-                            allowedLPAddresses={allowedLPAddresses}
-                            userAddress={userAddress}
+                              LiquidityVaultAddress={LiquidityVaultAddress}
+                              LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
+                              SushiSwapAddress={SushiSwapAddress}
+                              SendMeDemoLpsAddress={SendMeDemoLpsAddress}
+                              allowedLPTokens={allowedLPTokens}
+                              allowedLPAddresses={allowedLPAddresses}
+                              userAddress={userAddress}
                             />
                           </>
                         } 
