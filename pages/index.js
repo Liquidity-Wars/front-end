@@ -212,8 +212,8 @@ export default function Home() {
             className="flex"
           >
             <img
-              className="h-48"
-              src="/assets/images/sample-logo.png"
+              className="h-52"
+              src="/assets/images/liquidity_wars.png"
               alt="logo"
             />
           </motion.div>
