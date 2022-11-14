@@ -43,9 +43,31 @@ export default function VillageHoverInfo() {
   }, [isWeb3Enabled]);
 
   return (
-    <div className="absolute flex flex-col items-center justify-center translate-x-[-30px] w-[200px] h-[200px] bg-center bg-cover bg-[url('/assets/images/timer_frame.png')]">
-      <div>Number of Troops: {troopNumber}</div>
-      <div>Village Size: {villageSize}</div>
+    <div className="absolute flex flex-col justify-center translate-y-[-30px] translate-x-[70px] w-[150px] h-[150px] p-5 bg-center bg-cover bg-[url('/assets/images/timer_frame.png')]">
+      <div className="flex mb-3">
+        <img
+          src="/assets/images/troop_size.png"
+          className="h-[18px] mr-1 ml-0 p-0"
+          alt="troop size logo"
+        />
+        <div className="text-xs font-semibold">
+          Troops Number:
+          <br />
+          {troopNumber}
+        </div>
+      </div>
+      <div className="flex">
+        <img
+          src="/assets/images/village_size.png"
+          className="h-[20px] mr-0 p-0"
+          alt="village size logo"
+        />
+        <div className="text-xs font-semibold">
+          Village Size:
+          <br />
+          {villageSize}
+        </div>
+      </div>
     </div>
   );
 }

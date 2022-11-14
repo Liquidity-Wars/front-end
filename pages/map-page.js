@@ -73,9 +73,13 @@ export default function MapPage() {
           </div>
           <button
             onClick={() => open()}
-            className="py-3 px-3 bg-yellow-400 border-black border-2 rounded-full translate-y-[-230px] translate-x-6"
+            className=" px-3 py-1 bg-slate-400 border-black border-2 rounded-full translate-y-[-230px] translate-x-6"
           >
-            Log
+            <img
+              src="/assets/images/log_icon.png"
+              className="h-[50px] mr-0 p-0"
+              alt="log icon"
+            />
           </button>
           <AnimatePresence
             initial={false}

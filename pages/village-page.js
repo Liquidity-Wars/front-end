@@ -85,7 +85,7 @@ export default function VillagePage() {
     console.log("All USDC transfer from me:", events3);
 
     let allEvents = [...events2, ...events3];
-    allEvents.sort((a,b) => a.blockNumber - b.blockNumber); // b - a for reverse sort
+    allEvents.sort((a, b) => a.blockNumber - b.blockNumber); // b - a for reverse sort
     console.log("All transfers:", allEvents);
 
     // DepositDone event from the LiquidityVault contract
@@ -146,9 +146,13 @@ export default function VillagePage() {
         <div
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
-          className="py-3 px-3 bg-yellow-400 border-black border-2 rounded-full translate-y-[-230px] translate-x-2"
+          className="absolute z-20 translate-y-[-210px] translate-x-[455px]"
         >
-          Info
+          <img
+            src="/assets/images/kingdom_flag.png"
+            className="h-[100px] mr-2 p-0"
+            alt="flag icon"
+          />
           {isHovering && <VillageHoverInfo />}
         </div>
 
