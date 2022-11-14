@@ -21,14 +21,14 @@ export default function MapPage() {
   const { account, isWeb3Enabled, chainId: chainIdHex } = useMoralis();
   const chainId = parseInt(chainIdHex);
   const LiquidityWarsAddress =
-  chainId in networkMapping
-    ? networkMapping[chainId]["LiquidityWars"][0]
-    : null;
+    chainId in networkMapping
+      ? networkMapping[chainId]["LiquidityWars"][0]
+      : null;
 
   const { runContractFunction: getCurrentGameId } = useWeb3Contract({
     abi: LiquidityWarsAbi,
     contractAddress: LiquidityWarsAddress,
-    functionName: "getCurrentGameId"
+    functionName: "getCurrentGameId",
   });
 
   const close = () => setModalOpen(false);
@@ -40,7 +40,7 @@ export default function MapPage() {
   async function updateGameId() {
     const gameId = await getCurrentGameId();
     setGameId(gameId);
-}
+  }
 
   useEffect(() => {
     if (!account) {
@@ -59,7 +59,7 @@ export default function MapPage() {
       <div className="flex flex-col items-center justify-center h-screen w-screen bg-cover bg-[url('/assets/images/stardew-valley-img.jpg')]">
         <MapNav className="w-full" />
         <div className="flex justify-center items-center w-[850px] h-[520px] bg-[url('/assets/images/valley-canvas.png')] translate-x-[30px] bg-center bg-cover">
-          <div className="flex mx-12 flex-col justify-center  w-[250px] h-[450px]">
+          <div className="flex mx-12 flex-col justify-center  w-[250px] h-[450px] truncate">
             {playerId !== undefined ? (
               <EnemyInfo playerId={playerId} />
             ) : (
