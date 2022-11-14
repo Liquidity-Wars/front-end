@@ -106,7 +106,6 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
     console.log(LiquidityVaultAddress, tokenAmount, allowedLPAddresses)
     if(tokenAmount && tokenAmount > requiredAmount){
       const approveLPTokens = await approveLpToken()
-      await tx.wait(1)
       setApprovedAmount(approveLPTokens)
       console.log(approveLPTokens)
     } else {
@@ -200,7 +199,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
       }
 
     }
-  }, [isWeb3Enabled, userAddress])
+  }, [isWeb3Enabled, userAddress,approvedAmount])
 
 
   return (
