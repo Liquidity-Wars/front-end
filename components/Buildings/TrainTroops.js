@@ -10,7 +10,7 @@ export default function TrainTroops() {
   const [troopAttributes, setTroopAttributes] = useState();
   const [costToTrainTroops, setCostToTrainTroops] = useState();
   const dispatch = useNotification();
-  const [numberToTrain, setNumberToTrain] = useState();
+  const [numberToTrain, setNumberToTrain] = useState(0);
 
   const chainId = parseInt(chainIdHex);
   const LiquidityWarsAddress =
@@ -32,7 +32,7 @@ export default function TrainTroops() {
   async function handleTrainTroopsError(error) {
     dispatch({
       type: "error",
-      message: "Not enough resources",
+      message: `${error.message}`,
       title: "Failed to train troops",
       position: "topR",
     });
@@ -67,7 +67,7 @@ export default function TrainTroops() {
     await runContractFunction({
       params: trainTroopsParams,
       onSuccess: () => handleTrainTroopsSuccess(),
-      onError: () => handleTrainTroopsError(),
+      onError: (error) => handleTrainTroopsError(error),
     });
   }
 
@@ -91,7 +91,7 @@ export default function TrainTroops() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h1 className="text-xl font-bold text-gray-700 text-center mt-3">
+      <h1 className="text-xl font-bold text-gray-700 text-center mt-3 underline">
         Troop Stats
       </h1>
       <div className="text-xs">
@@ -100,14 +100,24 @@ export default function TrainTroops() {
         | Defense: {troopAttributes?.defense} | Attack:{" "}
         {troopAttributes?.attack}
       </div>
-      <div className="text-sm mt-2 mb-1">
-        Cost to Train Troops: {costToTrainTroops}
+      <div className="text-sm mt-2 mb-1 flex">
+        <img
+          src="/assets/images/upgrade_cost.png"
+          className="h-[20px] mr-[2px] p-0"
+          alt="cost to upgrade icon"
+        />
+        <div className="font-semibold">
+          Cost to Train Troops:{" "}
+          <span className="font-normal">
+            {costToTrainTroops * numberToTrain}
+          </span>
+        </div>
       </div>
       <input
         name="Train Troops"
         type="number"
         className="w-2/3 p-1"
-        placeholder="Number to train"
+        placeholder="Input Number to Train"
         value={numberToTrain}
         onChange={(event) => setNumberToTrain(event.target.value)}
       />

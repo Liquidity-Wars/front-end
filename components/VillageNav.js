@@ -5,15 +5,22 @@ import { useRouter } from "next/router";
 import { ConnectButton } from "web3uikit";
 import RewardsToClaim from "./Nav/RewardsToClaim";
 import YourResources from "./Nav/YourResources";
+import { useMoralis } from "react-moralis";
 
 const VillageNav = () => {
   const router = useRouter();
+  const { isWeb3Enabled } = useMoralis();
 
   return (
     <>
       <nav className="bg-transparent border-gray-200 py-2.5 rounded w-full">
         <div className="container flex flex-wrap justify-between items-center mx-auto">
-          <a href="/" className="flex items-center">
+          <a
+            href="/"
+            className={`flex items-center ${
+              isWeb3Enabled == true ? "pr-36" : "pr-2"
+            }`}
+          >
             <motion.div
               initial={{
                 y: 0,

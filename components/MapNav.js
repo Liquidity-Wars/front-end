@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { ConnectButton } from "web3uikit";
 import RewardsToClaim from "./Nav/RewardsToClaim";
 import YourResources from "./Nav/YourResources";
+
 import CountdownTimer from "./SmallTimer/CountdownTimer";
 import { useMoralis, useWeb3Contract } from "react-moralis";
 import LiquidityVaultAbi from '../constants/LiquidityVault.json'
@@ -57,7 +58,12 @@ const MapNav = () => {
       <nav className="bg-transparent border-gray-200 py-2.5 rounded w-full">
         <div className="container flex flex-wrap justify-between items-center mx-auto">
           <div className="flex flex-col">
-            <a href="/" className="flex items-center">
+            <a
+            href="/"
+            className={`flex items-center ${
+              isWeb3Enabled == true ? "pr-36" : "pr-2"
+            }`}
+          >
               <motion.div
                 initial={{
                   y: 0,
@@ -102,7 +108,7 @@ const MapNav = () => {
                   >
                     <div className="flex items-center justify-center">
                       <img
-                        src="/assets/images/village_icon.png"
+                        src="/assets/images/village_icon2.png"
                         className="h-[40px] mr-2 p-0"
                         alt="map icon"
                       />

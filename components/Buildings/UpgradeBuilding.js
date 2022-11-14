@@ -34,20 +34,20 @@ export default function UpgradeBuilding({
       : null;
 
   // handle upgrade building success
-  async function handleUpgradeSuccess(buildingType) {
+  async function handleUpgradeSuccess() {
     dispatch({
       type: "success",
-      message: "Builing upgraded successfully!",
-      title: `${buildingType} Upgrade`,
+      message: "Builing upgraded successfully! Please refresh to see changes",
+      title: `${buildingType} Upgraded`,
       position: "topR",
     });
   }
 
   // handle upgrade building error
-  async function handleUpgradeError(buildingType) {
+  async function handleUpgradeError(error) {
     dispatch({
       type: "error",
-      message: "Not enough resources to upgrade building",
+      message: error,
       title: `Failed to upgrade ${buildingType}`,
       position: "topR",
     });
@@ -96,8 +96,8 @@ export default function UpgradeBuilding({
 
     await runContractFunction({
       params: buildingParams,
-      onSuccess: () => handleUpgradeSuccess(buildingParams.params._building),
-      onError: () => handleUpgradeError(buildingParams.params._building),
+      onSuccess: () => handleUpgradeSuccess(),
+      onError: (error) => handleUpgradeError(error),
     });
   }
 
@@ -135,9 +135,15 @@ export default function UpgradeBuilding({
     <div className="flex flex-col items-center justify-center h-full w-full rounded-md bg-cover bg-[url('/assets/images/Web3Frame.png')]">
       <button
         onClick={handleClose}
-        className="absolute translate-x-[170px] translate-y-[-180px]"
+        className="absolute translate-x-[175px] translate-y-[-175px]"
       >
-        <div className="text-red-500 font-semibold">Close</div>
+        <div className="text-red-500 font-semibold">
+          <img
+            src="/assets/images/closebutton.png"
+            className="h-[30px] p-0"
+            alt="close icon"
+          />
+        </div>
       </button>
       <div className="p-6 flex flex-col items-center justify-between h-full">
         <div className="text-2xl font-bold text-gray-700 text-center ">
@@ -147,25 +153,70 @@ export default function UpgradeBuilding({
           </div>
         </div>
 
-        <div>
-          <h1 className="text-xl font-bold text-gray-700 text-center">
+        <div className="flex flex-col items-center">
+          <h1 className="text-xl font-bold text-gray-700 text-center underline">
             Building Stats
           </h1>
-          <div>Cost of Upgrade: {costOfUpgrade}</div>
-          <div>Current Ability: {buildingAbility}</div>
-          <div>
-            Next Ability:{" "}
-            {Number(buildingAbility) + Number(buildingAbility * bonus) / 100}
+          <div className="flex flex-col font-semibold">
+            <div className="flex items-center">
+              <img
+                src="/assets/images/upgrade_cost.png"
+                className="h-[25px] ml-1 mr-[2px] p-0"
+                alt="cost to upgrade icon"
+              />
+              <div>
+                Cost of Upgrade:{" "}
+                <span className="font-normal">{costOfUpgrade}</span>
+              </div>
+            </div>
+            <div className="flex items-center font-semibold">
+              <img
+                src="/assets/images/building_ability.png"
+                className="h-[25px] mr-1 p-0"
+                alt="current ability icon"
+              />
+              <div>
+                Current Ability:{" "}
+                <span className="font-normal">{buildingAbility}</span>
+              </div>
+            </div>
+            <div className="flex items-center font-semibold">
+              <img
+                src="/assets/images/next_ability.png"
+                className="h-[20px] mr-1 ml-1 p-0"
+                alt="next ability icon"
+              />
+              <div>
+                Next Ability:{" "}
+                <span className="font-normal">
+                  {Number(buildingAbility) +
+                    Number(buildingAbility * bonus) / 100}
+                </span>
+                <span className="font-normal text-lime-600">
+                  {" (+"}
+                  {Number(buildingAbility) +
+                    Number(buildingAbility * bonus) / 100 -
+                    buildingAbility}
+                  {")"}
+                </span>
+              </div>
+            </div>
           </div>
+
           {buildingType == "BARRACK" && <TrainTroops />}
         </div>
         <button
           onClick={async () => {
             await handleUpgradeBuilding();
           }}
-          className="btn btn-primary text-white p-3 font-semibold rounded-md bg-cover w-[130px] bg-[url('/assets/images/valley-button.png')]"
+          className="btn btn-primary flex items-center text-white p-3 font-semibold rounded-md bg-cover w-[130px] bg-[url('/assets/images/valley-button.png')]"
         >
-          Upgrade
+          <img
+            src="/assets/images/upgrade_building.png"
+            className="h-[20px] mr-1 ml-1 p-0"
+            alt="upgrade building icon"
+          />
+          <span className="text-slate-700 font-semibold">Upgrade</span>
         </button>
       </div>
     </div>
