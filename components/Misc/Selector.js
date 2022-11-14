@@ -38,7 +38,7 @@ const Selector = ({allowedLPTokens ,allowedLPAddresses }) => {
             ? selected?.substring(0, 25) + "..."
             : selected
           : (
-            <p className="text-xs">Select Token To Play!</p>
+            <p className="text-xs">Select Token!</p>
           )}
        
       </div>

@@ -11,7 +11,7 @@ const CountdownTimer = ({targetDate}) => {
   } else {
     return (
       <>
-        <img className="w-8" src="../assets/images/timer.png" alt=""/>
+        <img className="w-8 h-8" src="../assets/images/timer.png" alt=""/>
         <ShowCounter 
            days={days}
            hours={hours}

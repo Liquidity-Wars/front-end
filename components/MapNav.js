@@ -81,8 +81,10 @@ const MapNav = () => {
                 Liquidity Wars
               </span>
             </a>
- 
-
+            <div className="flex flex-row items-center mt-4 ml-6">
+              <CountdownTimer targetDate={dateTime} />
+            </div>     
+            
           </div>
       
           <div className="hidden w-full md:block md:w-auto">
@@ -111,7 +113,7 @@ const MapNav = () => {
               </li>
               <YourResources />
               <RewardsToClaim />
-              <CountdownTimer targetDate={dateTime} />
+ 
             </ul>
           </div>
           <div className="flex">

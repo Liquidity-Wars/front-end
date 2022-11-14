@@ -6,8 +6,8 @@ const ShowCounter = ({ days, hours, minutes, seconds }) => {
     <>  
         <div className="flex flex-row items-center">
       
-            {/* <DateTimeDisplay value={days} type={'Days'} isDanger={false} />
-            <DateTimeDisplay value={hours} type={'Hours'} isDanger={false} /> */}
+            <DateTimeDisplay value={days} type={'Days'} isDanger={false} />
+            <DateTimeDisplay value={hours} type={'Hour '} isDanger={false} />
             <DateTimeDisplay value={minutes} type={'Mins'} isDanger={false} />
             <DateTimeDisplay value={seconds} type={'Sec'} isDanger={false} />
         </div>
