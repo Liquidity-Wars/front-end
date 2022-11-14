@@ -7,7 +7,7 @@ import RewardsToClaim from "./Nav/RewardsToClaim";
 import YourResources from "./Nav/YourResources";
 import { useMoralis } from "react-moralis";
 
-const VillageNav = () => {
+const VillageNav = (gameState) => {
   const router = useRouter();
   const { isWeb3Enabled } = useMoralis();
 
@@ -67,7 +67,7 @@ const VillageNav = () => {
                   </a>
                 </Link>
               </li>
-              <YourResources />
+              <YourResources gameState={gameState} />
               <RewardsToClaim />
             </ul>
           </div>

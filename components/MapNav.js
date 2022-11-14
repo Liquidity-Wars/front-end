@@ -11,7 +11,7 @@ import { useMoralis, useWeb3Contract } from "react-moralis";
 import LiquidityVaultAbi from '../constants/LiquidityVault.json'
 import networkMapping from '../constants/networkMapping.json'
 
-const MapNav = () => {
+const MapNav = (gameState) => {
   const router = useRouter();
   const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
   const chainId = parseInt(chainIdHex)
@@ -117,7 +117,7 @@ const MapNav = () => {
                   </a>
                 </Link>
               </li>
-              <YourResources />
+              <YourResources gameState={gameState}/>
               <RewardsToClaim />
  
             </ul>

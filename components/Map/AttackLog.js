@@ -27,9 +27,10 @@ export default function AttackLog({ handleClose, gameId }) {
       const attackerFilter = liquidityWarsContract.filters.AttackHappenned(account,null,gameId);
       const defenderFilter = liquidityWarsContract.filters.AttackHappenned(null,account,gameId);
       const attackerEvents = await liquidityWarsContract.queryFilter(attackerFilter);
-      // console.log("attackerEvents:", attackerEvents);
       const defenderEvents = await liquidityWarsContract.queryFilter(defenderFilter);
-      // console.log("defenderEvents:", defenderEvents);
+      await Promise.all([attackerEvents, defenderEvents])
+      console.log("attackerEvents:", attackerEvents);
+      console.log("defenderEvents:", defenderEvents);
       let allEvents = [...attackerEvents, ...defenderEvents];
       allEvents.sort((a,b) => a.blockNumber - b.blockNumber); // b - a for reverse sort
       console.log("allEvents:", allEvents);

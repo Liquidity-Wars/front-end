@@ -14,6 +14,7 @@ export default function VillagePage() {
   const router = useRouter();
   const [isPlayer, setIsPlayer] = useState("");
   const [modalOpen, setModalOpen] = useState();
+  const [gameState, setGameState] = useState();
   const [buildingType, setBuildingType] = useState("none");
   const [isHovering, setIsHovering] = useState(false);
   const [infrastructureNumber, setInfrastructureNumber] = useState();
@@ -54,6 +55,13 @@ export default function VillagePage() {
     }
   });
 
+  const {runContractFunction: getGameState} = useWeb3Contract({
+    abi: LiquidityVaultAbi,
+    contractAddress: contractAddresses ? contractAddresses["LiquidityVault"][0]: null,
+    functionName:"getGameState",
+    params:{}
+  })
+
   const handleMouseOver = () => {
     setIsHovering(true);
   };
@@ -71,21 +79,28 @@ export default function VillagePage() {
     }
   }
 
+  async function getGameStateAsync(){
+    const gameState = await getGameState();
+    //console.log("village-map gameState:", gameState);
+    setGameState(gameState);
+  }
+
   useEffect(() => {
-    if (account && isPlayer == "no") {
+    if (account && isPlayer == "no" || gameState == 0) {
       router.push("/");
     }
-  }, [isPlayer]);
+  }, [isPlayer, gameState]);
 
   useEffect(() => {
     if (isWeb3Enabled) {
       checkPlayer();
+      getGameStateAsync();
     }
   }, [isWeb3Enabled]);
 
   return (
     <div className="flex flex-col items-center h-screen w-screen bg-cover bg-[url('/assets/images/stardew-valley-img.jpg')]">
-      <VillageNav className="w-full" />
+      <VillageNav className="w-full" gameState={gameState} />
       <div className="flex h-full w-screen justify-center items-center">
         <div className="flex justify-center items-center w-[850px] h-[520px] bg-[url('/assets/images/valley-canvas.png')] translate-x-[30px] bg-center bg-cover">
           <div className="flex m-auto justify-center bg-cover w-[770px] h-[470px] bg-[url('/assets/images/village_map.png')] bg-center">

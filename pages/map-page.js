@@ -20,6 +20,7 @@ export default function MapPage() {
   const [isPlayer, setIsPlayer] = useState("");
   const [playerId, setPlayerId] = useState();
   const [modalOpen, setModalOpen] = useState();
+  const [gameState, setGameState] = useState();
   const [gameId, setGameId] = useState();
   const { account, isWeb3Enabled, chainId: chainIdHex } = useMoralis();
   const chainId = parseInt(chainIdHex);
@@ -42,6 +43,13 @@ export default function MapPage() {
       _playerAddress: account
     }
   });
+
+  const {runContractFunction: getGameState} = useWeb3Contract({
+    abi: LiquidityVaultAbi,
+    contractAddress: contractAddresses ? contractAddresses["LiquidityVault"][0]: null,
+    functionName:"getGameState",
+    params:{}
+  })
 
   const close = () => setModalOpen(false);
 
@@ -67,25 +75,32 @@ export default function MapPage() {
     }
   }
 
+  async function getGameStateAsync(){
+    const gameState = await getGameState();
+    //console.log("village-map gameState:", gameState);
+    setGameState(gameState);
+  }
+
   useEffect(() => {
     // console.log("useEffect isPlayer: ", isPlayer);
     // console.log("useEffect account: ", account);
-    if (account && isPlayer == "no") {
+    if (account && isPlayer == "no" || gameState == 0) {
       router.push("/");
     }
-  }, [isPlayer]);
+  }, [isPlayer, gameState]);
 
   useEffect(() => {
     if (isWeb3Enabled) {
       updateGameId();
       checkPlayer();
+      getGameStateAsync();
     }
   }, [isWeb3Enabled]);
 
   return (
     <PlayerContext.Provider value={setPlayerId}>
       <div className="flex flex-col items-center justify-center h-screen w-screen bg-cover bg-[url('/assets/images/stardew-valley-img.jpg')]">
-        <MapNav className="w-full" />
+        <MapNav className="w-full" gameState={gameState} />
         <div className="flex justify-center items-center w-[850px] h-[520px] bg-[url('/assets/images/valley-canvas.png')] translate-x-[30px] bg-center bg-cover">
           <div className="flex mx-12 flex-col justify-center  w-[250px] h-[450px] truncate">
             {playerId !== undefined ? (

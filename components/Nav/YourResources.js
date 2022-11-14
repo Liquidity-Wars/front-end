@@ -4,7 +4,7 @@ import LiquidityWarsAbi from "../../constants/LiquidityWars.json";
 import { useState, useEffect } from "react";
 import networkMapping from "../../constants/networkMapping.json";
 
-const YourResources = () => {
+const YourResources = (gameState) => {
   const [playerResources, setPlayerResources] = useState(0);
   const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
   const chainId = parseInt(chainIdHex);
@@ -26,7 +26,7 @@ const YourResources = () => {
   }
 
   useEffect(() => {
-    if (isWeb3Enabled) {
+    if (isWeb3Enabled && gameState == 1) {
       updatePlayerResources();
     }
   }, [isWeb3Enabled]);

@@ -37,12 +37,12 @@ export default function MapGrid() {
 
   const villages = [];
   for (let i = 0; i < numberOfPlayers; i++) {
-    villages.push(<PlayerGrid playerId={i} setPlayerId={setPlayerId} />);
+    villages.push(<PlayerGrid key={`key-${i}`} playerId={i} setPlayerId={setPlayerId} />);
   }
 
   return (
     <div className="w-[320px] h-[320px] flex justify-center items-center">
-      <div class="grid grid-rows-4 grid-cols-4 gap-2 m-auto items-center justify-center">
+      <div className="grid grid-rows-4 grid-cols-4 gap-2 m-auto items-center justify-center">
         {villages.map((village) => village)}
       </div>
     </div>
