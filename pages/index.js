@@ -15,6 +15,7 @@ import ConnectToWallet from "../components/Misc/ConnectToWallet";
 import TopNav from "../components/TopNav";
 import Selector from "../components/Misc/Selector";
 import Link from "next/link";
+import Multiplayer from "../components/MusicPlayer/Multiplayer";
 
 
 export default function Home() {
@@ -84,8 +85,9 @@ export default function Home() {
       setPlayerExist(true)
     } 
 
+    console.log(getTime)
     if(gameStatus == 0){
-      let expiresInMS = getGameDurations*1000
+      let expiresInMS = getTime*1000
       let currentTimeStamp = new Date()
       let expiresDateTime = new Date(currentTimeStamp.getTime() + expiresInMS);
       setDateTime(expiresDateTime)
@@ -196,6 +198,7 @@ export default function Home() {
   return (
     <>
     <TopNav />
+      <Multiplayer />
       <div className={styles.container}>
         <div className="flex flex-col justify-center items-center pt-4">
           <motion.div
@@ -226,7 +229,7 @@ export default function Home() {
               <div className="bg-transparent p-4 ">
                 <div className="bg-[url('/assets/images/valley-canvas.png')] justify-center w-[800px] h-auto bg-cover bg-no-repeat">
                     <div className="flex flex-col  justify-center text-lg items-center text-center px-6 py-6">
-                      <h2 className="font-['Nabana-bold'] text-4xl text-[#CF3810]">{gameState == 0 ? 'Next Game In' : 'Game is Running!'}</h2>
+                      <h2 className="font-['Nabana-bold'] text-4xl text-[#CF3810]">{gameState == 0 ? 'Game Start Soon!' : 'Game is Running!'}</h2>
                       <div className="bg-[url('/assets/images/scroll.png')] justify-center w-24 bg-cover bg-no-repeat">
                         <p className="font-['Nabana-bold']">{gameState == 0 ? 'Ready' : 'Running'}</p>
                       </div>
@@ -273,6 +276,7 @@ export default function Home() {
                               allowedLPTokens={allowedLPTokens}
                               allowedLPAddresses={allowedLPAddresses}
                               userAddress={userAddress}
+                              gameState={gameState}
                             />
                           </>
                         } 
