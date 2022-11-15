@@ -20,10 +20,7 @@ export default function VillagePage() {
   const [infrastructureNumber, setInfrastructureNumber] = useState();
   const chainId = parseInt(chainIdHex);
   const contractAddresses =
-    chainId in networkMapping
-      ? networkMapping[chainId]
-      : null;
-
+    chainId in networkMapping ? networkMapping[chainId] : null;
 
   const close = () => setModalOpen(false);
 
@@ -48,19 +45,23 @@ export default function VillagePage() {
 
   const { runContractFunction: getPlayerInfo } = useWeb3Contract({
     abi: LiquidityVaultAbi,
-    contractAddress: contractAddresses ? contractAddresses["LiquidityVault"][0]: null,
+    contractAddress: contractAddresses
+      ? contractAddresses["LiquidityVault"][0]
+      : null,
     functionName: "getPlayerInfo",
-    params:{
-      _playerAddress: account
-    }
+    params: {
+      _playerAddress: account,
+    },
   });
 
-  const {runContractFunction: getGameState} = useWeb3Contract({
+  const { runContractFunction: getGameState } = useWeb3Contract({
     abi: LiquidityVaultAbi,
-    contractAddress: contractAddresses ? contractAddresses["LiquidityVault"][0]: null,
-    functionName:"getGameState",
-    params:{}
-  })
+    contractAddress: contractAddresses
+      ? contractAddresses["LiquidityVault"][0]
+      : null,
+    functionName: "getGameState",
+    params: {},
+  });
 
   const handleMouseOver = () => {
     setIsHovering(true);
@@ -71,7 +72,7 @@ export default function VillagePage() {
   };
 
   async function checkPlayer() {
-    if (account){
+    if (account) {
       const [tokenAddress, amount] = await getPlayerInfo();
       const amountParsed = parseFloat(ethers.utils.formatEther(amount));
       const isPlayer = amountParsed > 0 ? "yes" : "no";
@@ -79,17 +80,18 @@ export default function VillagePage() {
     }
   }
 
-  async function getGameStateAsync(){
+  async function getGameStateAsync() {
     const gameState = await getGameState();
     //console.log("village-map gameState:", gameState);
     setGameState(gameState);
   }
 
   useEffect(() => {
-    if (account && isPlayer == "no" || gameState == 0) {
+    checkPlayer();
+    if ((account && isPlayer == "no") || gameState == 0) {
       router.push("/");
     }
-  }, [isPlayer, gameState]);
+  }, [isPlayer, gameState, account]);
 
   useEffect(() => {
     if (isWeb3Enabled) {

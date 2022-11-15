@@ -4,7 +4,7 @@ import LiquidityWarsAbi from "../../constants/LiquidityWars.json";
 import { useState, useEffect } from "react";
 import networkMapping from "../../constants/networkMapping.json";
 
-const YourResources = (gameState) => {
+const YourResources = ({ gameState }) => {
   const [playerResources, setPlayerResources] = useState(0);
   const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
   const chainId = parseInt(chainIdHex);
@@ -32,7 +32,7 @@ const YourResources = (gameState) => {
   }, [isWeb3Enabled]);
 
   return (
-    <li className="text-white block py-2 pr-4 pl-3 rounded">
+    <li className="text-white block py-2">
       <div className="flex items-center justify-center">
         <img
           src="/assets/images/resources_icon.png"
