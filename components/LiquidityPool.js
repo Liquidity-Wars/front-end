@@ -10,7 +10,7 @@ import { useNotification } from "web3uikit";
 import { ethers } from "ethers"
 import { Form } from 'web3uikit';
 
-const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, SushiSwapAddress, allowedLPTokens, allowedLPAddresses, SendMeDemoLpsAddress, userAddress}) => {
+const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, SushiSwapAddress, allowedLPTokens, allowedLPAddresses, SendMeDemoLpsAddress, userAddress, gameState}) => {
 
   const [ tokenAmount, setTokenAmount] = useState(0);
   const [ requiredAmount, setRequiredAmount] = useState(0);
@@ -93,22 +93,23 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
 
   }
 
+
+
+
   async function depositLPTokens(event){
     event.preventDefault();
-    console.log(allowedLPAddresses?.toString())
-    console.log(tokenAmount)
     const approveOptions = {
       abi:LiquidityVaultAbi,
       contractAddress: LiquidityVaultAddress,
       functionName: "depositLpToken",
       params: {
-        _tokenAddress: allowedLPAddresses?.toString(),
-        _amount: tokenAmount
+        _tokenAddress: allowedLPAddresses[0],
+        _amount: requiredAmount
       }
     }
     await runContractFunction({
       params: approveOptions,
-      onSuccess: handleSuccess,
+      onSuccess: handleSuccessForDepositAndApprove(),
       onError:(error) =>{
         handleDepositErrorDispatcher(error);
       }
@@ -125,7 +126,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
     }
     await runContractFunction({
       params: SendMeDemoLpParams,
-      onSuccess: () => handleSuccess,
+      onSuccess: () => handleSuccess(),
       onError: () => handleErrorDispatcher()
     })
   }
@@ -157,6 +158,17 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
       position: "topR",
     });
   }
+
+  async function handleSuccessForDepositAndApprove() {
+    dispatch({
+      type: "success",
+      message: "Lp Tokens Approved & Deposit Success!",
+      title: "Lp Tokens",
+      position: "topR",
+    });
+  }
+
+
   async function handleErrorDispatcher(error) {
     dispatch({
       type: "error",
@@ -176,12 +188,22 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
   }
 
   async function handleDepositErrorDispatcher(error) {
-    dispatch({
-      type: "error",
-      message: `Deposit Lp token failed Amount of Lp token deposited ${tokenAmount}`,
-      title: "Failed Transaction",
-      position: "topR",
-    });
+    if(gameState == 1 ){
+      dispatch({
+        type: "error",
+        message: `Game is Already Started! You cant Join Or Deposit Now`,
+        title: "Failed Transaction",
+        position: "topR",
+      });
+    } else if (gameState == 0) {
+      dispatch({
+        type: "error",
+        message: `Deposit Lp token failed Amount of Lp token deposited ${tokenAmount}`,
+        title: "Failed Transaction",
+        position: "topR",
+      });
+    }
+
   }
   
   useEffect(() =>{
@@ -218,7 +240,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
           (
             <button onClick={approveLpTokenFunc} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Approve</button>
           ) : (
-            <button onClick={depositLpToken} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Deposit</button>
+            <button onClick={depositLPTokens} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Deposit</button>
           )
           }
           <button onClick={SendMeDemoLpFunc} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">LP Tokens Faucet</button>
