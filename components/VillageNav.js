@@ -7,18 +7,18 @@ import RewardsToClaim from "./Nav/RewardsToClaim";
 import YourResources from "./Nav/YourResources";
 import { useMoralis } from "react-moralis";
 
-const VillageNav = (gameState) => {
+const VillageNav = ({ gameState }) => {
   const router = useRouter();
   const { isWeb3Enabled } = useMoralis();
 
   return (
     <>
       <nav className="bg-transparent border-gray-200 py-2.5 rounded w-full">
-        <div className="container flex flex-wrap justify-between items-center mx-auto">
+        <div className="container flex justify-between items-center mx-auto">
           <a
             href="/"
             className={`flex items-center ${
-              isWeb3Enabled == true ? "pr-36" : "pr-2"
+              isWeb3Enabled == true ? "pr-30" : "pr-2"
             }`}
           >
             <motion.div

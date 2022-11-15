@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import LiquidityWarsAbi from "../constants/LiquidityWars.json";
 import LiquidityVaultAbi from "../constants/LiquidityVault.json";
 import networkMapping from "../constants/networkMapping.json";
-import { ethers } from "ethers"
+import { ethers } from "ethers";
 
 export const PlayerContext = createContext();
 
@@ -25,31 +25,35 @@ export default function MapPage() {
   const { account, isWeb3Enabled, chainId: chainIdHex } = useMoralis();
   const chainId = parseInt(chainIdHex);
   const contractAddresses =
-    chainId in networkMapping
-      ? networkMapping[chainId]
-      : null;
+    chainId in networkMapping ? networkMapping[chainId] : null;
 
   const { runContractFunction: getCurrentGameId } = useWeb3Contract({
     abi: LiquidityWarsAbi,
-    contractAddress: contractAddresses ? contractAddresses["LiquidityWars"][0]: null,
+    contractAddress: contractAddresses
+      ? contractAddresses["LiquidityWars"][0]
+      : null,
     functionName: "getCurrentGameId",
   });
 
   const { runContractFunction: getPlayerInfo } = useWeb3Contract({
     abi: LiquidityVaultAbi,
-    contractAddress: contractAddresses ? contractAddresses["LiquidityVault"][0]: null,
+    contractAddress: contractAddresses
+      ? contractAddresses["LiquidityVault"][0]
+      : null,
     functionName: "getPlayerInfo",
-    params:{
-      _playerAddress: account
-    }
+    params: {
+      _playerAddress: account,
+    },
   });
 
-  const {runContractFunction: getGameState} = useWeb3Contract({
+  const { runContractFunction: getGameState } = useWeb3Contract({
     abi: LiquidityVaultAbi,
-    contractAddress: contractAddresses ? contractAddresses["LiquidityVault"][0]: null,
-    functionName:"getGameState",
-    params:{}
-  })
+    contractAddress: contractAddresses
+      ? contractAddresses["LiquidityVault"][0]
+      : null,
+    functionName: "getGameState",
+    params: {},
+  });
 
   const close = () => setModalOpen(false);
 
@@ -63,7 +67,7 @@ export default function MapPage() {
   }
 
   async function checkPlayer() {
-    if (account){
+    if (account) {
       // console.log("Checking if is player...");
       // console.log("account: ", account);
       const [tokenAddress, amount] = await getPlayerInfo();
@@ -75,7 +79,7 @@ export default function MapPage() {
     }
   }
 
-  async function getGameStateAsync(){
+  async function getGameStateAsync() {
     const gameState = await getGameState();
     //console.log("village-map gameState:", gameState);
     setGameState(gameState);
@@ -84,10 +88,11 @@ export default function MapPage() {
   useEffect(() => {
     // console.log("useEffect isPlayer: ", isPlayer);
     // console.log("useEffect account: ", account);
-    if (account && isPlayer == "no" || gameState == 0) {
+    checkPlayer();
+    if ((account && isPlayer == "no") || gameState == 0) {
       router.push("/");
     }
-  }, [isPlayer, gameState]);
+  }, [isPlayer, gameState, account]);
 
   useEffect(() => {
     if (isWeb3Enabled) {
