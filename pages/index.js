@@ -9,11 +9,9 @@ import LiquidityVaultAbi from '../constants/LiquidityVault.json'
 import ERC20Abi from '../constants/ERC20.json'
 import UniswapV2PairAbi from '../constants/UniswapV2Pair.json'
 import LiquidityWarsConfigAbi from "../constants/LiquidityWarsConfig.json";
-import SendMeDemoLps from "../constants/SendMeDemoLps.json";
 import { useEffect, useState } from "react";
 import ConnectToWallet from "../components/Misc/ConnectToWallet";
 import TopNav from "../components/TopNav";
-import Selector from "../components/Misc/Selector";
 import Link from "next/link";
 import Multiplayer from "../components/MusicPlayer/Multiplayer";
 
@@ -26,7 +24,6 @@ export default function Home() {
   const chainId = parseInt(chainIdHex)
   const LiquidityVaultAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityVault'][0] : null
   const LiquidityVaultConfigAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityWarsConfig'][0] : null
-  const LiquidityWars = chainId in networkMapping ? networkMapping[chainId]['LiquidityWars'][0] : null
   const SushiSwapAddress = chainId in networkMapping ? networkMapping[chainId]['SushiSwap'][0] : null
   const SendMeDemoLpsAddress = chainId in networkMapping ? networkMapping[chainId]['SendMeDemoLps'][0] : null
   const [allowedLPTokens , setAllowedLPTokens] = useState([]);
@@ -86,17 +83,6 @@ export default function Home() {
     
   }
 
-  const handleSuccess = async (tx) => {
-    try {
-        await tx.wait(1)
-        updateUI()
-        // handleNewNotification(tx)
-    } catch (error) {
-        console.log(error)
-    }
-  }
-
-
   const getAllowedTokens = async () => {
     if(LiquidityVaultConfigAddress && LiquidityWarsConfigAbi) {
       const provider = new ethers.providers.Web3Provider(ethereum);
@@ -145,12 +131,11 @@ export default function Home() {
     setUserAddress(address)
   }
 
-  useEffect(() => {
-    connect();
-  }, [userAddress])
+  // useEffect(() => {
+  //   connect();
+  // }, [userAddress])
 
   useEffect(() => {
-    // console.log("allowedLPAddresses: ", allowedLPAddresses);
     for (let i = 0; i < allowedLPAddresses.length; i++) {
       getLPTokenSymbol(allowedLPAddresses[i]);
     }
