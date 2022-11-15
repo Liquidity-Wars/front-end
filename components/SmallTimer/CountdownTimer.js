@@ -7,7 +7,18 @@ const CountdownTimer = ({targetDate}) => {
   const [days, hours, minutes, seconds] = useCountdown(targetDate)
 
   if(days + hours+ minutes + seconds <= 0){
-    return <ExpiredNotice />
+    return (
+      <>
+      <img className="w-8 h-8" src="../assets/images/timer.png" alt=""/>
+        <ShowCounter 
+           days={0}
+           hours={0}
+           minutes={0}
+           seconds={0}
+        />
+      </>
+    
+    ) 
   } else {
     return (
       <>

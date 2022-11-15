@@ -8,6 +8,7 @@ import LiquidityVaultAbi from "../constants/LiquidityVault.json";
 import networkMapping from "../constants/networkMapping.json";
 import { useMoralis, useWeb3Contract } from "react-moralis";
 import { useRouter } from "next/router";
+import Multiplayer from "../components/MusicPlayer/Multiplayer";
 
 export default function VillagePage() {
   const { account, isWeb3Enabled, chainId: chainIdHex } = useMoralis();
@@ -102,6 +103,7 @@ export default function VillagePage() {
 
   return (
     <div className="flex flex-col items-center h-screen w-screen bg-cover bg-[url('/assets/images/stardew-valley-img.jpg')]">
+      <Multiplayer />
       <VillageNav className="w-full" gameState={gameState} />
       <div className="flex h-full w-screen justify-center items-center">
         <div className="flex justify-center items-center w-[850px] h-[520px] bg-[url('/assets/images/valley-canvas.png')] translate-x-[30px] bg-center bg-cover">
