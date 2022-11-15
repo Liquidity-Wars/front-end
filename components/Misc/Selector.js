@@ -1,25 +1,18 @@
 import React, { useState,  createRef ,useEffect} from 'react'
 import { createPopper } from "@popperjs/core";
 
-const Selector = ({allowedLPTokens ,allowedLPAddresses }) => {
-
-    let tokenArr = [];
-
+const Selector = ({allowedLPTokens, allowedLPAddresses, selected, setSelected }) => {
     const [lpTokens, setLpTokens] = useState(null);
     const [inputValue, setInputValue] = useState("");
-    const [selected, setSelected] = useState("");
     const [open, setOpen] = useState(false);
-    const tokenObject = {
-      address: allowedLPAddresses[0],
-      name: allowedLPTokens[0]
-    }
-    tokenArr.push(tokenObject)
 
-    // let tokenObject = {};
-    // tokenObject = allowedLPAddresses.reduce((o, k, i) => ({...o, [k]: allowedLPTokens[i]}), {})
-    // console.log(tokenObject)
-  
     useEffect(() => {
+      let tokenArr = [];
+      let tokenObject = {
+        address: allowedLPAddresses[0],
+        name: allowedLPTokens[0]
+      }
+      tokenArr.push(tokenObject)
       setLpTokens(tokenArr);
     }, [open]);
 
@@ -29,16 +22,16 @@ const Selector = ({allowedLPTokens ,allowedLPAddresses }) => {
      <div className="font-medium items-center w-2/5">
       <div
         onClick={() => setOpen(!open)}
-        className={`bg-[#F3B46C] border-[#AB4A05] mx-2 border-4 w-full p-2 flex items-center text-sm justify-between rounded font-['Nabana-bold'] ${
+        className={`cursor-pointer bg-[#F3B46C] border-[#AB4A05] mx-2 border-4 w-full p-2 flex items-center text-sm justify-between rounded font-['Nabana-bold'] ${
           !selected && " text-[#CF3810]"
         }`}
       >
         {selected
           ? selected?.length > 25
-            ? selected?.substring(0, 25) + "..."
-            : selected
+            ? selected?.name.substring(0, 25) + "..."
+            : selected?.name
           : (
-            <p className="text-xs">Select Token!</p>
+            <p className="text-base">Select Token!</p>
           )}
        
       </div>
@@ -61,7 +54,7 @@ const Selector = ({allowedLPTokens ,allowedLPAddresses }) => {
             key={lpToken?.name}
             className={`p-2 text-xs hover:bg-sky-600 hover:text-white
             ${
-              lpToken?.name?.toLowerCase() === selected?.toLowerCase() &&
+              lpToken?.name?.toLowerCase() === selected?.name?.toLowerCase() &&
               "bg-[#FFCA7A] border-[#AB4A05] border-2  text-[#CF3810] text-sm"
             }
             ${
@@ -71,8 +64,8 @@ const Selector = ({allowedLPTokens ,allowedLPAddresses }) => {
             }`}
             onClick={() => {
 
-              if (lpToken?.name?.toLowerCase() !== selected.toLowerCase()) {
-                setSelected(lpToken?.name);
+              if (lpToken?.name?.toLowerCase() !== selected?.name?.toLowerCase()) {
+                setSelected(lpToken);
                 setOpen(false);
                 setInputValue("");
 
