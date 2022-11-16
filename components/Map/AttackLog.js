@@ -17,10 +17,9 @@ export default function AttackLog({ handleClose, gameId }) {
   const getEvents = async () => {
     // https://docs.ethers.io/v5/concepts/events/
     // https://docs.ethers.io/v5/getting-started/#getting-started--history
+
     if (account && gameId) {
-      var provider = new ethers.providers.JsonRpcProvider(
-        "https://tame-icy-arm.matic-testnet.quiknode.pro/fdf1fd954a2b671a69a22994a0979e07260b5d62/"
-      );
+      var provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_MUMBAI_RPC_URL)
       const liquidityWarsContract = new ethers.Contract(
         LiquidityWarsAddress,
         LiquidityWarsAbi,
@@ -44,6 +43,7 @@ export default function AttackLog({ handleClose, gameId }) {
         defenderFilter,
         -9000
       );
+
       console.log("attackerEvents:", attackerEvents);
       console.log("defenderEvents:", defenderEvents);
       let allEvents = [...attackerEvents, ...defenderEvents];
@@ -52,6 +52,7 @@ export default function AttackLog({ handleClose, gameId }) {
       let history = [];
       let type;
       allEvents.forEach((event) => {
+
         type =
           event.args.attacker.toLowerCase() == account.toLowerCase()
             ? "Attack"
@@ -63,6 +64,7 @@ export default function AttackLog({ handleClose, gameId }) {
           event.args.robbedResources.toString(),
           event.blockNumber.toString(),
         ]);
+
       });
       console.log("history:", history);
       setAttackHistory(history);

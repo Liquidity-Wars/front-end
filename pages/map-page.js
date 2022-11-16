@@ -12,6 +12,7 @@ import LiquidityWarsAbi from "../constants/LiquidityWars.json";
 import LiquidityVaultAbi from "../constants/LiquidityVault.json";
 import networkMapping from "../constants/networkMapping.json";
 import { ethers } from "ethers";
+import Multiplayer from "../components/MusicPlayer/Multiplayer";
 
 export const PlayerContext = createContext();
 
@@ -63,7 +64,7 @@ export default function MapPage() {
 
   async function updateGameId() {
     const gameId = await getCurrentGameId();
-    setGameId(gameId);
+    setGameId(gameId ? gameId.toString() : 0);
   }
 
   async function checkPlayer() {
@@ -104,6 +105,7 @@ export default function MapPage() {
 
   return (
     <PlayerContext.Provider value={setPlayerId}>
+      <Multiplayer />
       <div className="flex flex-col items-center justify-center h-screen w-screen bg-cover bg-[url('/assets/images/stardew-valley-img.jpg')]">
         <MapNav className="w-full" gameState={gameState} />
         <div className="flex justify-center items-center w-[850px] h-[520px] bg-[url('/assets/images/valley-canvas.png')] translate-x-[30px] bg-center bg-cover">

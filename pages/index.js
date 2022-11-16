@@ -9,12 +9,11 @@ import LiquidityVaultAbi from '../constants/LiquidityVault.json'
 import ERC20Abi from '../constants/ERC20.json'
 import UniswapV2PairAbi from '../constants/UniswapV2Pair.json'
 import LiquidityWarsConfigAbi from "../constants/LiquidityWarsConfig.json";
-import SendMeDemoLps from "../constants/SendMeDemoLps.json";
 import { useEffect, useState } from "react";
 import ConnectToWallet from "../components/Misc/ConnectToWallet";
 import TopNav from "../components/TopNav";
-import Selector from "../components/Misc/Selector";
 import Link from "next/link";
+import Multiplayer from "../components/MusicPlayer/Multiplayer";
 
 
 export default function Home() {
@@ -25,7 +24,6 @@ export default function Home() {
   const chainId = parseInt(chainIdHex)
   const LiquidityVaultAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityVault'][0] : null
   const LiquidityVaultConfigAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityWarsConfig'][0] : null
-  const LiquidityWars = chainId in networkMapping ? networkMapping[chainId]['LiquidityWars'][0] : null
   const SushiSwapAddress = chainId in networkMapping ? networkMapping[chainId]['SushiSwap'][0] : null
   const SendMeDemoLpsAddress = chainId in networkMapping ? networkMapping[chainId]['SendMeDemoLps'][0] : null
   const [allowedLPTokens , setAllowedLPTokens] = useState([]);
@@ -34,9 +32,6 @@ export default function Home() {
   const [ playerExist, setPlayerExist ] = useState(false);
   // const [lpTokens, setLpTokens] = useState([]);
 
-
-  
-  // get time getTimeToStartOrEndGame
   const {runContractFunction: getTimeToStartOrEndGame} = useWeb3Contract({
     abi: LiquidityVaultAbi,
     contractAddress: LiquidityVaultAddress,
@@ -44,7 +39,6 @@ export default function Home() {
     params:{}
   })
 
-  // getGameState 
   const {runContractFunction: getGameState} = useWeb3Contract({
     abi: LiquidityVaultAbi,
     contractAddress: LiquidityVaultAddress,
@@ -52,22 +46,19 @@ export default function Home() {
     params:{}
   })
 
-   // getGameDuration
-   const {runContractFunction: getGameDuration} = useWeb3Contract({
+  const {runContractFunction: getGameDuration} = useWeb3Contract({
     abi: LiquidityVaultAbi,
     contractAddress: LiquidityVaultAddress,
     functionName:"getGameDuration",
     params:{}
   })
 
-  // getCurrentPlayInfo
   const {runContractFunction: getPlayerInfo} = useWeb3Contract({
     abi: LiquidityVaultAbi,
     contractAddress: LiquidityVaultAddress,
     functionName:"getPlayerInfo",
     params:{ _playerAddress: userAddress}
   })
-
 
   // Keep track and update all UI state
   async function updateUI(){
@@ -84,32 +75,13 @@ export default function Home() {
       setPlayerExist(true)
     } 
 
-    if(gameStatus == 0){
-      let expiresInMS = getGameDurations*1000
-      let currentTimeStamp = new Date()
-      let expiresDateTime = new Date(currentTimeStamp.getTime() + expiresInMS);
-      setDateTime(expiresDateTime)
-    }
-    if(gameStatus == 1){
-      let expiresInMS = getTime*1000
-      let currentTimeStamp = new Date()
-      let expiresDateTime = new Date(currentTimeStamp.getTime() + expiresInMS);
-      setDateTime(expiresDateTime)
-    }
-
+    console.log("getTime:", getTime)
+    let expiresInMS = getTime*1000
+    let currentTimeStamp = new Date()
+    let expiresDateTime = new Date(currentTimeStamp.getTime() + expiresInMS);
+    setDateTime(expiresDateTime)
     
   }
-
-  const handleSuccess = async (tx) => {
-    try {
-        await tx.wait(1)
-        updateUI()
-        // handleNewNotification(tx)
-    } catch (error) {
-        console.log(error)
-    }
-  }
-
 
   const getAllowedTokens = async () => {
     if(LiquidityVaultConfigAddress && LiquidityWarsConfigAbi) {
@@ -146,7 +118,6 @@ export default function Home() {
     setAllowedLPTokens([...new Set(newAllowedLPTokens)]);
   }
 
-
   async function connect() {
     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     let accounts = await provider.send("eth_requestAccounts", []);
@@ -160,13 +131,11 @@ export default function Home() {
     setUserAddress(address)
   }
 
-  useEffect(() => {
-    connect();
-  }, [userAddress])
+  // useEffect(() => {
+  //   connect();
+  // }, [userAddress])
 
-
   useEffect(() => {
-    // console.log("allowedLPAddresses: ", allowedLPAddresses);
     for (let i = 0; i < allowedLPAddresses.length; i++) {
       getLPTokenSymbol(allowedLPAddresses[i]);
     }
@@ -186,7 +155,6 @@ export default function Home() {
     getAllowedTokens();
   }, [LiquidityVaultAddress])
   
-
   useEffect(() =>{
     if(isWeb3Enabled){
       updateUI();
@@ -196,6 +164,7 @@ export default function Home() {
   return (
     <>
     <TopNav />
+      <Multiplayer />
       <div className={styles.container}>
         <div className="flex flex-col justify-center items-center pt-4">
           <motion.div
@@ -221,65 +190,54 @@ export default function Home() {
 
           <div className="flex flex-col mt-12">
 
-            {isWeb3Enabled ? ( 
+            {isWeb3Enabled && gameState ? ( 
               <>
               <div className="bg-transparent p-4 ">
                 <div className="bg-[url('/assets/images/valley-canvas.png')] justify-center w-[800px] h-auto bg-cover bg-no-repeat">
                     <div className="flex flex-col  justify-center text-lg items-center text-center px-6 py-6">
-                      <h2 className="font-['Nabana-bold'] text-4xl text-[#CF3810]">{gameState == 0 ? 'Next Game In' : 'Game is Running!'}</h2>
-                      <div className="bg-[url('/assets/images/scroll.png')] justify-center w-24 bg-cover bg-no-repeat">
+                      <h2 className="font-['Nabana-bold'] text-4xl text-[#CF3810]">
+                        {gameState == 0 ? 'Game will start Soon!' : 'Game is Running!'}
+                      </h2>
+                      {gameState == 0 && dateTime <= new Date() &&
+                        (<h3 className="font-['Nabana-bold'] text-2xl">
+                          Game is about to start, waiting for at least 2 players to join...
+                        </h3>)
+                      }
+                      {gameState == 1 &&
+                        (<h3 className="font-['Nabana-bold'] text-2xl">
+                          Please wait for the next round to start...
+                        </h3>)
+                      }
+                      {/* <div className="bg-[url('/assets/images/scroll.png')] justify-center w-24 bg-cover bg-no-repeat">
                         <p className="font-['Nabana-bold']">{gameState == 0 ? 'Ready' : 'Running'}</p>
-                      </div>
+                      </div> */}
 
                       <CountdownTimer targetDate={dateTime} />
-                      {/* <Selector 
-                        allowedLPTokens={allowedLPTokens}
-                        allowedLPAddresses={allowedLPAddresses}
-                      />
-                      <LiquidityPool 
-                      LiquidityVaultAddress={LiquidityVaultAddress}
-                      LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
-                      SushiSwapAddress={SushiSwapAddress}
-                      allowedLPTokens={allowedLPTokens}
-                      SendMeDemoLpsAddress={SendMeDemoLpsAddress}
-                      allowedLPAddresses={allowedLPAddresses}
-                      /> */}
-                        {playerExist ? 
-                        (
-                          <>
-                              <div className="bg-transparent p-8 ">
-                                <div className="bg-[url('/assets/images/Web3Frame.png')] flex justify-center w-64 h-64 bg-cover bg-no-repeat">
-                                    <div className="flex flex-col font-['Stardew'] justify-center text-lg items-center text-center px-6">
-                                        <h2>Welcome to <br></br> Liquidity Wars!!!</h2>
-                                        <Link href="/map-page">
-                                          <a className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-4 ">Play Now!</a>
-                                        </Link>
-                                    </div>
+                      
+                      {playerExist && 
+                        (<div className="bg-transparent p-8 ">
+                            <div className="bg-[url('/assets/images/Web3Frame.png')] flex justify-center w-64 h-64 bg-cover bg-no-repeat">
+                                <div className="flex flex-col font-['Stardew'] justify-center text-lg items-center text-center px-6">
+                                    <h2>Welcome to <br></br> Liquidity Wars!!!</h2>
+                                    <Link href="/map-page">
+                                      <a className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-4 ">Play Now!</a>
+                                    </Link>
                                 </div>
                             </div>
-                          </>
-                        ) : 
-                        
-                          <>
-                            {/* <Selector 
-                              allowedLPTokens={allowedLPTokens}
-                              allowedLPAddresses={allowedLPAddresses}
-                            /> */}
-                            <LiquidityPool 
-                              LiquidityVaultAddress={LiquidityVaultAddress}
-                              LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
-                              SushiSwapAddress={SushiSwapAddress}
-                              SendMeDemoLpsAddress={SendMeDemoLpsAddress}
-                              allowedLPTokens={allowedLPTokens}
-                              allowedLPAddresses={allowedLPAddresses}
-                              userAddress={userAddress}
-                            />
-                          </>
-                        } 
-
-
-                
-
+                        </div>)
+                      } 
+                      {!playerExist && gameState == 0 && 
+                        (<LiquidityPool 
+                          LiquidityVaultAddress={LiquidityVaultAddress}
+                          LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
+                          SushiSwapAddress={SushiSwapAddress}
+                          SendMeDemoLpsAddress={SendMeDemoLpsAddress}
+                          allowedLPTokens={allowedLPTokens}
+                          allowedLPAddresses={allowedLPAddresses}
+                          userAddress={userAddress}
+                          gameState={gameState}
+                        />)
+                      } 
                     </div>
                   </div>
               </div>
