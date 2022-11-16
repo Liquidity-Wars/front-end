@@ -4,6 +4,7 @@ import LiquidityVault from "../../constants/LiquidityVault.json";
 import networkMapping from "../../constants/networkMapping.json";
 import LiquidityWars from "../../constants/LiquidityWars.json";
 import { useNotification } from "web3uikit";
+import { ethers } from "ethers";
 
 export default function EnemyInfo({ playerId }) {
   const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
@@ -11,6 +12,8 @@ export default function EnemyInfo({ playerId }) {
   const [playerAddress, setPlayerAddress] = useState("");
   const [villageSize, setVillageSize] = useState(0);
   const dispatch = useNotification();
+  const [warsContract, setWarsContract] = useState();
+  const [isAttacking, setIsAttacking] = useState(false);
   const LiquidityVaultAddress =
     chainId in networkMapping
       ? networkMapping[chainId]["LiquidityVault"][0]
@@ -37,32 +40,25 @@ export default function EnemyInfo({ playerId }) {
     params: { _playerAddress: playerAddress },
   });
 
-  const { runContractFunction } = useWeb3Contract();
-
-  // handle attack player success
-  async function handleAttackSuccess() {
-    dispatch({
-      type: "success",
-      message: "Check log for attack details",
-      title: "Enemy Attacked",
-      position: "topR",
-    });
-  }
-
-  // attack player function
   async function handleAttackPlayer(playerToAttack) {
-    const playerParams = {
-      abi: LiquidityWars,
-      contractAddress: LiquidityWarsAddress,
-      functionName: "attackPlayer",
-      params: { _playerToAttack: playerToAttack },
-    };
-
-    await runContractFunction({
-      params: playerParams,
-      onSuccess: () => handleAttackSuccess(),
-      onError: (error) => console.log(error),
-    });
+    if(isAttacking) {
+      return;
+    }
+    try {
+      setIsAttacking(true);
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const liquidityWarsContract = new ethers.Contract(LiquidityWarsAddress, LiquidityWars, provider.getSigner());
+      setWarsContract(liquidityWarsContract);
+      const txn = await liquidityWarsContract.attackPlayer(playerToAttack);
+    } catch (error) {
+      setIsAttacking(false);
+      dispatch({
+        type: "error",
+        message: error.reason,
+        title: "Failed to attack",
+        position: "topR",
+      });
+    }
   }
 
   async function updateUI() {
@@ -77,6 +73,30 @@ export default function EnemyInfo({ playerId }) {
       updateUI();
     }
   }, [playerId, playerAddress]);
+
+  useEffect(() => {
+
+    const onAttackHappenned = (attacker,defender,gameId,attackerTroopsSurvived,defenderTroopsSurvived,robbedResources) => {
+      console.log(`Attack event arrived: ${attacker} | ${defender} | ${gameId} | ${attackerTroopsSurvived} | ${defenderTroopsSurvived} | ${robbedResources}`);
+      dispatch({
+        type: "success",
+        message: "Attack was successfully. Check the log for attack details",
+        title: "Enemy Attacked",
+        position: "topR",
+      });
+      setIsAttacking(false);
+    };
+
+    if (warsContract) {
+      warsContract.on('AttackHappenned', onAttackHappenned);
+    }
+
+    return () => {
+      if (warsContract) {
+        warsContract.off('AttackHappenned', onAttackHappenned);
+      }
+    }
+  }, [warsContract])
 
   return (
     <div className="flex flex-col w-[250px] h-full justify-between">
@@ -102,7 +122,7 @@ export default function EnemyInfo({ playerId }) {
               alt="attack enemy"
               className="h-[20px]"
             />{" "}
-            <div> Attack Player</div>
+            <div>{isAttacking ? "Attacking..." : "Attack Player"} </div>
           </div>
         </button>
       )}
