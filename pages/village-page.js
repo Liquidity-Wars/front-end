@@ -109,33 +109,53 @@ export default function VillagePage() {
             <div className="absolute w-[270px] h-[170px] border-2 border-gray-300 hover:border-yellow-300 hover:border-4 translate-x-[-155px] translate-y-[60px]">
               <button
                 onClick={() => open("FARM")}
-                className="relative translate-x-[110px] rounded-sm text-center translate-y-[165px] w-[40px] bg-gray-300"
+                className="relative flex items-center justify-center bg-cover h-[45px] w-[105px] bg-[url('/assets/images/valley-button.png')] font-semibold text-slate-600 translate-x-[85px] text-center translate-y-[65px] "
               >
-                Farm
+                <img
+                  src="/assets/images/farm_icon.png"
+                  className="h-[20px] mr-2 p-0"
+                  alt="farm icon"
+                />
+                <div>Farm</div>
               </button>
             </div>
 
             <div className="absolute w-[150px] h-[130px] border-2 border-gray-300 hover:border-yellow-300 hover:border-4 translate-x-[5px] translate-y-[240px]">
               <button
                 onClick={() => open("HIDEAWAY")}
-                className="relative translate-x-[37px] rounded-sm text-center translate-y-[125px] w-[75px] bg-gray-300"
+                className="relative translate-x-[25px] flex items-center justify-center bg-cover h-[45px] w-[105px] text-sm bg-[url('/assets/images/valley-button.png')] font-semibold text-slate-600 text-center translate-y-[40px]"
               >
-                Hideaway
+                <img
+                  src="/assets/images/hideaway_icon.png"
+                  className="h-[20px] mr-2 p-0"
+                  alt="hideaway icon"
+                />
+                <div>Hideaway</div>
               </button>
             </div>
             <div className="absolute w-[180px] h-[150px] border-2 border-gray-300 hover:border-yellow-300 hover:border-4 translate-x-[175px] translate-y-[60px]">
               <button
                 onClick={() => open("BARRACK")}
-                className="relative translate-x-[60px] rounded-sm text-center translate-y-[145px] w-[60px] bg-gray-300"
+                className="relative translate-x-[38px] flex items-center justify-center bg-cover h-[45px] w-[105px] bg-[url('/assets/images/valley-button.png')] font-semibold text-slate-600 text-center translate-y-[55px]"
               >
-                Barrack
+                <img
+                  src="/assets/images/barracks_icon.png"
+                  className="h-[20px] mr-2 p-0"
+                  alt="barracks icon"
+                />
+                <div>Barrack</div>
               </button>
             </div>
             <button
               onClick={() => open("WALLS")}
-              className="absolute translate-x-[140px] rounded-sm text-center translate-y-[420px] w-[50px] h-[30px] bg-gray-300"
+              className="absolute translate-x-[140px] text-center translate-y-[410px] flex items-center justify-center bg-cover h-[45px] w-[105px] bg-[url('/assets/images/valley-button.png')] font-semibold text-slate-600"
             >
-              Walls
+              <img
+                src="/assets/images/village_icon2.png"
+                className="h-[20px] mr-2 p-0"
+                alt="walls icon"
+              />
+              <div>Walls</div>
             </button>
           </div>
         </div>
