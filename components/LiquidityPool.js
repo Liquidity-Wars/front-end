@@ -8,7 +8,7 @@ import { useMoralis, useWeb3Contract, useERC20Balances   } from "react-moralis"
 import Selector from "../components/Misc/Selector";
 import { useNotification } from "web3uikit";
 import { ethers } from "ethers"
-import { Form } from 'web3uikit';
+import { motion } from 'framer-motion';
 
 const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, SushiSwapAddress, allowedLPTokens, allowedLPAddresses, SendMeDemoLpsAddress, userAddress, gameState}) => {
 
@@ -213,7 +213,14 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
 
   return (
    <>
-      <div className="bg-[url('/assets/images/frame.png')] p-4 shadow-sm rounded-lg bg-cover bg-no-repeat justify-center items-center w-[60%]">
+      <motion.div 
+          initial={{
+            opacity: 0,
+          }}
+          animate={{
+            opacity: 1,
+          }}
+        className="bg-[url('/assets/images/frame.png')] p-4 shadow-sm rounded-lg bg-cover bg-no-repeat justify-center items-center w-[60%]">
 
         <div className='px-4 py-4' >
           <div>
@@ -231,17 +238,32 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
             {lpTokenBalance && (<div className='text-sm font py-1'>You currently have {formatEther(lpTokenBalance)} LP Tokens</div>)}
           </div>
           {approvedAmount == 0 ?
-            (
-              <button onClick={approveLpTokenFunc} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Approve</button>
-            ) : 
-            (
-              <button onClick={depositLPTokens} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Deposit</button>
-            )
-          }
 
-          {process.env.NEXT_PUBLIC_CHAIN_ID == 80001 && (<button onClick={SendMeDemoLpFunc} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">LP Tokens Faucet</button>)}
+          (
+            <motion.button 
+              whileHover={{
+                scale: 1.1,
+                transition: { duration: 0.5 },
+              }}
+              onClick={approveLpTokenFunc} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Approve</motion.button>
+          ) : (
+            <motion.button 
+              whileHover={{
+                scale: 1.1,
+                transition: { duration: 0.5  },
+              }}
+              onClick={depositLPTokens} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Deposit</motion.button>
+          )
+          }
+          <motion.button 
+            whileHover={{
+              scale: 1.1,
+              transition: { duration: 0.5  },
+            }}
+            onClick={SendMeDemoLpFunc} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">LP Tokens Faucet</motion.button>
+
         </div>
-      </div>
+      </motion.div>
    </>
   )
 }
