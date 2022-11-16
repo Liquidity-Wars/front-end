@@ -40,7 +40,7 @@ const MapNav = ({ gameState }) => {
   async function updateUI() {
     const getTime = (await getTimeToStartOrEndGame())?.toString() || 0;
     const getGameDurations = (await getGameDuration())?.toString();
-    let expiresInMS = getGameDurations * 1000;
+    let expiresInMS = getTime * 1000;
     let currentTimeStamp = new Date();
     let expiresDateTime = new Date(currentTimeStamp.getTime() + expiresInMS);
     setDateTime(expiresDateTime);
