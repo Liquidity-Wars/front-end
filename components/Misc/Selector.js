@@ -52,7 +52,7 @@ const Selector = ({allowedLPTokens, allowedLPAddresses, selected, setSelected })
         {lpTokens?.map((lpToken) => (
           <li
             key={lpToken?.name}
-            className={`p-2 text-xs hover:bg-sky-600 hover:text-white
+            className={`cursor-pointer p-2 text-xs hover:bg-sky-600 hover:text-white
             ${
               lpToken?.name?.toLowerCase() === selected?.name?.toLowerCase() &&
               "bg-[#FFCA7A] border-[#AB4A05] border-2  text-[#CF3810] text-sm"

@@ -12,12 +12,12 @@ import LiquidityWarsConfigAbi from "../constants/LiquidityWarsConfig.json";
 import { useEffect, useState } from "react";
 import ConnectToWallet from "../components/Misc/ConnectToWallet";
 import TopNav from "../components/TopNav";
-import Link from "next/link";
 import Multiplayer from "../components/MusicPlayer/Multiplayer";
-
+import { useRouter } from "next/router";
+import { useNotification } from "web3uikit";
 
 export default function Home() {
-
+  const router = useRouter();
   const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
   const [dateTime , setDateTime] = useState(0);
   const [ gameState, setGameState ] = useState();
@@ -27,8 +27,12 @@ export default function Home() {
   const SendMeDemoLpsAddress = chainId in networkMapping ? networkMapping[chainId]['SendMeDemoLps'][0] : null
   const [allowedLPTokens , setAllowedLPTokens] = useState([]);
   const [allowedLPAddresses , setAllowedLPAddresses] = useState([]);
-  const [ playerExist, setPlayerExist ] = useState(false);
-  // const [lpTokens, setLpTokens] = useState([]);
+  const [playerExist, setPlayerExist] = useState(false);
+  const minNumberPlayers = 2;
+  const [pendingPlayers, setPendingPlayers] = useState(minNumberPlayers);
+  const dispatch = useNotification();
+
+  var pluralize = require('pluralize');
 
   const {runContractFunction: getTimeToStartOrEndGame} = useWeb3Contract({
     abi: LiquidityVaultAbi,
@@ -44,10 +48,10 @@ export default function Home() {
     params:{}
   })
 
-  const {runContractFunction: getGameDuration} = useWeb3Contract({
+  const {runContractFunction: getNumberOfPlayers} = useWeb3Contract({
     abi: LiquidityVaultAbi,
     contractAddress: LiquidityVaultAddress,
-    functionName:"getGameDuration",
+    functionName:"getNumberOfPlayers",
     params:{}
   })
 
@@ -63,11 +67,12 @@ export default function Home() {
 
     const getTime = (await getTimeToStartOrEndGame())?.toString() || 0;
     const gameStatus = (await getGameState()).toString();
-    const getGameDurations = (await getGameDuration())?.toString();
     const playerInfo = (await getPlayerInfo())?.toString();
+    const numberPlayers = (await getNumberOfPlayers())?.toString() || 0;
     const playerExistInGame = playerInfo?.split(',')[0] 
 
     setGameState(gameStatus)
+    setPendingPlayers(minNumberPlayers-numberPlayers);
 
     if(allowedLPAddresses.includes(playerExistInGame)){
       setPlayerExist(true)
@@ -116,21 +121,38 @@ export default function Home() {
     setAllowedLPTokens([...new Set(newAllowedLPTokens)]);
   }
 
+  const playButtonClicked = () => {
+    if (pendingPlayers > 0) {
+      dispatch({
+        type: "error",
+        message: `Waiting for more players to join the game`,
+        title: "Failed to start the game",
+        position: "topR",
+      });
+      return;
+    }
+    if (pendingPlayers <= 0 && gameState == 0) {
+      dispatch({
+        type: "error",
+        message: `Game is not ready yet, please wait a few more seconds and try again`,
+        title: "Failed to start the game",
+        position: "topR",
+      });
+      updateUI();
+      return;
+    }
+    router.push("/map-page");
+  }
+  
   useEffect(() => {
     for (let i = 0; i < allowedLPAddresses.length; i++) {
       getLPTokenSymbol(allowedLPAddresses[i]);
     }
 
-    if(allowedLPAddresses.length>0){
+    if(allowedLPAddresses.length > 0){
       updateUI();
     }
   }, [allowedLPAddresses])
-
-  useEffect(() =>{
-    if(allowedLPTokens.length > 0) {
-      console.log("allowedLPTokens: ", allowedLPTokens);
-    }
-  }, [allowedLPTokens])
 
   useEffect(() => {
     getAllowedTokens();
@@ -179,12 +201,12 @@ export default function Home() {
                       <h2 className="font-['Nabana-bold'] text-4xl text-[#CF3810]">
                         {gameState == 0 ? 'Game will start Soon!' : 'Game is Running!'}
                       </h2>
-                      {gameState == 0 && dateTime <= new Date() &&
+                      {gameState == 0 && dateTime <= new Date() && pendingPlayers > 0 &&
                         (<h3 className="font-['Nabana-bold'] text-2xl">
-                          Game is about to start, waiting for at least 2 players to join...
+                          Game is about to start, waiting for {pendingPlayers} {pluralize("player", pendingPlayers)} to join...
                         </h3>)
                       }
-                      {gameState == 1 &&
+                      {gameState == 1 && !playerExist &&
                         (<h3 className="font-['Nabana-bold'] text-2xl">
                           Please wait for the next round to start...
                         </h3>)
@@ -193,16 +215,19 @@ export default function Home() {
                         <p className="font-['Nabana-bold']">{gameState == 0 ? 'Ready' : 'Running'}</p>
                       </div> */}
 
-                      <CountdownTimer targetDate={dateTime} />
+                      {!playerExist && 
+                        <CountdownTimer targetDate={dateTime} />
+                      }
                       
                       {playerExist && 
                         (<div className="bg-transparent p-8 ">
                             <div className="bg-[url('/assets/images/Web3Frame.png')] flex justify-center w-64 h-64 bg-cover bg-no-repeat">
                                 <div className="flex flex-col font-['Stardew'] justify-center text-lg items-center text-center px-6">
                                     <h2>Welcome to <br></br> Liquidity Wars!!!</h2>
-                                    <Link href="/map-page">
-                                      <a className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-4 ">Play Now!</a>
-                                    </Link>
+                                    <a onClick={playButtonClicked}
+                                        className="cursor-pointer bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-4 ">
+                                      Play Now!
+                                    </a>
                                 </div>
                             </div>
                         </div>)
@@ -215,6 +240,7 @@ export default function Home() {
                           allowedLPTokens={allowedLPTokens}
                           allowedLPAddresses={allowedLPAddresses}
                           gameState={gameState}
+                          onSucess={updateUI}
                         />)
                       } 
                     </div>
