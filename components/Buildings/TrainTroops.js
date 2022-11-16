@@ -4,6 +4,7 @@ import LiquidityVault from "../../constants/LiquidityVault.json";
 import networkMapping from "../../constants/networkMapping.json";
 import LiquidityWars from "../../constants/LiquidityWars.json";
 import { useNotification } from "web3uikit";
+import { ethers } from "ethers";
 
 export default function TrainTroops() {
   const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
@@ -11,6 +12,9 @@ export default function TrainTroops() {
   const [costToTrainTroops, setCostToTrainTroops] = useState();
   const dispatch = useNotification();
   const [numberToTrain, setNumberToTrain] = useState(0);
+  const [warsContract, setWarsContract] = useState();
+  const [isTraining, setIsTraining] = useState();
+
 
   const chainId = parseInt(chainIdHex);
   const LiquidityWarsAddress =
@@ -26,14 +30,6 @@ export default function TrainTroops() {
       type: "success",
       message: `${numberToTrain} Troops Trained! Please refresh and wait to see changes`,
       title: "Troops Trained",
-      position: "topR",
-    });
-  }
-  async function handleTrainTroopsError(error) {
-    dispatch({
-      type: "error",
-      message: `${error.message}`,
-      title: "Failed to train troops",
       position: "topR",
     });
   }
@@ -54,22 +50,6 @@ export default function TrainTroops() {
     params: { _playerAddress: account },
   });
 
-  // submit train <user input> number of troops
-  async function handleTrainTroops(numberToTrain) {
-    const trainTroopsParams = {
-      abi: LiquidityWars,
-      contractAddress: LiquidityWarsAddress,
-      functionName: "trainTroops",
-      params: { _numberOfTroops: numberToTrain },
-    };
-
-    await runContractFunction({
-      params: trainTroopsParams,
-      onSuccess: () => handleTrainTroopsSuccess(),
-      onError: (error) => handleTrainTroopsError(error),
-    });
-  }
-
   async function updateUI() {
     const getTroopAttribute = await getTroopAttributes();
     setTroopAttributes(getTroopAttribute);
@@ -86,7 +66,34 @@ export default function TrainTroops() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await handleTrainTroops(numberToTrain);
+    if (isTraining) {
+      return;
+    }
+    try {
+      setIsTraining(true);
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const liquidityWarsContract = new ethers.Contract(LiquidityWarsAddress, LiquidityWars, provider.getSigner());
+      setWarsContract(liquidityWarsContract); //for the future, when we have a TroopTrained event in the Smart Contract
+      const txn = await liquidityWarsContract.trainTroops(numberToTrain);
+      await txn.wait();
+      dispatch({
+        type: "success",
+        message: `${numberToTrain} Troops Trained successfully!`,
+        title: "Troops Trained",
+        position: "topR",
+      });
+      setIsTraining(false);
+    } catch (error) {
+      setIsTraining(false);
+      dispatch({
+        type: "error",
+        message: error.reason,
+        title: "Failed to train troops",
+        position: "topR",
+      });
+
+    }
+
   };
 
   return (
@@ -94,13 +101,13 @@ export default function TrainTroops() {
       <h1 className="text-xl font-bold text-gray-700 text-center mt-3 underline">
         Troop Stats
       </h1>
-      <div className="text-xs m-auto w-[300px] flex items-center justify-center">
-        <div>Number: {Number(troopAttributes?.number)}</div>
-        <div>Health: {troopAttributes?.health}</div>
-        <div>Capacity: {troopAttributes?.capacity}</div>
-        <div>Speed: {troopAttributes?.speed}</div>
-        <div>Defense: {troopAttributes?.defense}</div>
-        <div>Attack: {troopAttributes?.attack}</div>
+      <div className="text-xs m-auto w-full flex items-center text-center">
+        <div className="pr-1.5"><b>Number</b><br/>{Number(troopAttributes?.number)}</div>
+        <div className="pr-1.5"><b>Health</b><br/>{troopAttributes?.health}</div>
+        <div className="pr-1.5"><b>Capacity</b><br/>{troopAttributes?.capacity}</div>
+        <div className="pr-1.5"><b>Speed</b><br/>{troopAttributes?.speed}</div>
+        <div className="pr-1.5"><b>Defense</b><br/>{troopAttributes?.defense}</div>
+        <div><b>Attack</b><br/>{troopAttributes?.attack}</div>
       </div>
       <div className="text-sm mt-2 mb-1 flex">
         <img
@@ -118,16 +125,16 @@ export default function TrainTroops() {
       <input
         name="Train Troops"
         type="number"
-        className="w-2/3 p-1"
+        className="w-1/2 p-1 mt-1.5"
         placeholder="Input Number to Train"
         value={numberToTrain}
         onChange={(event) => setNumberToTrain(event.target.value)}
       />
       <button
         type="submit"
-        className="btn btn-primary text-white font-semibold w-1/3 p-1 bg-[rgb(5,57,76)]"
+        className="btn btn-primary text-white font-semibold w-1/2 p-1 bg-[rgb(5,57,76)]"
       >
-        Train Troops
+        {isTraining ? "Training..." : "Train Troops"}
       </button>
     </form>
   );

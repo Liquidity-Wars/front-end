@@ -79,6 +79,8 @@ export default function Home() {
     } 
 
     console.log("getTime:", getTime)
+    console.log("gameStatus:", gameStatus)
+
     let expiresInMS = getTime*1000
     let currentTimeStamp = new Date()
     let expiresDateTime = new Date(currentTimeStamp.getTime() + expiresInMS);
@@ -159,10 +161,11 @@ export default function Home() {
   }, [LiquidityVaultAddress])
   
   useEffect(() =>{
+    console.log("account: ", account)
     if(isWeb3Enabled){
       updateUI();
     }
-  }, [isWeb3Enabled, playerExist])
+  }, [isWeb3Enabled, account, playerExist])
 
   return (
     <>
