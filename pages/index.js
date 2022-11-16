@@ -129,9 +129,19 @@ export default function Home() {
         title: "Failed to start the game",
         position: "topR",
       });
-    } else {
-      router.push("/map-page");
-    }   
+      return;
+    }
+    if (pendingPlayers <= 0 && gameState == 0) {
+      dispatch({
+        type: "error",
+        message: `Game is not ready yet, please wait a few more seconds and try again`,
+        title: "Failed to start the game",
+        position: "topR",
+      });
+      updateUI();
+      return;
+    }
+    router.push("/map-page");
   }
   
   useEffect(() => {
@@ -139,7 +149,7 @@ export default function Home() {
       getLPTokenSymbol(allowedLPAddresses[i]);
     }
 
-    if(allowedLPAddresses.length>0){
+    if(allowedLPAddresses.length > 0){
       updateUI();
     }
   }, [allowedLPAddresses])
