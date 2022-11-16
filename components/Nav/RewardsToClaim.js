@@ -4,7 +4,6 @@ import StrategiesAbi from "../../constants/Strategies.json";
 import LiquidityWarsAbi from "../../constants/LiquidityWars.json";
 import { useState, useEffect } from "react";
 import networkMapping from "../../constants/networkMapping.json";
-import { BigNumber } from "ethers";
 
 const RewardsToClaim = () => {
   const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
@@ -47,14 +46,14 @@ const RewardsToClaim = () => {
     getRatioOfRewards = getRatioOfRewards / 10 ** 10;
     setRatioOfRewards(getRatioOfRewards);
     console.log(ratioOfRewards);
+    setPlayerRewards(ratioOfRewards * currentRewards);
   }
 
   useEffect(() => {
     if (isWeb3Enabled) {
       updateCurrentRewards();
-      setPlayerRewards(parseInt(ratioOfRewards * currentRewards));
     }
-  }, [isWeb3Enabled]);
+  }, [isWeb3Enabled, playerRewards]);
 
   return (
     <li className="text-white block py-2">

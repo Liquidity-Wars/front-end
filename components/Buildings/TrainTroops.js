@@ -94,12 +94,12 @@ export default function TrainTroops() {
       <h1 className="text-xl font-bold text-gray-700 text-center mt-3 underline">
         Troop Stats
       </h1>
-      <div className="text-xs m-auto w-[300px] flex flex-wrap items-center justify-center">
-        <div>Number: {Number(troopAttributes?.number)} | </div>
-        <div>Health: {troopAttributes?.health} | </div>
-        <div>Capacity: {troopAttributes?.capacity} | </div>
-        <div>Speed: {troopAttributes?.speed} | </div>
-        <div>Defense: {troopAttributes?.defense} | </div>
+      <div className="text-xs m-auto w-[300px] flex items-center justify-center">
+        <div>Number: {Number(troopAttributes?.number)}</div>
+        <div>Health: {troopAttributes?.health}</div>
+        <div>Capacity: {troopAttributes?.capacity}</div>
+        <div>Speed: {troopAttributes?.speed}</div>
+        <div>Defense: {troopAttributes?.defense}</div>
         <div>Attack: {troopAttributes?.attack}</div>
       </div>
       <div className="text-sm mt-2 mb-1 flex">
