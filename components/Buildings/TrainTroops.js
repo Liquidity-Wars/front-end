@@ -24,7 +24,7 @@ export default function TrainTroops() {
   async function handleTrainTroopsSuccess() {
     dispatch({
       type: "success",
-      message: "Troops Trained",
+      message: `${numberToTrain} Troops Trained! Please refresh and wait to see changes`,
       title: "Troops Trained",
       position: "topR",
     });
@@ -56,7 +56,6 @@ export default function TrainTroops() {
 
   // submit train <user input> number of troops
   async function handleTrainTroops(numberToTrain) {
-    console.log(numberToTrain);
     const trainTroopsParams = {
       abi: LiquidityWars,
       contractAddress: LiquidityWarsAddress,
@@ -74,6 +73,7 @@ export default function TrainTroops() {
   async function updateUI() {
     const getTroopAttribute = await getTroopAttributes();
     setTroopAttributes(getTroopAttribute);
+    console.log(troopAttributes);
     const getCostToTrainTroops = await getTotalCostOfTroop();
     setCostToTrainTroops(getCostToTrainTroops.toNumber());
   }
@@ -94,11 +94,13 @@ export default function TrainTroops() {
       <h1 className="text-xl font-bold text-gray-700 text-center mt-3 underline">
         Troop Stats
       </h1>
-      <div className="text-xs">
-        Number: {troopAttributes?.number} | Health: {troopAttributes?.health} |
-        Capacity: {troopAttributes?.capacity} | Speed: {troopAttributes?.speed}{" "}
-        | Defense: {troopAttributes?.defense} | Attack:{" "}
-        {troopAttributes?.attack}
+      <div className="text-xs m-auto w-[300px] flex flex-wrap items-center justify-center">
+        <div>Number: {Number(troopAttributes?.number)} | </div>
+        <div>Health: {troopAttributes?.health} | </div>
+        <div>Capacity: {troopAttributes?.capacity} | </div>
+        <div>Speed: {troopAttributes?.speed} | </div>
+        <div>Defense: {troopAttributes?.defense} | </div>
+        <div>Attack: {troopAttributes?.attack}</div>
       </div>
       <div className="text-sm mt-2 mb-1 flex">
         <img

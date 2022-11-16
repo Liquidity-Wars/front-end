@@ -7,59 +7,89 @@ import networkMapping from "../../constants/networkMapping.json";
 
 export default function AttackLog({ handleClose, gameId }) {
   const [attackHistory, setAttackHistory] = useState([]);
-  const { account, isWeb3Enabled, chainId: chainIdHex } = useMoralis();
+  const { account, chainId: chainIdHex } = useMoralis();
   const chainId = parseInt(chainIdHex);
   const LiquidityWarsAddress =
-  chainId in networkMapping
-    ? networkMapping[chainId]["LiquidityWars"][0]
-    : null;
+    chainId in networkMapping
+      ? networkMapping[chainId]["LiquidityWars"][0]
+      : null;
 
   const getEvents = async () => {
     // https://docs.ethers.io/v5/concepts/events/
     // https://docs.ethers.io/v5/getting-started/#getting-started--history
-    console.log("getAttackEvents");
-    console.log("account: ", account);
-    console.log("gameId: ", gameId);
-    console.log("LiquidityWarsAddress: ", LiquidityWarsAddress);
-    if(account && gameId) {
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      const liquidityWarsContract = new ethers.Contract(LiquidityWarsAddress, LiquidityWarsAbi, provider);
-      const attackerFilter = liquidityWarsContract.filters.AttackHappenned(account,null,gameId);
-      const defenderFilter = liquidityWarsContract.filters.AttackHappenned(null,account,gameId);
-      const attackerEvents = await liquidityWarsContract.queryFilter(attackerFilter);
-      const defenderEvents = await liquidityWarsContract.queryFilter(defenderFilter);
-      await Promise.all([attackerEvents, defenderEvents])
+    if (account && gameId) {
+      var provider = new ethers.providers.JsonRpcProvider(
+        "https://tame-icy-arm.matic-testnet.quiknode.pro/fdf1fd954a2b671a69a22994a0979e07260b5d62/"
+      );
+      const liquidityWarsContract = new ethers.Contract(
+        LiquidityWarsAddress,
+        LiquidityWarsAbi,
+        provider
+      );
+      const attackerFilter = liquidityWarsContract.filters.AttackHappenned(
+        account,
+        null,
+        gameId
+      );
+      const defenderFilter = liquidityWarsContract.filters.AttackHappenned(
+        null,
+        account,
+        gameId
+      );
+      const attackerEvents = await liquidityWarsContract.queryFilter(
+        attackerFilter,
+        -9000
+      );
+      const defenderEvents = await liquidityWarsContract.queryFilter(
+        defenderFilter,
+        -9000
+      );
       console.log("attackerEvents:", attackerEvents);
       console.log("defenderEvents:", defenderEvents);
       let allEvents = [...attackerEvents, ...defenderEvents];
-      allEvents.sort((a,b) => a.blockNumber - b.blockNumber); // b - a for reverse sort
+      allEvents.sort((a, b) => a.blockNumber - b.blockNumber); // b - a for reverse sort
       console.log("allEvents:", allEvents);
       let history = [];
       let type;
       allEvents.forEach((event) => {
-        type = event.args.attacker === account ? "Attack" : "Attacked";
-        history.push([type, event.args.attackerTroopsSurvived, event.args.defenderTroopsSurvived, event.args.robbedResources]);
+        type =
+          event.args.attacker.toLowerCase() == account.toLowerCase()
+            ? "Attack"
+            : "Attacked";
+        history.push([
+          type,
+          event.args.attackerTroopsSurvived.toString(),
+          event.args.defenderTroopsSurvived.toString(),
+          event.args.robbedResources.toString(),
+          event.blockNumber.toString(),
+        ]);
       });
       console.log("history:", history);
-      setAttackHistory(history)
+      setAttackHistory(history);
     }
   };
 
   useEffect(() => {
     getEvents();
-  }, [isWeb3Enabled, gameId]);
+  }, [gameId]);
 
   return (
     <div className="flex flex-col items-center justify-center h-full w-full rounded-md bg-cover bg-[url('/assets/images/Web3Frame.png')]">
       <button
         onClick={handleClose}
-        className="absolute translate-x-[170px] translate-y-[-180px]"
+        className="absolute translate-x-[175px] translate-y-[-175px]"
       >
-        <div className="text-red-500 font-semibold">Close</div>
+        <div className="text-red-500 font-semibold">
+          <img
+            src="/assets/images/closebutton.png"
+            className="h-[30px] p-0"
+            alt="close icon"
+          />
+        </div>
       </button>
       <div className="h-[350px] w-[350px]  overflow-y-scroll overflow-x-hidden flex flex-col">
         {attackHistory.map((attack, index) => (
-          <div>
+          <div key={attack[4]}>
             <AttackEvent
               index={index}
               type={attack[0]}

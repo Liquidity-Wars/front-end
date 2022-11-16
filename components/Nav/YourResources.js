@@ -26,7 +26,7 @@ const YourResources = ({ gameState }) => {
   }
 
   useEffect(() => {
-    if (isWeb3Enabled && gameState == 1) {
+    if (isWeb3Enabled) {
       updatePlayerResources();
     }
   }, [isWeb3Enabled]);
