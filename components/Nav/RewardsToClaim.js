@@ -43,10 +43,10 @@ const RewardsToClaim = () => {
     });
     setCurrentRewards(getPlayerResource);
     console.log(`current rewards are ${currentRewards}`);
-    getRatioOfRewards = getRatioOfRewards / 10 ** 10;
+    getRatioOfRewards = getRatioOfRewards / 10 ** 28;
     setRatioOfRewards(getRatioOfRewards);
     console.log(ratioOfRewards);
-    setPlayerRewards(ratioOfRewards * currentRewards);
+    setPlayerRewards((ratioOfRewards * currentRewards).toFixed(9));
   }
 
   useEffect(() => {
