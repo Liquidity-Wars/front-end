@@ -10,12 +10,12 @@ import { useNotification } from "web3uikit";
 import { ethers } from "ethers"
 import { motion } from 'framer-motion';
 
-const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, SushiSwapAddress, allowedLPTokens, allowedLPAddresses, SendMeDemoLpsAddress, userAddress, gameState}) => {
+const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, SushiSwapAddress, allowedLPTokens, allowedLPAddresses, SendMeDemoLpsAddress, gameState}) => {
 
   const [ tokenAmount, setTokenAmount] = useState(null);
   const [ requiredAmount, setRequiredAmount] = useState(null);
   const [ demoLps , setDemoLps] = useState();
-  const { isWeb3Enabled, isInitialized  } = useMoralis();
+  const { isWeb3Enabled, account, isInitialized  } = useMoralis();
   const [ lpTokenBalance, setLpTokenBalance] = useState();
   const [ approvedAmount, setApprovedAmount ] = useState(0);
   const [ selected, setSelected ] = useState(null);
@@ -42,13 +42,6 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
     }
   })
 
-  const { runContractFunction: getUsdRequiredAmount } = useWeb3Contract({
-    abi: LiquidityWarsConfigAbi,
-    contractAddress: LiquidityVaultConfigAddress,
-    functionName: "getUsdRequiredAmount",
-    params:{}
-  })
-
   const { runContractFunction: getAmountOfLpTokensRequired } = useWeb3Contract({
     abi: LiquidityWarsConfigAbi,
     contractAddress: LiquidityVaultConfigAddress,
@@ -66,12 +59,14 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
   })
 
   async function getRequiredAmountOfLpTokens(){
-    //const depositedLpTokens = await depositLpToken();
-    // const usdAmount = (await getUsdRequiredAmount())?.toString();
-    const amountOfLpTokensRequired = await getAmountOfLpTokensRequired()
-    // console.log("usdAmount:", usdAmount)
-    console.log("amountOfLpTokensRequired:", amountOfLpTokensRequired)
-    setRequiredAmount(amountOfLpTokensRequired);
+    const amountOfLpTokensRequired = await getAmountOfLpTokensRequired();
+    console.log("amountOfLpTokensRequired:", formatEther(amountOfLpTokensRequired));
+    const safetyFactorNum = ethers.utils.parseEther(String(1e17));
+    const safetyFactorDen = ethers.utils.parseEther(String(1e18));
+    const safetyAmount = amountOfLpTokensRequired.mul(safetyFactorNum).div(safetyFactorDen); //10% safety factor
+    const requiredAmountSafety = amountOfLpTokensRequired.add(safetyAmount);
+    console.log("amountOfLpTokensRequired+safetyAmount:", formatEther(requiredAmountSafety));
+    setRequiredAmount(requiredAmountSafety);
   }
 
   async function approveLpTokenFunc(event){
@@ -141,12 +136,12 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
   }
 
   const fetchTokenBalances = async () => {
-    console.log("userAddress:", userAddress);
-    console.log("allowedLPAddresses:", allowedLPAddresses);
-    if(userAddress && allowedLPAddresses.length > 0){
+    console.log("account:", account);
+    console.log("selected.address:", selected?.address);
+    if(account && selected){
       const provider = new ethers.providers.Web3Provider(ethereum);
-      const erc20TokenContract = new ethers.Contract(allowedLPAddresses[0], UniswapV2PairAbi, provider);
-      const balance = await erc20TokenContract.balanceOf(userAddress)
+      const erc20TokenContract = new ethers.Contract(selected.address, UniswapV2PairAbi, provider);
+      const balance = await erc20TokenContract.balanceOf(account)
       setLpTokenBalance(balance);
     }
   }
@@ -209,7 +204,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
       getRequiredAmountOfLpTokens();
       fetchTokenBalances();
     }
-  }, [isWeb3Enabled, userAddress, selected])
+  }, [isWeb3Enabled, account, selected])
 
   return (
    <>
@@ -226,7 +221,7 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
           <div>
             <label className="block mb-2  font-['Nabana-bold'] text-3xl text-[#CF3810] font-medium">Deposit</label>
             <div className="flex flex-row w-full justify-between">
-            <input type='text' id="deposit" readonly="readonly" value={formatEther(requiredAmount)} className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'/>
+            <input type='text' id="deposit" readOnly value={formatEther(requiredAmount)} className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'/>
             <Selector 
               allowedLPTokens={allowedLPTokens}
               allowedLPAddresses={allowedLPAddresses}
@@ -238,25 +233,30 @@ const LiquidityPool = ({LiquidityVaultConfigAddress, LiquidityVaultAddress, Sush
             {lpTokenBalance && (<div className='text-sm font py-1'>You currently have {formatEther(lpTokenBalance)} LP Tokens</div>)}
           </div>
           {approvedAmount == 0 ?
-            (
-              <motion.button 
-                whileHover={{
-                  scale: 1.1,
-                  transition: { duration: 0.5 },
-                }}
-                onClick={approveLpTokenFunc} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Approve</motion.button>
-            ) : 
-            (
-              <motion.button 
+
+          (
+            <motion.button 
               whileHover={{
                 scale: 1.1,
                 transition: { duration: 0.5 },
               }}
-                onClick={depositLPTokens} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Deposit</motion.button>
-            )
+              onClick={approveLpTokenFunc} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Approve</motion.button>
+          ) : (
+            <motion.button 
+              whileHover={{
+                scale: 1.1,
+                transition: { duration: 0.5  },
+              }}
+              onClick={depositLPTokens} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">Deposit</motion.button>
+          )
           }
+          <motion.button 
+            whileHover={{
+              scale: 1.1,
+              transition: { duration: 0.5  },
+            }}
+            onClick={SendMeDemoLpFunc} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">LP Tokens Faucet</motion.button>
 
-          {process.env.NEXT_PUBLIC_CHAIN_ID == 80001 && (<motion.button onClick={SendMeDemoLpFunc} className="bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-2 ">LP Tokens Faucet</motion.button>)}
         </div>
       </motion.div>
    </>

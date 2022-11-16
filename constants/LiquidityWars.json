@@ -11,40 +11,29 @@
         "name": "_configAddress",
         "type": "address"
       },
-      {
-        "internalType": "address",
-        "name": "_VRFAddress",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "_VRFAddress", "type": "address" }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
   {
     "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
     ],
     "name": "LiquidityVault__TimeNotPassed",
     "type": "error"
   },
   {
     "inputs": [
-      {
-        "internalType": "enum GameState",
-        "name": "",
-        "type": "uint8"
-      }
+      { "internalType": "enum GameState", "name": "", "type": "uint8" }
     ],
     "name": "LiquidityVault__WrongGameState",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "LiquidityWars__CannotAttackYourself",
     "type": "error"
   },
   {
@@ -56,6 +45,11 @@
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "actualResources",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "resourcesRequired",
         "type": "uint256"
       }
@@ -63,6 +57,7 @@
     "name": "LiquidityWars__NotEnoughResources",
     "type": "error"
   },
+  { "inputs": [], "name": "LiquidityWars__NotEnoughTroops", "type": "error" },
   {
     "inputs": [],
     "name": "LiquidityWars__NotLiquidityVaultCall",
@@ -79,16 +74,8 @@
     "name": "LiquidityWars__WrongInfrastructure",
     "type": "error"
   },
-  {
-    "inputs": [],
-    "name": "LiquidityWars__WrongInputValue",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "LiquidityWars__checkUpkeepError",
-    "type": "error"
-  },
+  { "inputs": [], "name": "LiquidityWars__WrongInputValue", "type": "error" },
+  { "inputs": [], "name": "LiquidityWars__checkUpkeepError", "type": "error" },
   {
     "anonymous": false,
     "inputs": [
@@ -210,24 +197,12 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "bytes",
-        "name": "checkData",
-        "type": "bytes"
-      }
+      { "internalType": "bytes", "name": "checkData", "type": "bytes" }
     ],
     "name": "checkUpkeep",
     "outputs": [
-      {
-        "internalType": "bool",
-        "name": "upkeepNeeded",
-        "type": "bool"
-      },
-      {
-        "internalType": "bytes",
-        "name": "performData",
-        "type": "bytes"
-      }
+      { "internalType": "bool", "name": "upkeepNeeded", "type": "bool" },
+      { "internalType": "bytes", "name": "performData", "type": "bytes" }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -242,23 +217,13 @@
   {
     "inputs": [],
     "name": "gameId",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_level",
-        "type": "uint256"
-      },
+      { "internalType": "uint256", "name": "_level", "type": "uint256" },
       {
         "internalType": "enum Infrastructure",
         "name": "_building",
@@ -266,32 +231,16 @@
       }
     ],
     "name": "getBuildingAbility",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "uint16",
-        "name": "_level",
-        "type": "uint16"
-      }
+      { "internalType": "uint16", "name": "_level", "type": "uint16" }
     ],
     "name": "getCostOfUpgrade",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -304,26 +253,14 @@
       }
     ],
     "name": "getCurrentBuildingLevel",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "getCurrentGameId",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -331,11 +268,7 @@
     "inputs": [],
     "name": "getGameState",
     "outputs": [
-      {
-        "internalType": "enum GameState",
-        "name": "",
-        "type": "uint8"
-      }
+      { "internalType": "enum GameState", "name": "", "type": "uint8" }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -343,133 +276,59 @@
   {
     "inputs": [],
     "name": "getNumberOfTroops",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_playerAddress",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "_playerAddress", "type": "address" }
     ],
     "name": "getPlayerResources",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_playerAddress",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "_playerAddress", "type": "address" }
     ],
     "name": "getRatioOfResources",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_playerAddress",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "_playerAddress", "type": "address" }
     ],
     "name": "getTotalCostOfTroop",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "getTotalSupplyOfResources",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "enum Nation",
-        "name": "_nation",
-        "type": "uint8"
-      }
+      { "internalType": "address", "name": "_playerAddress", "type": "address" }
     ],
     "name": "getTroopAttributes",
     "outputs": [
       {
         "components": [
-          {
-            "internalType": "uint64",
-            "name": "number",
-            "type": "uint64"
-          },
-          {
-            "internalType": "uint32",
-            "name": "cost",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "health",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint16",
-            "name": "capacity",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint16",
-            "name": "speed",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint16",
-            "name": "defense",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint16",
-            "name": "attack",
-            "type": "uint16"
-          }
+          { "internalType": "uint64", "name": "number", "type": "uint64" },
+          { "internalType": "uint32", "name": "cost", "type": "uint32" },
+          { "internalType": "uint32", "name": "health", "type": "uint32" },
+          { "internalType": "uint16", "name": "capacity", "type": "uint16" },
+          { "internalType": "uint16", "name": "speed", "type": "uint16" },
+          { "internalType": "uint16", "name": "defense", "type": "uint16" },
+          { "internalType": "uint16", "name": "attack", "type": "uint16" }
         ],
         "internalType": "struct Troop",
         "name": "",
@@ -482,55 +341,29 @@
   {
     "inputs": [],
     "name": "getVaultResources",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_playerAddress",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "_playerAddress", "type": "address" }
     ],
     "name": "getVillageSize",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "owner",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "bytes",
-        "name": "performData",
-        "type": "bytes"
-      }
+      { "internalType": "bytes", "name": "performData", "type": "bytes" }
     ],
     "name": "performUpkeep",
     "outputs": [],
@@ -546,11 +379,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_costOfAttack",
-        "type": "uint256"
-      }
+      { "internalType": "uint256", "name": "_costOfAttack", "type": "uint256" }
     ],
     "name": "setCostsOfAttack",
     "outputs": [],
@@ -559,11 +388,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "bytes",
-        "name": "_playersEncoded",
-        "type": "bytes"
-      }
+      { "internalType": "bytes", "name": "_playersEncoded", "type": "bytes" }
     ],
     "name": "startGame",
     "outputs": [],
@@ -585,11 +410,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "newOwner", "type": "address" }
     ],
     "name": "transferOwnership",
     "outputs": [],

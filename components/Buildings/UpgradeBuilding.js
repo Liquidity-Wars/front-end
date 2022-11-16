@@ -47,8 +47,8 @@ export default function UpgradeBuilding({
   async function handleUpgradeError(error) {
     dispatch({
       type: "error",
-      message: error,
-      title: `Failed to upgrade ${buildingType}`,
+      message: `${error.message}`,
+      title: `Failed to upgrade`,
       position: "topR",
     });
   }
@@ -122,14 +122,9 @@ export default function UpgradeBuilding({
   useEffect(() => {
     if (isWeb3Enabled) {
       updateUI();
-    }
-  }, [buildingType, currentBuildingLevel]);
-
-  useEffect(() => {
-    if (isWeb3Enabled) {
       getBuildingParams();
     }
-  }, [buildingType]);
+  }, [buildingType, currentBuildingLevel]);
 
   return (
     <div className="flex flex-col items-center justify-center h-full w-full rounded-md bg-cover bg-[url('/assets/images/Web3Frame.png')]">

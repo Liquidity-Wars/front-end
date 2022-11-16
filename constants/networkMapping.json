@@ -1,10 +1,10 @@
 {
   "80001": {
-    "LiquidityVault": ["0xfd673E18296cd6A96EED95C99B9b26f552684f27"],
-    "LiquidityWars": ["0xEf4B3B847DdFb9be859cFBC199E63B597f2139c2"],
-    "LiquidityWarsConfig": ["0x2c39efcfD06B69Cb9091Dc558fb3dAb6195157eE"],
-    "Strategies": ["0xE9c49b944D5E8175c551d7a2967D213888238d07"],
+    "LiquidityVault": ["0x58dd6859F72AC18f4121488f5ec1578ab489EAAb"],
+    "LiquidityWars": ["0xD66539E99320FdA2628c4DdA97DA212d126B8Ca5"],
+    "LiquidityWarsConfig": ["0xe42Db0da865B7252d05999a4d9C5477504D488Ca"],
+    "Strategies": ["0x255577ea5D593fc54Ed8dB9dc16F54f5d9Df4A75"],
     "SushiSwap": ["0x7522559e20725b715d62d274e68e703F331954d1"],
-    "SendMeDemoLps": ["0xa17DC3018d1ae833b119754B4135cbb35F4F718B"]
+    "SendMeDemoLps": ["0xd2f2B6716E0Bd3b8044daDcD58A4d51Eb6C1dfa4"]
   }
 }

@@ -24,11 +24,9 @@ export default function Home() {
   const chainId = parseInt(chainIdHex)
   const LiquidityVaultAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityVault'][0] : null
   const LiquidityVaultConfigAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityWarsConfig'][0] : null
-  const SushiSwapAddress = chainId in networkMapping ? networkMapping[chainId]['SushiSwap'][0] : null
   const SendMeDemoLpsAddress = chainId in networkMapping ? networkMapping[chainId]['SendMeDemoLps'][0] : null
   const [allowedLPTokens , setAllowedLPTokens] = useState([]);
   const [allowedLPAddresses , setAllowedLPAddresses] = useState([]);
-  const [userAddress , setUserAddress ] = useState();
   const [ playerExist, setPlayerExist ] = useState(false);
   // const [lpTokens, setLpTokens] = useState([]);
 
@@ -57,7 +55,7 @@ export default function Home() {
     abi: LiquidityVaultAbi,
     contractAddress: LiquidityVaultAddress,
     functionName:"getPlayerInfo",
-    params:{ _playerAddress: userAddress}
+    params:{ _playerAddress: account }
   })
 
   // Keep track and update all UI state
@@ -118,23 +116,6 @@ export default function Home() {
     setAllowedLPTokens([...new Set(newAllowedLPTokens)]);
   }
 
-  async function connect() {
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    let accounts = await provider.send("eth_requestAccounts", []);
-    let account = accounts[0];
-    provider.on('accountsChanged', function (accounts) {
-        account = accounts[0];
-        console.log(address); // Print new address
-    });
-    const signer = provider.getSigner();
-    const address = await signer.getAddress();
-    setUserAddress(address)
-  }
-
-  // useEffect(() => {
-  //   connect();
-  // }, [userAddress])
-
   useEffect(() => {
     for (let i = 0; i < allowedLPAddresses.length; i++) {
       getLPTokenSymbol(allowedLPAddresses[i]);
@@ -159,7 +140,7 @@ export default function Home() {
     if(isWeb3Enabled){
       updateUI();
     }
-  }, [isWeb3Enabled, userAddress, playerExist])
+  }, [isWeb3Enabled, playerExist])
 
   return (
     <>
@@ -230,11 +211,9 @@ export default function Home() {
                         (<LiquidityPool 
                           LiquidityVaultAddress={LiquidityVaultAddress}
                           LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
-                          SushiSwapAddress={SushiSwapAddress}
                           SendMeDemoLpsAddress={SendMeDemoLpsAddress}
                           allowedLPTokens={allowedLPTokens}
                           allowedLPAddresses={allowedLPAddresses}
-                          userAddress={userAddress}
                           gameState={gameState}
                         />)
                       } 

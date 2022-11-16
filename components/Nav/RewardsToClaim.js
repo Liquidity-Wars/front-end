@@ -4,7 +4,6 @@ import StrategiesAbi from "../../constants/Strategies.json";
 import LiquidityWarsAbi from "../../constants/LiquidityWars.json";
 import { useState, useEffect } from "react";
 import networkMapping from "../../constants/networkMapping.json";
-import { BigNumber } from "ethers";
 
 const RewardsToClaim = () => {
   const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
@@ -15,8 +14,8 @@ const RewardsToClaim = () => {
     chainId in networkMapping
       ? networkMapping[chainId]["LiquidityWars"][0]
       : null;
-  const [currentRewards, setCurrentRewards] = useState(0);
-  const [ratioOfRewards, setRatioOfRewards] = useState(0);
+  const [currentRewards, setCurrentRewards] = useState();
+  const [ratioOfRewards, setRatioOfRewards] = useState();
   const [playerRewards, setPlayerRewards] = useState(0);
 
   const { runContractFunction: getCurrentRewards } = useWeb3Contract({
@@ -39,22 +38,22 @@ const RewardsToClaim = () => {
 
   async function updateCurrentRewards() {
     const getPlayerResource = Number((await getCurrentRewards())?.toString());
-    setCurrentRewards(getPlayerResource);
     const getRatioOfRewards = await getRatioOfResources().then((b) => {
       return b.toNumber();
     });
-    getRatioOfRewards = getRatioOfRewards / 10 ** 10;
+    setCurrentRewards(getPlayerResource);
+    console.log(`current rewards are ${currentRewards}`);
+    getRatioOfRewards = getRatioOfRewards / 10 ** 28;
     setRatioOfRewards(getRatioOfRewards);
+    console.log(ratioOfRewards);
+    setPlayerRewards((ratioOfRewards * currentRewards).toFixed(9));
   }
 
   useEffect(() => {
     if (isWeb3Enabled) {
       updateCurrentRewards();
-      console.log(`current rewards are ${currentRewards}`);
-      console.log(ratioOfRewards);
-      setPlayerRewards(ratioOfRewards * currentRewards);
     }
-  }, [isWeb3Enabled]);
+  }, [isWeb3Enabled, playerRewards]);
 
   return (
     <li className="text-white block py-2">

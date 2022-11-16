@@ -18,12 +18,12 @@ const Multiplayer = () => {
   }
 
  
-  useEffect(()=>{
-    setTimeout(() => {
-      play();
-    }, 1);
-    setPlayed(true)
-  },[play])
+  // useEffect(()=>{
+  //   setTimeout(() => {
+  //     play();
+  //   }, 1);
+  //   setPlayed(true)
+  // },[play])
 
   return (
    <>
