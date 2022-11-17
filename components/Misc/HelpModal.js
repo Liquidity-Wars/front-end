@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { motion } from "framer-motion";
+import { useRouter } from "next/router";
 
 const HelpModal = ({handleClose}) => {
+    const router = useRouter();
     const [openTab, setOpenTab] = useState(1);
     const dropIn = {
         hidden: {
@@ -27,16 +29,16 @@ const HelpModal = ({handleClose}) => {
    <>
     <motion.div
       onClick={(e) => e.stopPropagation}
-      className="absolute w-[350px] h-[500px] flex flex-col items-center justify-center z-50 top-20 left-[1rem]"
+      className="absolute w-[350px] h-full flex flex-col items-center justify-center z-50 top-20 left-[1rem]"
       variants={dropIn}
       initial="hidden"
       animate="visible"
       exit="exit"
     >
-        <div className="flex flex-col items-center justify-center h-full w-full rounded-md bg-cover bg-[url('/assets/images/Modal.png')]">
+        <div className="flex flex-col items-center justify-center h-full w-full bg-[#FFCA7A] border-[#AB4A05] border-4 rounded-lg shadow-sm">
         <button
             onClick={handleClose}
-            className="absolute top-4 right-6"
+            className="absolute top-1 right-1"
         >
             <div className="text-red-500 font-semibold">
             <img
@@ -46,41 +48,41 @@ const HelpModal = ({handleClose}) => {
             />
             </div>
         </button>
-        <div className="h-[460px] w-[290px]  overflow-y-scroll overflow-x-hidden flex flex-col">
-            <div className='p-4'>
+        <div className="h-screen w-full  overflow-y-scroll overflow-x-hidden flex flex-col">
+            <div className='px-2 py-4'>
     
-                    <div className="flex flex-col items-center justify-center max-w-xl ">
-                        <ul className="flex space-x-2">
+                    <div className="flex flex-col items-left justify-center max-w-xl ">
+                        <ul className="flex space-x-2 px-2">
                             <li>
                                 <a
                                     href="#"
                                     onClick={() => setOpenTab(1)}
-                                    className={` ${openTab === 1 ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]" : ""} font-['Nabana-bold'] text-lg inline-block`}
+                                    className={` ${ router.pathname === "/" ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]" : ""} font-['Nabana-bold']  text-lg inline-block`}
                                 >
-                                    Deposit
+                                    Deposit |
                                 </a>
                             </li>
                             <li>
                                 <a
                                     href="#"
                                     onClick={() => setOpenTab(2)}
-                                    className={` ${openTab === 2 ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]" : ""} font-['Nabana-bold'] text-lg  inline-block `}
+                                    className={` ${router.pathname === "/map-page"? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]" : ""} font-['Nabana-bold']  text-lg  inline-block `}
                                 >
-                                    Map Page
+                                    Map Page |
                                 </a>
                             </li>
                             <li>
                                 <a
                                     href="#"
                                     onClick={() => setOpenTab(3)}
-                                    className={` ${openTab === 3 ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]" : ""} font-['Nabana-bold'] text-lg  inline-bloc`}
+                                    className={` ${router.pathname === "/village-page" ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]" : ""} font-['Nabana-bold']  text-lg  inline-bloc`}
                                 >
-                                    Village Page
+                                    Village Page 
                                 </a>
                             </li>
                         </ul>
                      
-                        <div className="ml-4 py-3 mt-2 ">
+                        <div className="ml-2 py-3 mt-2 ">
                             <hr className='mb-2'></hr>
                             <div className={openTab === 1 ? "block" : "hidden"}>
                                 {" "}
