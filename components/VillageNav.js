@@ -65,37 +65,47 @@ const VillageNav = ({ gameState }) => {
       <nav className="bg-transparent border-gray-200 py-2.5 rounded w-full">
         <div className="container flex justify-between items-center mx-auto">
           <div className="flex flex-col">
-            <Link href="/">
-              <a
-                className={`flex items-center ${
-                  isWeb3Enabled == true ? "pr-30" : "pr-2"
-                }`}
-              >
-                <motion.div
-                  initial={{
-                    y: 0,
-                  }}
-                  animate={{
-                    y: [10, 0, 10],
-                    transition: {
-                      duration: 1.6,
-                      ease: "linear",
-                      repeat: Infinity,
-                    },
-                  }}
+            <div className="flex items-center">
+              <Link href="/">
+                <a
+                  className={`flex items-center ${
+                    isWeb3Enabled == true ? "pr-30" : "pr-2"
+                  }`}
                 >
-                  <img
-                    src="/assets/images/chicken.png"
-                    className="mr-3 h-6 sm:h-9 ml-6"
-                    alt="LW logo"
-                  />
-                </motion.div>
-                <span className=" text-white self-center text-xl font-semibold whitespace-nowrap">
-                  Liquidity Wars
-                </span>
-              </a>
-            </Link>
+                  <motion.div
+                    initial={{
+                      y: 0,
+                    }}
+                    animate={{
+                      y: [10, 0, 10],
+                      transition: {
+                        duration: 1.6,
+                        ease: "linear",
+                        repeat: Infinity,
+                      },
+                    }}
+                  >
+                    <img
+                      src="/assets/images/chicken.png"
+                      className="mr-3 h-6 sm:h-9 ml-6"
+                      alt="LW logo"
+                    />
+                  </motion.div>
+                  <span className=" text-white self-center text-xl font-semibold whitespace-nowrap">
+                    Liquidity Wars
+                  </span>
+                </a>
+              </Link>
+              <button
+                  onClick={() => open()}
+                  className="bg-[#F5AF00] h-6 w-6 items-center rounded-full justify-center mx-2"
+                >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                </svg>
 
+              </button>
+            </div>
             <div className="flex flex-row items-center mt-4 ml-6">
               <CountdownTimer targetDate={dateTime} />
             </div>

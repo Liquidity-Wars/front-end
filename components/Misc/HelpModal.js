@@ -1,41 +1,42 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from "framer-motion";
 
 const HelpModal = ({handleClose}) => {
-const dropIn = {
-    hidden: {
-        y: "-100vh",
-        opacity: 0,
-    },
-    visible: {
-        y: "0",
-        overflowY: "hidden",
-        opacity: 1,
-        transition: {
-        duration: 0.1,
-        type: "spring",
-        damping: 25,
-        stiffness: 500,
+    const [openTab, setOpenTab] = useState(1);
+    const dropIn = {
+        hidden: {
+            y: "-100vh",
+            opacity: 0,
         },
-    },
-    exit: {
-        opacity: 0,
-    },
-    };
+        visible: {
+            y: "0",
+            overflowY: "hidden",
+            opacity: 1,
+            transition: {
+            duration: 0.1,
+            type: "spring",
+            damping: 25,
+            stiffness: 500,
+            },
+        },
+        exit: {
+            opacity: 0,
+        },
+        };
   return (
    <>
     <motion.div
       onClick={(e) => e.stopPropagation}
-      className="absolute w-[400px] h-[400px] flex flex-col items-center justify-center z-50 top-20 left-[4rem]"
+      className="absolute w-[350px] h-[500px] flex flex-col items-center justify-center z-50 top-20 left-[1rem]"
       variants={dropIn}
       initial="hidden"
       animate="visible"
       exit="exit"
     >
-        <div className="flex flex-col items-center justify-center h-full w-full rounded-md bg-cover bg-[url('/assets/images/Web3Frame.png')]">
+        <div className="flex flex-col items-center justify-center h-full w-full rounded-md bg-cover bg-[url('/assets/images/Modal.png')]">
         <button
             onClick={handleClose}
-            className="absolute top-8 right-10"
+            className="absolute top-4 right-6"
         >
             <div className="text-red-500 font-semibold">
             <img
@@ -45,11 +46,55 @@ const dropIn = {
             />
             </div>
         </button>
-        <div className="h-[350px] w-[350px]  overflow-y-scroll overflow-x-hidden flex flex-col">
+        <div className="h-[460px] w-[290px]  overflow-y-scroll overflow-x-hidden flex flex-col">
             <div className='p-4'>
-                <h3 className='font-bold'>Guide & Information</h3>
-                <hr className='my-2'></hr>
-                <p>Liquidity wars is no lose game when players deploy its liquidity to play in the game. At the end of the game each player can redeem the same amount of liquidity tokens (LP). The main rules in the game is to get as many resources (RES) as it is possible. The RES will be the base for rewards distributions which will be derived from LP tokens rewards. In order to get RES players can attack and rob each other, develop infrastruture to get more resources, increase defence or places to hide RES from the aggressor. The purpose of the project is to not be another play to earn game but to be play and earn game which will atract potential investors to provide and lock their liquidity. The targets of the projects are not only players but DEXes which will want to increase liquidity by our game. That is why another goal of the game is to have configurable game where each DEX can configure its game and some game parameters (game duration, additional rewards, allowed LP tokens).</p>
+    
+                    <div className="flex flex-col items-center justify-center max-w-xl ">
+                        <ul className="flex space-x-2">
+                            <li>
+                                <a
+                                    href="#"
+                                    onClick={() => setOpenTab(1)}
+                                    className={` ${openTab === 1 ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]" : ""} font-['Nabana-bold'] text-lg inline-block`}
+                                >
+                                    Deposit
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="#"
+                                    onClick={() => setOpenTab(2)}
+                                    className={` ${openTab === 2 ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]" : ""} font-['Nabana-bold'] text-lg  inline-block `}
+                                >
+                                    Map Page
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="#"
+                                    onClick={() => setOpenTab(3)}
+                                    className={` ${openTab === 3 ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]" : ""} font-['Nabana-bold'] text-lg  inline-bloc`}
+                                >
+                                    Village Page
+                                </a>
+                            </li>
+                        </ul>
+                     
+                        <div className="ml-4 py-3 mt-2 ">
+                            <hr className='mb-2'></hr>
+                            <div className={openTab === 1 ? "block" : "hidden"}>
+                                {" "}
+                                Liquidity on DEXes is a crucial factor which is responsible for costs of swap (slippages) and liquidity providing efficiency (pernament loss). Dexes usually compete for liquidity providers by offering high APRs often with highly inflationary tokens what obscures real APY. Our protocol offers different approach to attract liquidity - entertainment. What if I tell you, you can benefit from current LP farms and additionally have a fun ? Don't you be interested use our protocol instead of others ? We have taken an ide from pool together extended it and transmitted to the fantasy world where you can fight with other players for LP rewards without exposing yourself to risk of loosing LP tokens (LP tokens will always come back to you).
+                            </div>
+                            <div className={openTab === 2 ? "block" : "hidden"}>
+                            Liquidity on DEXes is a crucial factor which is responsible for costs of swap
+                            </div>
+                            <div className={openTab === 3 ? "block" : "hidden"}>
+                            Liquidity on DEXes is a crucial factor which is responsible for costs of swap
+                            </div>
+                        </div>
+                    </div>
+                
             </div>
         </div>
         </div>
