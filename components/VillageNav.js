@@ -65,35 +65,37 @@ const VillageNav = ({ gameState }) => {
       <nav className="bg-transparent border-gray-200 py-2.5 rounded w-full">
         <div className="container flex justify-between items-center mx-auto">
           <div className="flex flex-col">
-            <a
-              href="/"
-              className={`flex items-center ${
-                isWeb3Enabled == true ? "pr-30" : "pr-2"
-              }`}
-            >
-              <motion.div
-                initial={{
-                  y: 0,
-                }}
-                animate={{
-                  y: [10, 0, 10],
-                  transition: {
-                    duration: 1.6,
-                    ease: "linear",
-                    repeat: Infinity,
-                  },
-                }}
+            <Link href="/">
+              <a
+                className={`flex items-center ${
+                  isWeb3Enabled == true ? "pr-30" : "pr-2"
+                }`}
               >
-                <img
-                  src="/assets/images/chicken.png"
-                  className="mr-3 h-6 sm:h-9 ml-6"
-                  alt="LW logo"
-                />
-              </motion.div>
-              <span className=" text-white self-center text-xl font-semibold whitespace-nowrap">
-                Liquidity Wars
-              </span>
-            </a>
+                <motion.div
+                  initial={{
+                    y: 0,
+                  }}
+                  animate={{
+                    y: [10, 0, 10],
+                    transition: {
+                      duration: 1.6,
+                      ease: "linear",
+                      repeat: Infinity,
+                    },
+                  }}
+                >
+                  <img
+                    src="/assets/images/chicken.png"
+                    className="mr-3 h-6 sm:h-9 ml-6"
+                    alt="LW logo"
+                  />
+                </motion.div>
+                <span className=" text-white self-center text-xl font-semibold whitespace-nowrap">
+                  Liquidity Wars
+                </span>
+              </a>
+            </Link>
+
             <div className="flex flex-row items-center mt-4 ml-6">
               <CountdownTimer targetDate={dateTime} />
             </div>
