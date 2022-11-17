@@ -105,40 +105,43 @@ export default function MapPage() {
 
   return (
     <PlayerContext.Provider value={setPlayerId}>
-      <Multiplayer />
-      <div className="flex flex-col items-center h-screen w-screen bg-cover bg-[url('/assets/images/stardew-valley-img.jpg')]">
+
+      <div className="flex flex-col  items-center h-screen w-screen bg-cover bg-[url('/assets/images/stardew-valley-img.jpg')]">
+        <Multiplayer />
         <MapNav className="w-full" gameState={gameState} />
-        <div className="flex justify-center items-center w-[850px] h-[520px] bg-[url('/assets/images/valley-canvas.png')] translate-x-[30px] bg-center bg-cover">
-          <div className="flex mx-12 flex-col justify-center  w-[250px] h-[450px] truncate">
-            {playerId !== undefined ? (
-              <EnemyInfo playerId={playerId} />
-            ) : (
-              <div className="w-full text-center">
-                Click on an enemy for info.
-              </div>
-            )}
+        <div className="flex h-full w-screen justify-center items-center">
+          <div className="flex justify-center items-center w-[850px] h-[520px] bg-[url('/assets/images/valley-canvas.png')] translate-x-[30px] bg-center bg-cover">
+            <div className="flex mx-12 flex-col justify-center  w-[250px] h-[450px] truncate">
+              {playerId !== undefined ? (
+                <EnemyInfo playerId={playerId} />
+              ) : (
+                <div className="w-full text-center">
+                  Click on an enemy for info.
+                </div>
+              )}
+            </div>
+            <div className="flex items-center justify-center bg-cover rounded-md w-[450px] h-[450px] bg-[url('/assets/images/map_background.png')] bg-center">
+              <MapGrid />
+            </div>
+            <button
+              onClick={() => open()}
+              className=" px-3 py-1 bg-slate-400 border-black border-2 rounded-full translate-y-[-230px] translate-x-6"
+            >
+              <img
+                src="/assets/images/log_icon.png"
+                className="h-[50px] mr-0 p-0"
+                alt="log icon"
+              />
+            </button>
+            <AnimatePresence
+              initial={false}
+              exitBeforeEnter={true}
+              onExitComplete={() => null}
+              className="absolute m-auto"
+            >
+              {modalOpen && <Modal gameId={gameId} handleClose={close} />}
+            </AnimatePresence>
           </div>
-          <div className="flex items-center justify-center bg-cover rounded-md w-[450px] h-[450px] bg-[url('/assets/images/map_background.png')] bg-center">
-            <MapGrid />
-          </div>
-          <button
-            onClick={() => open()}
-            className=" px-3 py-1 bg-slate-400 border-black border-2 rounded-full translate-y-[-230px] translate-x-6"
-          >
-            <img
-              src="/assets/images/log_icon.png"
-              className="h-[50px] mr-0 p-0"
-              alt="log icon"
-            />
-          </button>
-          <AnimatePresence
-            initial={false}
-            exitBeforeEnter={true}
-            onExitComplete={() => null}
-            className="absolute m-auto"
-          >
-            {modalOpen && <Modal gameId={gameId} handleClose={close} />}
-          </AnimatePresence>
         </div>
       </div>
     </PlayerContext.Provider>
