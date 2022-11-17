@@ -84,14 +84,14 @@ const HelpModal = ({handleClose}) => {
                      
                         <div className="ml-2 py-3 mt-2 ">
                             <hr className='mb-2'></hr>
-                            <div className={openTab === 1 ? "block" : "hidden"}>
+                            <div className={router.pathname === "/" ? "block" : "hidden"}>
                                 {" "}
                                 Liquidity on DEXes is a crucial factor which is responsible for costs of swap (slippages) and liquidity providing efficiency (pernament loss). Dexes usually compete for liquidity providers by offering high APRs often with highly inflationary tokens what obscures real APY. Our protocol offers different approach to attract liquidity - entertainment. What if I tell you, you can benefit from current LP farms and additionally have a fun ? Don't you be interested use our protocol instead of others ? We have taken an ide from pool together extended it and transmitted to the fantasy world where you can fight with other players for LP rewards without exposing yourself to risk of loosing LP tokens (LP tokens will always come back to you).
                             </div>
-                            <div className={openTab === 2 ? "block" : "hidden"}>
+                            <div className={router.pathname === "/map-page" ? "block" : "hidden"}>
                             Liquidity on DEXes is a crucial factor which is responsible for costs of swap
                             </div>
-                            <div className={openTab === 3 ? "block" : "hidden"}>
+                            <div className={router.pathname === "/village-page" ? "block" : "hidden"}>
                             Liquidity on DEXes is a crucial factor which is responsible for costs of swap
                             </div>
                         </div>
