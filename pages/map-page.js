@@ -106,7 +106,7 @@ export default function MapPage() {
   return (
     <PlayerContext.Provider value={setPlayerId}>
       <Multiplayer />
-      <div className="flex flex-col items-center justify-center h-screen w-screen bg-cover bg-[url('/assets/images/stardew-valley-img.jpg')]">
+      <div className="flex flex-col items-center h-screen w-screen bg-cover bg-[url('/assets/images/stardew-valley-img.jpg')]">
         <MapNav className="w-full" gameState={gameState} />
         <div className="flex justify-center items-center w-[850px] h-[520px] bg-[url('/assets/images/valley-canvas.png')] translate-x-[30px] bg-center bg-cover">
           <div className="flex mx-12 flex-col justify-center  w-[250px] h-[450px] truncate">
