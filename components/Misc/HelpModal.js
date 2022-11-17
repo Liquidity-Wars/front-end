@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 
@@ -25,6 +25,17 @@ const HelpModal = ({ handleClose }) => {
       opacity: 0,
     },
   };
+
+  useEffect(()=>{
+
+    if(router.pathname === "/map-page"){
+        setOpenTab(3)
+    } else if(router.pathname === "/village-page"){
+        setOpenTab(2)
+    } else {
+        setOpenTab(1)
+    }
+  },[])
   return (
     <>
       <motion.div
@@ -56,7 +67,7 @@ const HelpModal = ({ handleClose }) => {
                       className={` ${
                         router.pathname === "/"
                           ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]"
-                          : "pointer-events-none"
+                          : ""
                       } font-['Nabana-bold']  text-lg inline-block`}
                     >
                       Deposit |
@@ -69,7 +80,7 @@ const HelpModal = ({ handleClose }) => {
                       className={` ${
                         router.pathname === "/village-page"
                           ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]"
-                          : "pointer-events-none"
+                          : ""
                       } font-['Nabana-bold']  text-lg  inline-block `}
                     >
                       Village Page |
@@ -82,7 +93,7 @@ const HelpModal = ({ handleClose }) => {
                       className={` ${
                         router.pathname === "/map-page"
                           ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]"
-                          : "pointer-events-none"
+                          : ""
                       } font-['Nabana-bold']  text-lg  inline-bloc`}
                     >
                       Map Page
@@ -209,7 +220,7 @@ const HelpModal = ({ handleClose }) => {
                       {"(Click “Go to Map” in the navbar)"}
                     </div>
                   </div>
-                  <div className={openTab === 3 ? "block" : "hidden"}>
+                  <div className={ openTab === 3 ? "block" : "hidden"}>
                     <div>
                       Step 1: Welcome to the Map Page! Click on any of the
                       villages icons on the map to see more information
