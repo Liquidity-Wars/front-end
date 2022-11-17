@@ -9,6 +9,7 @@ import { useMoralis, useWeb3Contract } from "react-moralis";
 import CountdownTimer from "./SmallTimer/CountdownTimer";
 import LiquidityVaultAbi from "../constants/LiquidityVault.json";
 import networkMapping from "../constants/networkMapping.json";
+import HelpModal from "./Misc/HelpModal";
 
 const VillageNav = ({ gameState }) => {
   const router = useRouter();
@@ -19,6 +20,7 @@ const VillageNav = ({ gameState }) => {
       ? networkMapping[chainId]["LiquidityVault"][0]
       : null;
   const [dateTime, setDateTime] = useState(0);
+  const [modalOpen, setModalOpen] = useState();
 
   // get time getTimeToStartOrEndGame
   const { runContractFunction: getTimeToStartOrEndGame } = useWeb3Contract({
@@ -45,6 +47,13 @@ const VillageNav = ({ gameState }) => {
     setDateTime(expiresDateTime);
   }
 
+  
+  const close = () => setModalOpen(false);
+
+  const open = () => {
+    setModalOpen(true);
+  };
+
   useEffect(() => {
     if (isWeb3Enabled) {
       updateUI();
@@ -55,39 +64,35 @@ const VillageNav = ({ gameState }) => {
     <>
       <nav className="bg-transparent border-gray-200 py-2.5 rounded w-full">
         <div className="container flex justify-between items-center mx-auto">
-          <div className="flex flex-col">
-            <a
-              href="/"
-              className={`flex items-center ${
-                isWeb3Enabled == true ? "pr-30" : "pr-2"
-              }`}
-            >
-              <motion.div
-                initial={{
-                  y: 0,
-                }}
-                animate={{
-                  y: [10, 0, 10],
-                  transition: {
-                    duration: 1.6,
-                    ease: "linear",
-                    repeat: Infinity,
-                  },
-                }}
-              >
-                <img
-                  src="/assets/images/chicken.png"
-                  className="mr-3 h-6 sm:h-9 ml-6"
-                  alt="LW logo"
-                />
-              </motion.div>
-              <span className=" text-white self-center text-xl font-semibold whitespace-nowrap">
-                Liquidity Wars
-              </span>
-            </a>
-            <div className="flex flex-row items-center mt-4 ml-6">
-              <CountdownTimer targetDate={dateTime} />
-            </div>
+          <div className={` flex ${isWeb3Enabled == true ? "pr-8" : "pr-2"} justify-center items-center`}>
+              <a href="/" className={`flex items-center `}>
+                    <motion.div
+                        initial={{
+                            y: 0,
+                          }}
+                          animate={{
+                            y: [10, 0, 10],
+                            transition:{
+                              duration: 1.6,
+                              ease: "linear",
+                              repeat: Infinity,
+                            }
+                          }}
+                    >
+                        <img src="/assets/images/chicken.png" className="mr-3 h-6 sm:h-9" alt="LW logo" />
+                    </motion.div>
+                    <span className=" text-white self-center text-xl font-semibold whitespace-nowrap">Liquidity Wars</span>
+                    {/* <Modal gameId={gameId} handleClose={close} /> */}
+                </a>
+                <button
+                    onClick={() => open()}
+                    className="bg-[#CF3810] h-6 w-6 items-center rounded-full justify-center mx-2"
+                  >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                  </svg>
+
+                </button>
           </div>
           <div className="hidden w-full md:block md:w-auto">
             <ul className="flex flex-col p-4 mt-4 items-center bg-transparent rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0">
@@ -118,6 +123,7 @@ const VillageNav = ({ gameState }) => {
           <div className="flex">
             <ConnectButton />
           </div>
+          {modalOpen && <HelpModal handleClose={close} />}
         </div>
       </nav>
     </>
