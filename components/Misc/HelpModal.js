@@ -29,7 +29,7 @@ const HelpModal = ({handleClose}) => {
    <>
     <motion.div
       onClick={(e) => e.stopPropagation}
-      className="absolute w-[350px] h-full flex flex-col items-center justify-center z-50 top-20 left-[1rem]"
+      className="absolute w-[350px] h-5/6 flex flex-col items-center justify-center z-50 top-20 left-[1rem]"
       variants={dropIn}
       initial="hidden"
       animate="visible"
