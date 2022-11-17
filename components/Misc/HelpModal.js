@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/router";
 
 const HelpModal = ({ handleClose }) => {
+  const router = useRouter();
   const [openTab, setOpenTab] = useState(1);
   const dropIn = {
     hidden: {
@@ -27,14 +29,14 @@ const HelpModal = ({ handleClose }) => {
     <>
       <motion.div
         onClick={(e) => e.stopPropagation}
-        className="absolute w-[350px] h-[500px] flex flex-col items-center justify-center z-50 top-20 left-[1rem]"
+        className="absolute w-[350px] h-5/6 flex flex-col items-center justify-center z-50 top-20 left-[1rem]"
         variants={dropIn}
         initial="hidden"
         animate="visible"
         exit="exit"
       >
-        <div className="flex flex-col items-center justify-center h-full w-full rounded-md bg-cover bg-[url('/assets/images/Modal.png')]">
-          <button onClick={handleClose} className="absolute top-4 right-6">
+        <div className="flex flex-col items-center justify-center h-full w-full bg-[#FFCA7A] border-[#AB4A05] border-4 rounded-lg shadow-sm">
+          <button onClick={handleClose} className="absolute top-1 right-1">
             <div className="text-red-500 font-semibold">
               <img
                 src="/assets/images/closebutton.png"
@@ -43,21 +45,21 @@ const HelpModal = ({ handleClose }) => {
               />
             </div>
           </button>
-          <div className="h-[460px] w-[290px]  overflow-y-scroll overflow-x-hidden flex flex-col">
-            <div className="p-4">
-              <div className="flex flex-col items-center justify-center max-w-xl ">
-                <ul className="flex space-x-2">
+          <div className="h-screen w-full  overflow-y-scroll overflow-x-hidden flex flex-col">
+            <div className="px-2 py-4">
+              <div className="flex flex-col items-left justify-center max-w-xl ">
+                <ul className="flex space-x-2 px-2">
                   <li>
                     <a
                       href="#"
                       onClick={() => setOpenTab(1)}
                       className={` ${
-                        openTab === 1
+                        router.pathname === "/"
                           ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]"
-                          : ""
-                      } font-['Nabana-bold'] text-lg inline-block`}
+                          : "pointer-events-none"
+                      } font-['Nabana-bold']  text-lg inline-block`}
                     >
-                      Deposit
+                      Deposit |
                     </a>
                   </li>
                   <li>
@@ -65,12 +67,12 @@ const HelpModal = ({ handleClose }) => {
                       href="#"
                       onClick={() => setOpenTab(2)}
                       className={` ${
-                        openTab === 2
+                        router.pathname === "/map-page"
                           ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]"
-                          : ""
-                      } font-['Nabana-bold'] text-lg  inline-block `}
+                          : "pointer-events-none"
+                      } font-['Nabana-bold']  text-lg  inline-block `}
                     >
-                      Map Page
+                      Map Page |
                     </a>
                   </li>
                   <li>
@@ -78,43 +80,33 @@ const HelpModal = ({ handleClose }) => {
                       href="#"
                       onClick={() => setOpenTab(3)}
                       className={` ${
-                        openTab === 3
+                        router.pathname === "/village-page"
                           ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]"
-                          : ""
-                      } font-['Nabana-bold'] text-lg  inline-bloc`}
+                          : "pointer-events-none"
+                      } font-['Nabana-bold']  text-lg  inline-bloc`}
                     >
                       Village Page
                     </a>
                   </li>
                 </ul>
 
-                <div className="ml-4 py-3 mt-2 ">
+                <div className="ml-2 py-3 mt-2 ">
                   <hr className="mb-2"></hr>
                   <div className={openTab === 1 ? "block" : "hidden"}>
-                    <div className="mb-3">
-                      Dear Judges, thanks for taking your time to try out our
-                      front-end interface for our protocol. This is a guide we
-                      have written to facilitate your interaction with our
-                      interface.
-                    </div>
-                    <div>Step 1: Connect to your token wallet</div>
-                    <img
-                      src="/assets/images/deposit-step1.png"
-                      className="h-[130px] p-0 mb-3"
-                      alt="deposit step 1"
-                    />
-                    <div>
-                      Step 2: Request for free demo LP tokens to test our game
-                      {
-                        " (We specially built this faucet to facilitate your testing)"
-                      }
-                      . Wait for the LP tokens to be transferred to your wallet.
-                    </div>
-                    <img
-                      src="/assets/images/deposit-step1.png"
-                      className="h-[130px] p-0 mb-3"
-                      alt="deposit step 1"
-                    />
+                    {" "}
+                    Liquidity on DEXes is a crucial factor which is responsible
+                    for costs of swap (slippages) and liquidity providing
+                    efficiency (pernament loss). Dexes usually compete for
+                    liquidity providers by offering high APRs often with highly
+                    inflationary tokens what obscures real APY. Our protocol
+                    offers different approach to attract liquidity -
+                    entertainment. What if I tell you, you can benefit from
+                    current LP farms and additionally have a fun ? Don't you be
+                    interested use our protocol instead of others ? We have
+                    taken an ide from pool together extended it and transmitted
+                    to the fantasy world where you can fight with other players
+                    for LP rewards without exposing yourself to risk of loosing
+                    LP tokens (LP tokens will always come back to you).
                   </div>
                   <div className={openTab === 2 ? "block" : "hidden"}>
                     Liquidity on DEXes is a crucial factor which is responsible
