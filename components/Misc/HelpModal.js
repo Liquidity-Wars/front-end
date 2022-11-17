@@ -147,15 +147,16 @@ const HelpModal = ({ handleClose }) => {
                       className="h-[150px] p-0 mb-3 mt-3 border-2 border-black"
                       alt="deposit step 5"
                     />
+                    <div className="mb-3">
+                      Step 6: Repeat steps 1-5 using another account.
+                    </div>
                     <div>
-                      Step 6: Wait for the game to change from “Game will start
+                      Step 7: Wait for the game to change from “Game will start
                       soon” to “Game is running”. For this demo game, we
-                      configured the Chainlink automation to start the game once
-                      100 seconds have passed and there are at least 2 players
-                      deposited. We have one dummy player deposit for this game
-                      so only one token wallet account is needed to test this
-                      demo game. For subsequent games, at least 2 token wallet
-                      accounts have to be deposited in order to start the game.
+                      configured the Chainlink Automation to start the game once
+                      80 seconds have passed and there are at least 2 players
+                      deposited. The game should start soon since you have
+                      deposited with 2 accounts.
                     </div>
                     <img
                       src="/assets/images/deposit-step6.png"
@@ -163,10 +164,10 @@ const HelpModal = ({ handleClose }) => {
                       alt="deposit step 6"
                     />
                     <div>
-                      Step 7: Now head to the Village page by clicking the
-                      Village button in the navbar. This is your own personal
-                      village that you will build throughout the duration of the
-                      game
+                      Step 8: Great! The game has started! Now head to the
+                      Village page by clicking the Village button in the navbar.
+                      This is your own personal village that you will build
+                      throughout the duration of the game
                     </div>
                   </div>
                   <div className={openTab === 2 ? "block" : "hidden"}>
@@ -248,10 +249,12 @@ const HelpModal = ({ handleClose }) => {
                       Step 4: Great! You are now acquainted with the basic
                       functionalities of the contract. Do continue to explore
                       the game as you like{" "}
-                      {"(do note that the game ends after a set interval)"}.
-                      Your deposited LP tokens will be returned to you when the
-                      game ends. You will also receive extra REWARD tokens. You
-                      can find these ERC20 transactions through your wallet
+                      {
+                        "(do note that the game ends after 10 minutes for this demo game)"
+                      }
+                      . Your deposited LP tokens will be returned to you when
+                      the game ends. You will also receive extra REWARD tokens.
+                      You can find these ERC20 transactions through your wallet
                       address in the Mumbai Polygonscan.
                     </div>
                   </div>
