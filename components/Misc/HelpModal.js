@@ -158,7 +158,8 @@ const HelpModal = ({ handleClose }) => {
                       alt="deposit step 5"
                     />
                     <div className="mb-3">
-                      Step 6: Repeat steps 1-5 using another account.
+                      Step 6: Repeat steps 1-5 using another token wallet
+                      account.
                     </div>
                     <div>
                       Step 7: Wait for the game to change from “Game will start
@@ -259,10 +260,12 @@ const HelpModal = ({ handleClose }) => {
                       Step 4: Great! You are now acquainted with the basic
                       functionalities of the contract. Do continue to explore
                       the game as you like{" "}
-                      {"(do note that the game ends after a set interval)"}.
-                      Your deposited LP tokens will be returned to you when the
-                      game ends. You will also receive extra REWARD tokens. You
-                      can find these ERC20 transactions through your wallet
+                      {
+                        "(do note that the game ends after 10 minutes for this demo game)"
+                      }
+                      . Your deposited LP tokens will be returned to you when
+                      the game ends. You will also receive extra REWARD tokens.
+                      You can find these ERC20 transactions through your wallet
                       address in the Mumbai Polygonscan.
                     </div>
                   </div>
