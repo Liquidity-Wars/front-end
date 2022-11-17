@@ -26,16 +26,15 @@ const HelpModal = ({ handleClose }) => {
     },
   };
 
-  useEffect(()=>{
-
-    if(router.pathname === "/map-page"){
-        setOpenTab(3)
-    } else if(router.pathname === "/village-page"){
-        setOpenTab(2)
+  useEffect(() => {
+    if (router.pathname === "/map-page") {
+      setOpenTab(3);
+    } else if (router.pathname === "/village-page") {
+      setOpenTab(2);
     } else {
-        setOpenTab(1)
+      setOpenTab(1);
     }
-  },[])
+  }, []);
   return (
     <>
       <motion.div
@@ -158,15 +157,16 @@ const HelpModal = ({ handleClose }) => {
                       className="h-[150px] p-0 mb-3 mt-3 border-2 border-black"
                       alt="deposit step 5"
                     />
+                    <div className="mb-3">
+                      Step 6: Repeat steps 1-5 using another account.
+                    </div>
                     <div>
-                      Step 6: Wait for the game to change from “Game will start
+                      Step 7: Wait for the game to change from “Game will start
                       soon” to “Game is running”. For this demo game, we
-                      configured the Chainlink automation to start the game once
-                      100 seconds have passed and there are at least 2 players
-                      deposited. We have one dummy player deposit for this game
-                      so only one token wallet account is needed to test this
-                      demo game. For subsequent games, at least 2 token wallet
-                      accounts have to be deposited in order to start the game.
+                      configured the Chainlink Automation to start the game once
+                      80 seconds have passed and there are at least 2 players
+                      deposited. The game should start soon since you have
+                      deposited with 2 accounts.
                     </div>
                     <img
                       src="/assets/images/deposit-step6.png"
@@ -174,10 +174,10 @@ const HelpModal = ({ handleClose }) => {
                       alt="deposit step 6"
                     />
                     <div>
-                      Step 7: Now head to the Village page by clicking the
-                      Village button in the navbar. This is your own personal
-                      village that you will build throughout the duration of the
-                      game
+                      Step 8: Great! The game has started! Now head to the
+                      Village page by clicking the Village button in the navbar.
+                      This is your own personal village that you will build
+                      throughout the duration of the game
                     </div>
                   </div>
                   <div className={openTab === 2 ? "block" : "hidden"}>
@@ -220,7 +220,7 @@ const HelpModal = ({ handleClose }) => {
                       {"(Click “Go to Map” in the navbar)"}
                     </div>
                   </div>
-                  <div className={ openTab === 3 ? "block" : "hidden"}>
+                  <div className={openTab === 3 ? "block" : "hidden"}>
                     <div>
                       Step 1: Welcome to the Map Page! Click on any of the
                       villages icons on the map to see more information
