@@ -27,7 +27,8 @@ const TopNav = () => {
         <nav className="bg-transparent border-gray-200 px-2 sm:px-4 py-2.5 rounded">
         <div className="container flex flex-wrap justify-between items-center mx-auto">
             <div className={` flex ${isWeb3Enabled == true ? "pr-8" : "pr-2"} justify-center items-center`}>
-              <a href="/" className={`flex items-center `}>
+            <Link href="/">
+              <a className={`flex items-center `}>
                     <motion.div
                         initial={{
                             y: 0,
@@ -46,6 +47,7 @@ const TopNav = () => {
                     <span className=" text-white self-center text-xl font-semibold whitespace-nowrap">Liquidity Wars</span>
                     {/* <Modal gameId={gameId} handleClose={close} /> */}
                 </a>
+            </Link>
                 <button
                     onClick={() => open()}
                     className="bg-[#CF3810] h-6 w-6 items-center rounded-full justify-center mx-2"
