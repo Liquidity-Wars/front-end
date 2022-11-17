@@ -57,7 +57,7 @@ const HelpModal = ({handleClose}) => {
                                 <a
                                     href="#"
                                     onClick={() => setOpenTab(1)}
-                                    className={` ${ router.pathname === "/" ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]" : ""} font-['Nabana-bold']  text-lg inline-block`}
+                                    className={` ${ router.pathname === "/" ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]" : "pointer-events-none"} font-['Nabana-bold']  text-lg inline-block`}
                                 >
                                     Deposit |
                                 </a>
@@ -66,7 +66,7 @@ const HelpModal = ({handleClose}) => {
                                 <a
                                     href="#"
                                     onClick={() => setOpenTab(2)}
-                                    className={` ${router.pathname === "/map-page"? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]" : ""} font-['Nabana-bold']  text-lg  inline-block `}
+                                    className={` ${router.pathname === "/map-page"? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]" : "pointer-events-none"} font-['Nabana-bold']  text-lg  inline-block `}
                                 >
                                     Map Page |
                                 </a>
@@ -75,7 +75,7 @@ const HelpModal = ({handleClose}) => {
                                 <a
                                     href="#"
                                     onClick={() => setOpenTab(3)}
-                                    className={` ${router.pathname === "/village-page" ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]" : ""} font-['Nabana-bold']  text-lg  inline-bloc`}
+                                    className={` ${router.pathname === "/village-page" ? "underline underline-offset-8 decoration-[#CF3810] decoration-4 text-[#CF3810]" : "pointer-events-none"} font-['Nabana-bold']  text-lg  inline-bloc`}
                                 >
                                     Village Page 
                                 </a>
