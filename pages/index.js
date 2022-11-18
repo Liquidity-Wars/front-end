@@ -2,7 +2,7 @@ import styles from "../styles/Home.module.css";
 import { motion } from "framer-motion";
 import { ethers } from "ethers";
 import CountdownTimer from "../components/Timer/CountdownTimer";
-import { useMoralis, useWeb3Contract } from "react-moralis";
+import { useMoralis, useWeb3Contract, useChain } from "react-moralis";
 import LiquidityPool from '../components/LiquidityPool';
 import networkMapping from '../constants/networkMapping.json'
 import LiquidityVaultAbi from '../constants/LiquidityVault.json'
@@ -18,15 +18,14 @@ import { useNotification } from "web3uikit";
 
 export default function Home() {
   const router = useRouter();
-  const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
+  const { chain, account } = useChain();
   const [dateTime , setDateTime] = useState(0);
-  const [ gameState, setGameState ] = useState();
-  const chainId = parseInt(chainIdHex)
-  const LiquidityVaultAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityVault'][0] : null
-  const LiquidityVaultConfigAddress = chainId in networkMapping ? networkMapping[chainId]['LiquidityWarsConfig'][0] : null
-  const SendMeDemoLpsAddress = chainId in networkMapping ? networkMapping[chainId]['SendMeDemoLps'][0] : null
-  const [allowedLPTokens , setAllowedLPTokens] = useState([]);
-  const [allowedLPAddresses , setAllowedLPAddresses] = useState([]);
+  const [gameState, setGameState] = useState();
+  const LiquidityVaultAddress = networkMapping[process.env.NEXT_PUBLIC_CHAIN_ID]['LiquidityVault'][0]
+  const LiquidityVaultConfigAddress = networkMapping[process.env.NEXT_PUBLIC_CHAIN_ID]['LiquidityWarsConfig'][0]
+  const SendMeDemoLpsAddress = networkMapping[process.env.NEXT_PUBLIC_CHAIN_ID]['SendMeDemoLps'][0]
+  const [allowedLPTokens, setAllowedLPTokens] = useState([]);
+  const [allowedLPAddresses, setAllowedLPAddresses] = useState([]);
   const [playerExist, setPlayerExist] = useState(false);
   const minNumberPlayers = 2;
   const [pendingPlayers, setPendingPlayers] = useState(minNumberPlayers);
@@ -123,6 +122,10 @@ export default function Home() {
     setAllowedLPTokens([...new Set(newAllowedLPTokens)]);
   }
 
+  const checkNetwork = () => {
+    return (chain && chain.networkId == process.env.NEXT_PUBLIC_CHAIN_ID);
+  }
+
   const playButtonClicked = () => {
     if (pendingPlayers > 0) {
       dispatch({
@@ -150,114 +153,110 @@ export default function Home() {
     for (let i = 0; i < allowedLPAddresses.length; i++) {
       getLPTokenSymbol(allowedLPAddresses[i]);
     }
-
-    if(allowedLPAddresses.length > 0){
-      updateUI();
-    }
   }, [allowedLPAddresses])
 
   useEffect(() => {
-    getAllowedTokens();
-  }, [LiquidityVaultAddress])
+    if(checkNetwork()){
+      getAllowedTokens();
+    }
+  }, [chain, LiquidityVaultAddress])
   
   useEffect(() =>{
-    console.log("account: ", account)
-    if(isWeb3Enabled){
+    console.log("account:", account)
+    console.log("chain:", chain)
+
+    if(checkNetwork()){
       updateUI();
     }
-  }, [isWeb3Enabled, account, playerExist])
+  }, [chain, account, playerExist])
 
   return (
-    <>
-    <TopNav />
-      <Multiplayer />
-      <div className={styles.container}>
-        <div className="flex flex-col justify-center items-center pt-4">
-          <motion.div
-            initial={{
-              y: 0,
-            }}
-            animate={{
-              y: [30, 0, 30],
-              transition: {
-                duration: 1.6,
-                ease: "linear",
-                repeat: Infinity,
-              },
-            }}
-            className="flex"
-          >
-            <img
-              className="h-52"
-              src="/assets/images/liquidity_wars.png"
-              alt="logo"
-            />
-          </motion.div>
+      <>
+        <TopNav />
+        <Multiplayer />
+        <div className={styles.container}>
+          <div className="flex flex-col justify-center items-center pt-4">
+            <motion.div
+              initial={{
+                y: 0,
+              }}
+              animate={{
+                y: [30, 0, 30],
+                transition: {
+                  duration: 1.6,
+                  ease: "linear",
+                  repeat: Infinity,
+                },
+              }}
+              className="flex"
+            >
+              <img
+                className="h-52"
+                src="/assets/images/liquidity_wars.png"
+                alt="logo"
+              />
+            </motion.div>
 
-          <div className="flex flex-col mt-12">
+            <div className="flex flex-col mt-12">
+              {checkNetwork() && gameState ? ( 
+                <div className="bg-transparent p-4 ">
+                  <div className="bg-[url('/assets/images/valley-canvas.png')] justify-center w-[800px] h-auto bg-cover bg-no-repeat">
+                      <div className="flex flex-col  justify-center text-lg items-center text-center px-6 py-6">
+                        <h2 className="font-['Nabana-bold'] text-4xl text-[#CF3810]">
+                          {gameState == 0 ? 'Game will start Soon!' : 'Game is Running!'}
+                        </h2>
+                        {gameState == 0 && dateTime <= new Date() && pendingPlayers > 0 &&
+                          (<h3 className="font-['Nabana-bold'] text-2xl">
+                            Game is about to start, waiting for {pendingPlayers} {pluralize("player", pendingPlayers)} to join...
+                          </h3>)
+                        }
+                        {gameState == 1 && !playerExist &&
+                          (<h3 className="font-['Nabana-bold'] text-2xl">
+                            Please wait for the next round to start...
+                          </h3>)
+                        }
+                        {/* <div className="bg-[url('/assets/images/scroll.png')] justify-center w-24 bg-cover bg-no-repeat">
+                          <p className="font-['Nabana-bold']">{gameState == 0 ? 'Ready' : 'Running'}</p>
+                        </div> */}
 
-            {isWeb3Enabled && gameState ? ( 
-              <>
-              <div className="bg-transparent p-4 ">
-                <div className="bg-[url('/assets/images/valley-canvas.png')] justify-center w-[800px] h-auto bg-cover bg-no-repeat">
-                    <div className="flex flex-col  justify-center text-lg items-center text-center px-6 py-6">
-                      <h2 className="font-['Nabana-bold'] text-4xl text-[#CF3810]">
-                        {gameState == 0 ? 'Game will start Soon!' : 'Game is Running!'}
-                      </h2>
-                      {gameState == 0 && dateTime <= new Date() && pendingPlayers > 0 &&
-                        (<h3 className="font-['Nabana-bold'] text-2xl">
-                          Game is about to start, waiting for {pendingPlayers} {pluralize("player", pendingPlayers)} to join...
-                        </h3>)
-                      }
-                      {gameState == 1 && !playerExist &&
-                        (<h3 className="font-['Nabana-bold'] text-2xl">
-                          Please wait for the next round to start...
-                        </h3>)
-                      }
-                      {/* <div className="bg-[url('/assets/images/scroll.png')] justify-center w-24 bg-cover bg-no-repeat">
-                        <p className="font-['Nabana-bold']">{gameState == 0 ? 'Ready' : 'Running'}</p>
-                      </div> */}
-
-                      {!playerExist && 
-                        <CountdownTimer targetDate={dateTime} />
-                      }
-                      
-                      {playerExist && 
-                        (<div className="bg-transparent p-8 ">
-                            <div className="bg-[url('/assets/images/Web3Frame.png')] flex justify-center w-64 h-64 bg-cover bg-no-repeat">
-                                <div className="flex flex-col font-['Stardew'] justify-center text-lg items-center text-center px-6">
-                                    <h2>Welcome to <br></br> Liquidity Wars!!!</h2>
-                                    <a onClick={playButtonClicked}
-                                        className="cursor-pointer bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-4 ">
-                                      Play Now!
-                                    </a>
-                                </div>
-                            </div>
-                        </div>)
-                      } 
-                      {!playerExist && gameState == 0 && 
-                        (<LiquidityPool 
-                          LiquidityVaultAddress={LiquidityVaultAddress}
-                          LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
-                          SendMeDemoLpsAddress={SendMeDemoLpsAddress}
-                          allowedLPTokens={allowedLPTokens}
-                          allowedLPAddresses={allowedLPAddresses}
-                          gameState={gameState}
-                          onSucess={updateUI}
-                        />)
-                      } 
+                        {!playerExist && 
+                          <CountdownTimer targetDate={dateTime} />
+                        }
+                        
+                        {playerExist && 
+                          (<div className="bg-transparent p-8 ">
+                              <div className="bg-[url('/assets/images/Web3Frame.png')] flex justify-center w-64 h-64 bg-cover bg-no-repeat">
+                                  <div className="flex flex-col font-['Stardew'] justify-center text-lg items-center text-center px-6">
+                                      <h2>Welcome to <br></br> Liquidity Wars!!!</h2>
+                                      <a onClick={playButtonClicked}
+                                          className="cursor-pointer bg-[url('/assets/images/valley-button.png')] font-['Nabana-bold'] w-40 h-16 bg-cover bg-no-repeat text-[#CF3810] p-4 ">
+                                        Play Now!
+                                      </a>
+                                  </div>
+                              </div>
+                          </div>)
+                        } 
+                        {!playerExist && gameState == 0 && 
+                          (<LiquidityPool 
+                            LiquidityVaultAddress={LiquidityVaultAddress}
+                            LiquidityVaultConfigAddress={LiquidityVaultConfigAddress}
+                            SendMeDemoLpsAddress={SendMeDemoLpsAddress}
+                            allowedLPTokens={allowedLPTokens}
+                            allowedLPAddresses={allowedLPAddresses}
+                            gameState={gameState}
+                            onSucess={updateUI}
+                          />)
+                        } 
+                      </div>
                     </div>
-                  </div>
-              </div>
-              
-              </>
-            ) :
-            (
-              <ConnectToWallet />
-            )}
+                </div>
+              ) :
+              (
+                <ConnectToWallet />
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </>
+      </>
   );
 }
