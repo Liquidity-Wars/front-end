@@ -103,7 +103,7 @@ const MapNav = ({ gameState }) => {
                     onClick={() => open()}
                     className="bg-[#F5AF00] px-2 font-bold shadow-md items-center rounded-full justify-center mx-2"
                   >
-                    Guide
+                    Tutorial
               </button>
             </div>
             <div className="flex flex-row items-center mt-4 ml-6">
