@@ -13,13 +13,14 @@ import HelpModal from "./Misc/HelpModal";
 
 const VillageNav = ({ gameState }) => {
   const router = useRouter();
-  const { isWeb3Enabledaccount, chainId: chainIdHex, isWeb3Enabled } = useMoralis();
+  const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis();
   const chainId = parseInt(chainIdHex);
   const LiquidityVaultAddress =
     chainId in networkMapping
       ? networkMapping[chainId]["LiquidityVault"][0]
       : null;
-  const [dateTime, setDateTime] = useState(0);
+  const dateTime0 = new Date().getTime() + 5000;
+  const [dateTime, setDateTime] = useState(dateTime0);
   const [modalOpen, setModalOpen] = useState();
 
   // get time getTimeToStartOrEndGame

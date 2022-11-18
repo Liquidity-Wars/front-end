@@ -19,7 +19,9 @@ import { useNotification } from "web3uikit";
 export default function Home() {
   const router = useRouter();
   const { chain, account } = useChain();
-  const [dateTime , setDateTime] = useState(0);
+  const dateTime0 = new Date().getTime() + 5000;
+  const [dateTime, setDateTime] = useState(dateTime0);
+  const [isExpired, setIsExpired] = useState(dateTime0);
   const [gameState, setGameState] = useState();
   const LiquidityVaultAddress = networkMapping[process.env.NEXT_PUBLIC_CHAIN_ID]['LiquidityVault'][0]
   const LiquidityVaultConfigAddress = networkMapping[process.env.NEXT_PUBLIC_CHAIN_ID]['LiquidityWarsConfig'][0]
@@ -68,14 +70,12 @@ export default function Home() {
     const gameStatus = (await getGameState()).toString();
     const playerInfo = (await getPlayerInfo())?.toString();
     const numberPlayers = (await getNumberOfPlayers())?.toString() || 0;
-    const playerExistInGame = playerInfo?.split(',')[0] 
+    const playerExistInGame = playerInfo?.split(',')[0]
 
     setGameState(gameStatus)
     setPendingPlayers(minNumberPlayers-numberPlayers);
-
-    if(allowedLPAddresses.includes(playerExistInGame)){
-      setPlayerExist(true)
-    } 
+    setPlayerExist(parseInt(playerExistInGame) !== 0);
+    setIsExpired(getTime == 0);
 
     console.log("getTime:", getTime)
     console.log("gameStatus:", gameStatus)
@@ -84,7 +84,6 @@ export default function Home() {
     let currentTimeStamp = new Date()
     let expiresDateTime = new Date(currentTimeStamp.getTime() + expiresInMS);
     setDateTime(expiresDateTime)
-    
   }
 
   const getAllowedTokens = async () => {
@@ -207,7 +206,7 @@ export default function Home() {
                         </h2>
                         {gameState == 0 && dateTime <= new Date() && pendingPlayers > 0 &&
                           (<h3 className="font-['Nabana-bold'] text-2xl">
-                            Game is about to start, waiting for {pendingPlayers} {pluralize("player", pendingPlayers)} to join...
+                            Game is about to start, waiting for at least {pendingPlayers} more {pluralize("player", pendingPlayers)} to join...
                           </h3>)
                         }
                         {gameState == 1 && !playerExist &&

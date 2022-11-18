@@ -6,29 +6,16 @@ import ExpiredNotice from './ExpiredNotice';
 const CountdownTimer = ({targetDate}) => {
   const [days, hours, minutes, seconds] = useCountdown(targetDate)
 
-  if(days + hours+ minutes + seconds <= 0){
-    return (
-      <>
+  return (
+    <>
       <ShowCounter 
-           days={0}
-           hours={0}
-           minutes={0}
-           seconds={0}
-        />
-      </>
-    )
-  } else {
-    return (
-      <>
-        <ShowCounter 
-           days={days}
-           hours={hours}
-           minutes={minutes}
-           seconds={seconds}
-        />
-      </>
-    )
-  }
+         days={days}
+         hours={hours}
+         minutes={minutes}
+         seconds={seconds}
+      />
+    </>
+  )
  
 }
 

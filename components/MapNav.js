@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { ConnectButton } from "web3uikit";
 import RewardsToClaim from "./Nav/RewardsToClaim";
 import YourResources from "./Nav/YourResources";
-
 import CountdownTimer from "./SmallTimer/CountdownTimer";
 import { useMoralis, useWeb3Contract } from "react-moralis";
 import LiquidityVaultAbi from "../constants/LiquidityVault.json";
@@ -20,7 +19,8 @@ const MapNav = ({ gameState }) => {
     chainId in networkMapping
       ? networkMapping[chainId]["LiquidityVault"][0]
       : null;
-  const [dateTime, setDateTime] = useState(0);
+  const dateTime0 = new Date().getTime() + 5000;
+  const [dateTime, setDateTime] = useState(dateTime0);
   const [modalOpen, setModalOpen] = useState();
 
   // get time getTimeToStartOrEndGame

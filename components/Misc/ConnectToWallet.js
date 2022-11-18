@@ -6,7 +6,7 @@ const ConnectToWallet = () => {
     <>
       <div className="bg-transparent  ">
             <div className="bg-[url('/assets/images/Web3Frame.png')] flex justify-center w-64 h-64 bg-cover bg-no-repeat">
-                <div className="flex flex-col font-sans justify-center text-lg items-center text-center px-6">
+                <div className="flex flex-col font-['Nabana-bold'] justify-center text-lg items-center text-center px-6">
                   Please Connect your Wallet to start the game.<br/>
                   At the moment we are only available at <u>Polygon Testnet Mumbai</u>
                   <img

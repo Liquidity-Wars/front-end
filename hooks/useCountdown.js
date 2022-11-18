@@ -4,12 +4,13 @@ const useCountdown = (targetDate) => {
   const countDownDate = new Date(targetDate);
 
   const [countDown, setCountDown] = useState(
-    countDownDate - new Date()
+    countDownDate - new Date() <= 0 ? 0 : countDownDate - new Date()
   );
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCountDown(countDownDate - new Date());
+      const dateDif = countDownDate - new Date();
+      setCountDown(dateDif <= 0 ? 0 : dateDif);
     }, 1000);
 
     return () => clearInterval(interval);
@@ -27,7 +28,9 @@ const getReturnValues = (countDown) => {
   const minutes = Math.floor((countDown % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((countDown % (1000 * 60)) / 1000);
 
-  return [days, hours, minutes, seconds];
+  const timeIsOver = days + hours+ minutes + seconds <= 0;
+
+  return [days, hours, minutes, seconds, timeIsOver];
 };
 
 export { useCountdown };
